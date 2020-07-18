@@ -1,0 +1,76 @@
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #ccc;
+  transition: all .7s;
+  position: relative;
+}
+.navbar:hover {
+  box-shadow: 2px 3px 5px #dcdcdc;
+}
+.navbarNav {
+  display: flex;
+  transition: all 2s;
+}
+.navbarItem {
+  list-style: none;
+  padding: 0 1rem;
+}
+
+.navbarProfileName {
+  padding: .1rem 0;
+}
+
+.navbarProfileName:hover ~ .ProfileBox {
+  display: block;
+}
+
+
+.Heading1 {
+  font-size: 1rem;
+  color: #000;
+  font-weight: bold;
+}
+
+.navbarProfile {
+  cursor: pointer;
+}
+.navbarProfile:hover ~ .ProfileBox {
+  display: block;
+}
+
+.ProfileBox {
+  position: absolute;
+  top: 2.5rem;
+  right: 0rem;
+  padding: .5rem;
+  box-shadow: 2px 3px 4px #ccc;
+  background-color: #fff;
+  display: none;
+  transition: all 2s;
+}
+
+.ProfileBox:hover {
+  display: block;
+}
+
+.ProfileBox ul {
+
+}
+
+.ProfileBox ul li {
+   list-style-type: none;
+   padding: .5rem;
+   cursor: pointer;
+}
+
+.ProfileBox ul li:hover {
+  color: #f2ba36;
+}
+
+.ProfileBox ul li:not(:last-child) {
+   border-bottom: 1px solid #eaeaea;
+}

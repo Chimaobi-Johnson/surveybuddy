@@ -1,0 +1,45 @@
+.LandingContainer {
+ display: flex;
+ justify-content: space-between;
+}
+
+.LandingTextContainer {
+  align-self: center;
+  text-transform: uppercase;
+  letter-spacing: 2.5;
+  padding: 4rem;
+}
+
+.LandingTextContainer Button {
+
+}
+
+.LandingCarousel {
+  flex-basis: 50%;
+}
+
+.carouselItem {
+  width: 100%;
+  margin: 0 auto;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.carouselImage {
+  height: 60vh;
+  border-radius: 5px;
+  width: 90%;
+  margin: auto 0;
+  box-shadow: 2px 4px 8px #dcdcdc;
+
+}
+
+.carouselItem {
+
+}
+
+.fade {
+
+}

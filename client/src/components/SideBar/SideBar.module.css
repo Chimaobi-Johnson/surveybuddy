@@ -1,0 +1,31 @@
+.SideBarContent {
+  background-color: #282f40;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.TopSideBar {
+  height: 20%;
+  border-bottom: 1px solid #fff;
+}
+
+.TopSideBar ul {
+  padding: 2rem;
+  color: #fff;
+  list-style: none;
+}
+
+.SideBarFooter {
+  text-align: center;
+  color: #ccc;
+  font-style: italic;
+  position: absolute;
+  bottom: .5rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.SideBarFooter p {
+  font-size: .6rem !important;
+}

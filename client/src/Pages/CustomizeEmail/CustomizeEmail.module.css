@@ -1,0 +1,43 @@
+.Container {
+  display: flex;
+  height: 90vh;
+  background-color: #f4f5f6;
+}
+
+h5 {
+  color: #fff;
+}
+
+.SideBarContainer {
+   flex-basis: 25%;
+}
+
+.FormContainer {
+  flex-grow: 1;
+  padding: 5rem;
+}
+
+.FormContainer input {
+  margin: 1.5rem 0;
+}
+
+.SideBarContent {
+   color: #fff !important;
+   padding: 1rem;
+   font-size: .8rem !important;
+}
+
+
+.SurveyBtn {
+  padding: .8rem 1.2rem;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  background-color: ##f4f5f7;
+}
+
+.EmailContentBox {
+  border: 1px solid #ccc;
+  height: 45%;
+  overflow-y: scroll;
+  font-size: .7rem;
+}

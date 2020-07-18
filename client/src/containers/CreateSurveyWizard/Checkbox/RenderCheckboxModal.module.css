@@ -1,0 +1,26 @@
+.CheckboxContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.CheckboxContainer input {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  height: 2rem;
+  margin-top: .5rem;
+}
+
+.CheckboxContainer input:focus {
+  border: none;
+  border-bottom: 1px solid #ccc;
+}
+
+.CheckboxContainer input:active {
+  border: none;
+  border-bottom: 1px solid #ccc;
+}
+
+
+.CheckboxContainer div {
+  margin: .6rem;
+}

@@ -1,0 +1,15 @@
+.SurveyList {
+  font-size: 1rem !important;
+}
+
+.SurveyList h2 {
+  font-size: 1rem !important;
+}
+
+.TableRow {
+  cursor: pointer;
+}
+
+.TableRow:hover {
+  background-color: #ccc;
+}

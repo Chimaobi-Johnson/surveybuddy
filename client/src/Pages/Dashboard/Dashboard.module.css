@@ -1,0 +1,73 @@
+.DashboardContainer {
+  background-color: #eee;
+  display: flex;
+}
+
+.SideBarContainer {
+  flex-basis: 25%;
+}
+
+.DashboardMain {
+  flex-basis: 75%;
+  background-color: #fff;
+  min-height: 90vh;
+}
+
+.DashboardInnerBox {
+  padding: 4rem;
+  font-size: .8rem !important;
+  color: rgba(0, 0, 0, .8);
+}
+
+.CreateSurveyBtn Button {
+  width: 100%;
+  border-radius: 0 !important;
+  margin-bottom: 2rem;
+}
+
+.SideBarMenuItems ul {
+  list-style: none;
+  color: #fff !important;
+  position: relative;
+}
+
+.SideBarMenuItems ul li {
+  margin: 1rem auto;
+  padding: .5rem 1rem;
+  position: relative;
+  cursor: pointer;
+  z-index: 10;
+  display: block;
+  display: flex;
+}
+
+.SideBarMenuItems ul li:active {
+  z-index: 10;
+}
+
+.SideBarMenuItems ul li i {
+  width: 1rem;
+  margin-right: 1rem;
+}
+
+.SideBarMenuItems ul li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: -10;
+  width: 3px;
+  background-color: #f2ba36;
+  transform: scaleY(0);
+  transition: transform .2s, width .4s .2s, background-color .1s; /*cubic-bezier(1,0,0,1)*/
+}
+
+.SideBarMenuItems ul li:hover::before {
+  transform: scaleY(1);
+  width: 100%;
+}
+
+.SideBarMenuItems ul li:active::before {
+  background-color: #e0ad34;
+}

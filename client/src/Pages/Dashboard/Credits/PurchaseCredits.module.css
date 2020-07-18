@@ -1,0 +1,61 @@
+.DashboardContainer {
+  background-color: #eee;
+  display: flex;
+}
+
+.DashboardMain {
+  flex-basis: 75%;
+  background-color: #fff;
+  min-height: 90vh;
+}
+
+.DashboardInnerBox {
+  padding: 4rem;
+  font-size: .8rem !important;
+  color: rgba(0, 0, 0, .8);
+}
+
+.CreditCardImg {
+  width: 100%;
+  height: 18rem;
+}
+
+.PurchaseCreditsContainer {
+  margin: 4rem;
+}
+
+.PurchaseCreditsContainer input {
+  height: 1rem;
+  opacity: 0.8;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.PurchaseCreditsBtn button {
+  outline: none;
+  border: none;
+  margin-top: 2rem;
+  padding: .8rem 1rem;
+  background-color: #ccc;
+  cursor: pointer;
+  box-shadow: 1px 2px 2px #aca4a4;
+  transition: all .4s;
+}
+
+.PurchaseCreditsBtn button:hover {
+  box-shadow: 1px 4px 4px #aca4a4;
+}
+
+.PurchaseCreditsBtn button::before {
+  transform: translateY(3px);
+}
+
+.PurchaseCreditsBtn button:active {
+  transform: translateY(-3px);
+}
+/*
+.PurchaseCreditsContainer input {
+  padding: 1rem;
+  border-radius: 5px;
+}
+*/

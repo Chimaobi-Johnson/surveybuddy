@@ -1,0 +1,26 @@
+.Credits {
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 1rem;
+}
+
+h1, h2, h3, h5, h6 {
+  color: rgba(0, 0, 0, 0.8) !important;
+  font-size: 1rem !important;
+}
+
+.DashboardContainer {
+  background-color: #eee;
+  display: flex;
+}
+
+.DashboardMain {
+  flex-basis: 75%;
+  background-color: #fff;
+  min-height: 90vh;
+}
+
+.DashboardInnerBox {
+  padding: 4rem;
+  font-size: .8rem !important;
+  color: rgba(0, 0, 0, .8);
+}
