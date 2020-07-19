@@ -33,16 +33,19 @@ class CreateSurveyWizard extends React.Component {
     surveyFooterDialog: false,
     surveyCheckboxes: {
       checkboxOne: {
+        id: 1,
         surveyCheckboxQuestion: '',
         surveyCheckboxNames: {},
         isDisplayed: false
       },
       checkboxTwo: {
+        id: 2,
         surveyCheckboxQuestion: '',
         surveyCheckboxNames: {},
         isDisplayed: false
       },
       checkboxThree: {
+        id: 3,
         surveyCheckboxQuestion: '',
         surveyCheckboxNames: {},
         isDisplayed: false
@@ -68,18 +71,21 @@ class CreateSurveyWizard extends React.Component {
     },
     surveyRadioOptions: {
       radioOne: {
+        id: 1,
         surveyRadioQuestion: '',
         surveyRadioOptionNames: [],
         surveyRadioAnswer: '',
         isDisplayed: false
       },
       radioTwo: {
+        id: 2,
         surveyRadioQuestion: '',
         surveyRadioOptionNames: [],
         surveyRadioAnswer: '',
         isDisplayed: false
       },
       radioThree: {
+        id: 3,
         surveyRadioQuestion: '',
         surveyRadioOptionNames: [],
         surveyRadioAnswer: '',
@@ -238,11 +244,11 @@ class CreateSurveyWizard extends React.Component {
      document.getElementById('removeImageBtn').style.display = 'block';
   }
 
-  // removeSurveyImageHandler = () => {
-  //   document.getElementById('removeImageBtn').style.display = 'none';
-  //   this.setState({imagePreviewUrl: ''});
-  // }
-  //
+  removeSurveyImageHandler = () => {
+    document.getElementById('removeImageBtn').style.display = 'none';
+    this.setState({ imagePreviewUrl: null });
+  }
+
 
 
   initSurveyInputDialog = () => {
@@ -299,86 +305,86 @@ class CreateSurveyWizard extends React.Component {
   }
 
 
-    surveyCheckboxNameChangeHandler = (event, checkbox) => {
-      const checkboxInitValues = {...this.state.surveyCheckboxInitValues};
-      checkboxInitValues[checkbox].value = event.target.value;
-      this.setState({surveyCheckboxInitValues: checkboxInitValues});
-    }
+  surveyCheckboxNameChangeHandler = (event, checkbox) => {
+    const checkboxInitValues = {...this.state.surveyCheckboxInitValues};
+    checkboxInitValues[checkbox].value = event.target.value;
+    this.setState({surveyCheckboxInitValues: checkboxInitValues});
+  }
 
-    saveSurveyCheckboxHandler = () => {
-      const surveyCheckbox = {...this.state.surveyCheckboxes};
-      const surveyCheckboxInitValues = {...this.state.surveyCheckboxInitValues};
-      let checkboxNames = {};
-      // loop each checkbox from one to three and transfer it from the initial state which is surveyCheckboxInitValues
-      // to the permanent state which is either in checkbox one, two or three depending on how many the users wants
-      switch (false) {
-        case !isEmpty(surveyCheckboxInitValues.checkboxOne.value):
-          alert('Please Edit Survey Form Checkbox Names');
-          break;
-        case !isEmpty(this.state.surveyCheckboxTempQuestion):
-          alert('Please Edit Survey Form Checkbox Question');
-          break;
-        case surveyCheckbox.checkboxOne.isDisplayed:
-           surveyCheckbox.checkboxOne.surveyCheckboxQuestion = this.state.surveyCheckboxTempQuestion;
-           surveyCheckbox.checkboxOne.isDisplayed = true;
-           Object.values(surveyCheckboxInitValues).map(checkboxObj => {
-             if(checkboxObj.value === '') {
-               return  // this is to prevent a checkbox with an empty name from being displayed in the form
-             }
-              // transfer object to as its been looped to checkboxNames obj using Object.assign method
-               return Object.assign(checkboxNames, {[checkboxObj.value]: false});
-           });
-           // Clear the values so as to prevent the old state from displaying on the UI
-           Object.values(surveyCheckboxInitValues).map(checkboxObj => {
-               checkboxObj.value = '';
-           });
-           surveyCheckbox.checkboxOne.surveyCheckboxNames = checkboxNames
-           this.setState({surveyCheckboxes: surveyCheckbox, surveyCheckboxTempQuestion: '', surveyCheckboxInitValues: surveyCheckboxInitValues, surveyCheckboxDialog: false});
-          break;
-        case surveyCheckbox.checkboxTwo.isDisplayed:
-          surveyCheckbox.checkboxTwo.surveyCheckboxQuestion = this.state.surveyCheckboxTempQuestion;
-          surveyCheckbox.checkboxTwo.isDisplayed = true;
-          Object.values(surveyCheckboxInitValues).map(checkboxObj => {
-            if(checkboxObj.value === '') {
-              return  // this is to prevent a checkbox with an empty name from being displayed in the form
-            }
-               return Object.assign(checkboxNames, {[checkboxObj.value]: false});
-          });
-          // Clear the values so as to prevent the old state from displaying on the UI
-          Object.values(surveyCheckboxInitValues).map(checkboxObj => {
-              checkboxObj.value = '';
-          });
-          surveyCheckbox.checkboxTwo.surveyCheckboxNames = checkboxNames
-          this.setState({surveyCheckboxes: surveyCheckbox, surveyCheckboxTempQuestion: '', surveyCheckboxDialog: false });
-          break;
-        case surveyCheckbox.checkboxThree.isDisplayed:
-          surveyCheckbox.checkboxThree.surveyCheckboxQuestion = this.state.surveyCheckboxTempQuestion;
-          surveyCheckbox.checkboxThree.isDisplayed = true;
-          Object.values(surveyCheckboxInitValues).map(checkboxObj => {
-            if(checkboxObj.value === '') {
-              return  // this is to prevent a checkbox with an empty name from being displayed in the form
-            }
-               return Object.assign(checkboxNames, {[checkboxObj.value]: false});
-          });
-          // Clear the values so as to prevent the old state from displaying on the UI
-          Object.values(surveyCheckboxInitValues).map(checkboxObj => {
-              checkboxObj.value = '';
-          });
-          surveyCheckbox.checkboxThree.surveyCheckboxNames = checkboxNames
-          this.setState({surveyCheckboxes: surveyCheckbox, surveyCheckboxTempQuestion: '', surveyCheckboxDialog: false });
-         break;
-        default:
-          return alert('You cant add more than 3 checkbox questions'); //issue here
-      }
+  saveSurveyCheckboxHandler = () => {
+    const surveyCheckbox = {...this.state.surveyCheckboxes};
+    const surveyCheckboxInitValues = {...this.state.surveyCheckboxInitValues};
+    let checkboxNames = {};
+    // loop each checkbox from one to three and transfer it from the initial state which is surveyCheckboxInitValues
+    // to the permanent state which is either in checkbox one, two or three depending on how many the users wants
+    switch (false) {
+      case !isEmpty(surveyCheckboxInitValues.checkboxOne.value):
+        alert('Please Edit Survey Form Checkbox Names');
+        break;
+      case !isEmpty(this.state.surveyCheckboxTempQuestion):
+        alert('Please Edit Survey Form Checkbox Question');
+        break;
+      case surveyCheckbox.checkboxOne.isDisplayed:
+         surveyCheckbox.checkboxOne.surveyCheckboxQuestion = this.state.surveyCheckboxTempQuestion;
+         surveyCheckbox.checkboxOne.isDisplayed = true;
+         Object.values(surveyCheckboxInitValues).map(checkboxObj => {
+           if(checkboxObj.value === '') {
+             return  // this is to prevent a checkbox with an empty name from being displayed in the form
+           }
+            // transfer object to as its been looped to checkboxNames obj using Object.assign method
+             return Object.assign(checkboxNames, {[checkboxObj.value]: false});
+         });
+         // Clear the values so as to prevent the old state from displaying on the UI
+         Object.values(surveyCheckboxInitValues).map(checkboxObj => {
+             checkboxObj.value = '';
+         });
+         surveyCheckbox.checkboxOne.surveyCheckboxNames = checkboxNames
+         this.setState({surveyCheckboxes: surveyCheckbox, surveyCheckboxTempQuestion: '', surveyCheckboxInitValues: surveyCheckboxInitValues, surveyCheckboxDialog: false});
+        break;
+      case surveyCheckbox.checkboxTwo.isDisplayed:
+        surveyCheckbox.checkboxTwo.surveyCheckboxQuestion = this.state.surveyCheckboxTempQuestion;
+        surveyCheckbox.checkboxTwo.isDisplayed = true;
+        Object.values(surveyCheckboxInitValues).map(checkboxObj => {
+          if(checkboxObj.value === '') {
+            return  // this is to prevent a checkbox with an empty name from being displayed in the form
+          }
+             return Object.assign(checkboxNames, {[checkboxObj.value]: false});
+        });
+        // Clear the values so as to prevent the old state from displaying on the UI
+        Object.values(surveyCheckboxInitValues).map(checkboxObj => {
+            checkboxObj.value = '';
+        });
+        surveyCheckbox.checkboxTwo.surveyCheckboxNames = checkboxNames
+        this.setState({surveyCheckboxes: surveyCheckbox, surveyCheckboxTempQuestion: '', surveyCheckboxDialog: false });
+        break;
+      case surveyCheckbox.checkboxThree.isDisplayed:
+        surveyCheckbox.checkboxThree.surveyCheckboxQuestion = this.state.surveyCheckboxTempQuestion;
+        surveyCheckbox.checkboxThree.isDisplayed = true;
+        Object.values(surveyCheckboxInitValues).map(checkboxObj => {
+          if(checkboxObj.value === '') {
+            return  // this is to prevent a checkbox with an empty name from being displayed in the form
+          }
+             return Object.assign(checkboxNames, {[checkboxObj.value]: false});
+        });
+        // Clear the values so as to prevent the old state from displaying on the UI
+        Object.values(surveyCheckboxInitValues).map(checkboxObj => {
+            checkboxObj.value = '';
+        });
+        surveyCheckbox.checkboxThree.surveyCheckboxNames = checkboxNames
+        this.setState({surveyCheckboxes: surveyCheckbox, surveyCheckboxTempQuestion: '', surveyCheckboxDialog: false });
+       break;
+      default:
+        return alert('You cant add more than 3 checkbox questions'); //issue here
     }
+  }
 
     deleteSurveyCheckBoxHandler = (checkboxObj) => {
       // checkbox is an Object
-      // surveyCheckboxes is spread out here and the surveyCheckboxQuestion is used as
+      // surveyCheckboxes is spread out here and the id is used as
       // a unique identifier to compare and get the current checkbox the user wants to delete
       const surveyCheckboxes = {...this.state.surveyCheckboxes};
       Object.values(surveyCheckboxes).map(checkbox => {
-        if(checkbox.surveyCheckboxQuestion === checkboxObj.surveyCheckboxQuestion) {
+        if(checkbox.id === checkboxObj.id) {
           checkbox.surveyCheckboxQuestion = '';
           checkbox.surveyCheckboxNames = {};
           checkbox.isDisplayed = false;
@@ -399,7 +405,7 @@ class CreateSurveyWizard extends React.Component {
            checkboxItems = Object.keys(checkboxObj.surveyCheckboxNames)
            .map(checkbox => {
              return (
-               <CustomInput type="checkbox" id="exampleCustomInline2" label={checkbox} inline />
+               <CustomInput key={Math.random() + "-ent"} type="checkbox" id="exampleCustomInline2" label={checkbox} inline />
             )
            });
          }
@@ -511,15 +517,15 @@ class CreateSurveyWizard extends React.Component {
     // radio is an Object
     // surveyRadioOptions is spread out here and the surveyRadioQuestion is used as
     // a unique identifier to compare and get the current radio the user wants to delete
-    // const surveyRadioOptions = {...this.state.surveyRadioOptions};
-    // Object.values(surveyRadioOptions).map(radioObj => {
-    //   if(radioObj.surveyRadioQuestion === radio.surveyRadioQuestion) {
-    //     radioObj.surveyRadioQuestion = '';
-    //     radioObj.surveyRadioOptionNames.length = 0;
-    //     radioObj.isDisplayed = false;
-    //   }
-    // });
-    // this.setState({ surveyRadioOptions });
+    const surveyRadioOptions = {...this.state.surveyRadioOptions};
+    Object.values(surveyRadioOptions).map(radioObj => {
+      if(radioObj.id === radio.id) {
+        radioObj.surveyRadioQuestion = '';
+        radioObj.surveyRadioOptionNames.length = 0;
+        radioObj.isDisplayed = false;
+      }
+    });
+    this.setState({ surveyRadioOptions });
     console.log(radio);
   }
 
