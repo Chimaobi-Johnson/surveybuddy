@@ -1,6 +1,11 @@
 
+.SideBarToggle {
+  display: none;
+}
+
 .SideBarContainer {
   flex-basis: 25%;
+  transition: all .3s;
 }
 
 .DashboardMain {
@@ -66,4 +71,21 @@
 
 .SideBarMenuItems ul li:active::before {
   background-color: #e0ad34;
+}
+
+@media (max-width: 699px) {
+  .SideBarContainer {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 16%;
+    z-index: 20;
+  }
+  .SideBarToggle {
+    display: block;
+    position: absolute;
+    top: 30%;
+    left: 0;
+    z-index: 25;
+  }
 }

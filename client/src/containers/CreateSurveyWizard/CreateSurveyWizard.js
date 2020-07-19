@@ -588,7 +588,6 @@ class CreateSurveyWizard extends React.Component {
  }
 
   render() {
-  console.log(this.state);
     return (
        <div className={classes.SurveyContainer}>
          {this.state.saving ? <div className={classes.LoadingBox}><img style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '50px', height: '50px'}} src={loader} alt="" /><p style={{display: 'block', fontWeight: 'bold',  position: 'absolute', top: '55%', left: '50%', transform: 'translate(-50%, -50%)'}}>Saving..</p></div> : null }

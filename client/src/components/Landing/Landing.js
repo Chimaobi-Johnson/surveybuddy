@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -111,7 +112,7 @@ const Landing = props => {
       <div className={classes.LandingTextContainer}>
           <h2>a simple and powerful online survey tool</h2>
           <p>sign up now for unlimited surveys, questions and responses</p>
-          { props.auth.isAuth ? <Button>Continue</Button> : <Button onClick={toggleModal}>Get Started</Button> }
+          { props.auth.isAuth ? <Button><Link to="/surveys">Continue</Link></Button> : <Button onClick={toggleModal}>Get Started</Button> }
       </div>
 
    </div>

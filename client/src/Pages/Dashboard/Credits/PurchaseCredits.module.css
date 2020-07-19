@@ -59,3 +59,12 @@
   border-radius: 5px;
 }
 */
+
+@media (max-width: 699px) {
+  .DashboardInnerBox {
+    padding: 0;
+  }
+  .DashboardContainer {
+    display: block;
+  }
+}

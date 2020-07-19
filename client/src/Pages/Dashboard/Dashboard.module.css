@@ -71,3 +71,12 @@
 .SideBarMenuItems ul li:active::before {
   background-color: #e0ad34;
 }
+
+@media (max-width: 699px) {
+  .DashboardInnerBox {
+    padding: 2rem;
+  }
+  .DashboardContainer {
+    display: block;
+  }
+}

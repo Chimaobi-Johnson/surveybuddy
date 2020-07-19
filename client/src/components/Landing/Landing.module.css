@@ -10,6 +10,10 @@
   padding: 4rem;
 }
 
+.LandingTextContainer h2 {
+  font-weight: bold;
+}
+
 .LandingTextContainer Button {
 
 }
@@ -41,5 +45,32 @@
 }
 
 .fade {
+
+}
+
+@media (max-width: 699px) {
+  .LandingContainer {
+   flex-direction: column;
+   justify-content: space-between;
+  }
+
+  .carouselImage {
+    height: 60vh;
+    border-radius: 0;
+    width: 100%;
+    margin: 0;
+    box-shadow: 2px 4px 8px #dcdcdc;
+  }
+
+  .carouselItem {
+    height: auto;
+  }
+
+  .LandingTextContainer {
+    position: absolute;
+    top: 60%;
+    background-color: #fff;
+    padding: 2rem;
+  }
 
 }

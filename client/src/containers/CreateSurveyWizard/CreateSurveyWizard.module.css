@@ -122,3 +122,24 @@
   text-align: center;
   z-index: 2000;
 }
+
+
+@media (max-width: 699px) {
+
+  .SurveyContainer {
+    display: block;
+  }
+
+  .SideBarContainer {
+    display: none;
+  }
+
+  .SurveyFormContainer {
+    flex-basis: 100%;
+  }
+
+  .SurveyForm {
+    width: 95%;
+  }
+
+}

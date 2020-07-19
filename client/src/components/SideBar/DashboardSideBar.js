@@ -1,17 +1,28 @@
 import React from 'react';
 import SideBar from './SideBar';
 import { Button } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
 import * as classes from './DashboardSideBar.module.css';
 
 const dashboardsidebar = props => {
 
+  const toggleSidebarOpen = () => {
+    const sidebar = document.getElementById('sidebar');
+    if(sidebar.style.display === 'block') {
+      sidebar.style.display = 'none';
+    } else {
+      sidebar.style.display = 'block';
+    }
+  }
+
   return (
-       <div className={classes.SideBarContainer}>
+       <>
+       <Button onClick={toggleSidebarOpen} className={classes.SideBarToggle}>T</Button>
+       <div id="sidebar" className={classes.SideBarContainer}>
            <SideBar>
              <div className={classes.CreateSurveyBtn}>
-               <Button>Create New Survey</Button>
+               <Button><Link to="/surveys/new">Create New Survey</Link></Button>
              </div>
              <div className={classes.SideBarMenuItems}>
                 <ul>
@@ -23,6 +34,7 @@ const dashboardsidebar = props => {
              </div>
            </SideBar>
            </div>
+        </>
   )
 }
 

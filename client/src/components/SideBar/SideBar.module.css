@@ -29,3 +29,9 @@
 .SideBarFooter p {
   font-size: .6rem !important;
 }
+
+@media (max-width: 699px) {
+  .SideBarContent {
+    padding: 1rem 0;
+  }
+}
