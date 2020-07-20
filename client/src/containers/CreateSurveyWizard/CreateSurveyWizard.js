@@ -116,7 +116,8 @@ class CreateSurveyWizard extends React.Component {
     saving: false,
     responseStatus: null,
     responseData: null,
-    modalOpen: true
+    modalOpen: true,
+    sidebarOpen: false
   }
 
   // componentDidMount () {
@@ -210,6 +211,7 @@ class CreateSurveyWizard extends React.Component {
 
   initSurveyTitleDialog = () => {
     // document.getElementById('drawer-toggle').checked = false;
+    this.toggleSidebarOpen();
     this.setState({surveyTitleDialog: true});
   }
 
@@ -219,11 +221,13 @@ class CreateSurveyWizard extends React.Component {
 
   initSurveyDescrDialog = () => {
   // document.getElementById('drawer-toggle').checked = false;
+  this.toggleSidebarOpen();
   this.setState({surveyDescrDialog: true});
   }
 
   initSurveyImageDialog = () => {
     // document.getElementById('drawer-toggle').checked = false;
+    this.toggleSidebarOpen();
     this.setState({surveyImageDialog: true});
   }
 
@@ -256,6 +260,7 @@ class CreateSurveyWizard extends React.Component {
     const surveyInputLength = Object.keys(surveyInputsData).length
     if(surveyInputLength <= 4) {
       // document.getElementById('drawer-toggle').checked = false;
+      this.toggleSidebarOpen();
       this.setState({surveyInputDialog: true});
     } else {
       // document.getElementById('drawer-toggle').checked = false;
@@ -286,6 +291,7 @@ class CreateSurveyWizard extends React.Component {
 
   initSurveyCheckboxDialog = () => {
     // document.getElementById('drawer-toggle').checked = false;
+    this.toggleSidebarOpen();
     const surveyCheckboxes = {...this.state.surveyCheckboxes};
     this.setState({surveyCheckboxDialog: true});
   }
@@ -440,6 +446,7 @@ class CreateSurveyWizard extends React.Component {
 
   initSurveyFooterDialog = () => {
     // document.getElementById('drawer-toggle').checked = false;
+    this.toggleSidebarOpen();
     this.setState({ surveyFooterDialog: true });
   }
 
@@ -461,6 +468,7 @@ class CreateSurveyWizard extends React.Component {
 
   initSurveyRadioDialog = () => {
   // document.getElementById('drawer-toggle').checked = false;
+  this.toggleSidebarOpen();
   this.setState({surveyRadioDialog: true});
   }
 
@@ -551,6 +559,17 @@ class CreateSurveyWizard extends React.Component {
       });
     }
 
+ toggleSidebarOpen = () => {
+   const sidebar = document.getElementById('surveySidebar');
+   if(sidebar.style.transform === 'translate(-100%)') {
+     sidebar.style.transform = 'translate(0)';
+     this.setState({ sidebarOpen: true });
+   } else {
+     sidebar.style.transform = 'translate(-100%)';
+     this.setState({ sidebarOpen: false });
+   }
+ }
+
 
   renderDashboardContent() {
    return (
@@ -565,16 +584,21 @@ class CreateSurveyWizard extends React.Component {
        <div id="inputArea" className={classes.InputArea}>
        {
          Object.keys(this.state.surveyInputs).map(key => {
-                return (<><Input
-                   key={key + new Date().getMilliseconds()}
-                   id={key}
-                   type="text"
-                   placeholder={key}
-                   value={this.state.surveyInputs[key]}
-                   onChange={(event, key) => this.surveyInputChangeHandler(event, {key})}
-                 />
+                return (<>
+                  <FormGroup>
+                      <Label>{key}</Label>
+                        <Input
+                         style={{ borderRadius: 0, height: '1.8rem' }}
+                         key={key + new Date().getMilliseconds()}
+                         id={key}
+                         type="text"
+                         value={this.state.surveyInputs[key]}
+                         onChange={(event, key) => this.surveyInputChangeHandler(event, {key})}
+                       />
+                     <Button size='sm' key={key + 'btn' + new Date().getMilliseconds()} onClick={(identifier) => this.deleteSurveyInputHandler(`${key}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+                  </FormGroup>
+                    </>)
                  {/* <Button key={key + 'btn' + new Date().getSeconds()} size='small' style={{ fontWeight: 'bold', color: '#303f9f'}} onClick={(identifier) => this.editSurveyInputHandler(`${key}`)}>Edit</Button> */}
-                 <Button size='sm' key={key + 'btn' + new Date().getMilliseconds()} onClick={(identifier) => this.deleteSurveyInputHandler(`${key}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button></>)
        })
        }
        </div>
@@ -591,7 +615,7 @@ class CreateSurveyWizard extends React.Component {
     return (
        <div className={classes.SurveyContainer}>
          {this.state.saving ? <div className={classes.LoadingBox}><img style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '50px', height: '50px'}} src={loader} alt="" /><p style={{display: 'block', fontWeight: 'bold',  position: 'absolute', top: '55%', left: '50%', transform: 'translate(-50%, -50%)'}}>Saving..</p></div> : null }
-         <Button onClick={this.cancelNewSurvey} className={classes.goBack}><i className="fa fa-chevron-left" aria-hidden="true"></i></Button>
+         {/* <Button onClick={this.cancelNewSurvey} className={classes.goBack}><i className="fa fa-chevron-left" aria-hidden="true"></i></Button> */}
          <Button onClick={this.storeCustomSurveyFormHandler} className={classes.goForward}><span>Save</span><i class="fa fa-floppy-o" aria-hidden="true"></i></Button>
          <MessageModal responseStatus={this.state.responseStatus} surveyName={this.state.savedData ? this.state.savedData.surveyForm.surveyName : null} surveyId={this.state.savedData ? this.state.savedData.surveyForm._id : null} modalOpen={this.state.modalOpen} closeModal={this.closeMessageModalHandler}/>
          <RenderTitleModal surveyTitleDialog={this.state.surveyTitleDialog} surveyTitleText={this.state.surveyTitleText} changeSurveyTitle={this.changeSurveyTitle} removeDialog={(mode) => this.removeDialog('surveyTitleDialog')}/>
@@ -617,7 +641,10 @@ class CreateSurveyWizard extends React.Component {
                    />
           <RenderFooterModal surveyFooterDialog={this.state.surveyFooterDialog} surveyFooterText={this.state.surveyFooterText} changeSurveyFooterText={this.changeSurveyFooterText} removeDialog={(mode) => this.removeDialog('surveyFooterDialog')}/>
 
-          <div className={classes.SideBarContainer}>
+          <div id="surveySidebar" className={classes.SideBarContainer}>
+             <Button onClick={this.toggleSidebarOpen} className={classes.SideBarToggle}>
+               { this.state.sidebarOpen ? <i className="fa fa-close"></i> : <i className="fa fa-bars"></i> }
+             </Button>
              <SideBar>
                 <div className={classes.SideBarContent}>
                   <SurveyName surveyNameEditingMode={this.state.surveyNameEditingMode} surveyNameText={this.state.surveyNameText} surveyNameChange={this.surveyNameChange} saveSurveyName={this.saveSurveyName} editSurveyName={this.editSurveyName} />

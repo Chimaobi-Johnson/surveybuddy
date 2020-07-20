@@ -1,25 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SideBar from './SideBar';
 import { Button } from 'reactstrap';
 import { NavLink, Link } from 'react-router-dom';
 
 import * as classes from './DashboardSideBar.module.css';
 
-const dashboardsidebar = props => {
+const DashboardSidebar = props => {
+
+  const [ sidebarOpen, setOpen ] = useState(false);
 
   const toggleSidebarOpen = () => {
     const sidebar = document.getElementById('sidebar');
-    if(sidebar.style.display === 'block') {
-      sidebar.style.display = 'none';
+    if(sidebar.style.transform === 'translate(-100%)') {
+      sidebar.style.transform = 'translate(0)';
+      setOpen(true);
     } else {
-      sidebar.style.display = 'block';
+      sidebar.style.transform = 'translate(-100%)';
+      setOpen(false);
     }
   }
 
   return (
-       <>
-       <Button onClick={toggleSidebarOpen} className={classes.SideBarToggle}>T</Button>
        <div id="sidebar" className={classes.SideBarContainer}>
+       <Button onClick={toggleSidebarOpen} className={classes.SideBarToggle}>
+        { sidebarOpen ? <i className="fa fa-close"></i> : <i className="fa fa-bars"></i> }
+       </Button>
            <SideBar>
              <div className={classes.CreateSurveyBtn}>
                <Button><Link to="/surveys/new">Create New Survey</Link></Button>
@@ -34,8 +39,7 @@ const dashboardsidebar = props => {
              </div>
            </SideBar>
            </div>
-        </>
   )
 }
 
-export default dashboardsidebar;
+export default DashboardSidebar;

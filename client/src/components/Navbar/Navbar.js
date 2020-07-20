@@ -122,7 +122,7 @@ class MenuBar extends Component {
     } else {
       profileBox = (
         <NavItem>
-          <NavLink role="button" onClick={this.toggleModal} color="primary" size="sm">Login</NavLink>
+          <NavLink onClick={this.toggleModal}><Button  color="primary" size="sm">Login</Button></NavLink>
         </NavItem>
       )
     }
@@ -132,7 +132,7 @@ class MenuBar extends Component {
       {this.renderModal()}
       <Navbar className={classes.navbar} color="light" light expand="md">
         <NavbarBrand className={classes.Heading1} href="/">SURVEY<span style={{ color: '#f2ba36' }}>BUDDY</span></NavbarBrand>
-        <NavbarToggler onClick={this.toggle} />
+        <NavbarToggler style={{ border: '1px solid' }} onClick={this.toggle} />
         <Collapse isOpen={this.state.isOpen} navbar>
           <Nav className="ml-auto" navbar>
             <NavItem>

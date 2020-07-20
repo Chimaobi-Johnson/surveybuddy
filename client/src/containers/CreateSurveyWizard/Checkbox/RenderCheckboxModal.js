@@ -9,29 +9,29 @@ const renderCheckboxModal = props => {
     let checkboxOne, checkboxTwo, checkboxThree, checkboxFour, checkboxFive;
     if(props.surveyCheckboxInitValues) {
       checkboxOne = (<>
-        <Input type="text" label="Checkbox One" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxOne')} value={props.checkboxOneInitValue} />
+        <Input type="text" placeholder="Enter Checkbox Name" label="Checkbox One" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxOne')} value={props.checkboxOneInitValue} />
         <Button size='sm' onClick={(checkbox) => props.saveCheckboxNameHandler('checkboxOne')}>Save Names</Button></>);
       checkboxTwo = (<>
-          <Input type="text" label="Checkbox One" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxOne')} value={props.checkboxOneInitValue} />
+          <Input type="text" placeholder="Enter Checkbox Name" label="Checkbox One" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxOne')} value={props.checkboxOneInitValue} />
           <Input type="text" label="Checkbox Two" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxTwo')} value={props.checkboxTwoInitValue} />
           <Button size='sm' onClick={(checkbox) => props.saveCheckboxNameHandler('checkboxTwo')}>Save Names</Button></>);
       checkboxThree = (<>
-          <Input type="text" label="Checkbox One" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxOne')} value={props.checkboxOneInitValue} />
-          <Input type="text" label="Checkbox Two" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxTwo')} value={props.checkboxTwoInitValue} />
-          <Input type="text" label="Checkbox Three" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxThree')} value={props.checkboxThreeInitValue} />
+          <Input type="text" placeholder="Enter Checkbox Name" label="Checkbox One" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxOne')} value={props.checkboxOneInitValue} />
+          <Input type="text" placeholder="Enter Checkbox Name" label="Checkbox Two" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxTwo')} value={props.checkboxTwoInitValue} />
+          <Input type="text" placeholder="Enter Checkbox Name" label="Checkbox Three" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxThree')} value={props.checkboxThreeInitValue} />
           <Button size='sm' onClick={(checkbox) => props.saveCheckboxNameHandler('checkboxThree')}>Save Names</Button></>);
       checkboxFour = (<>
-          <Input type="text" label="Checkbox One" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxOne')} value={props.checkboxOneInitValue} />
-          <Input type="text" label="Checkbox Two" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxTwo')} value={props.checkboxTwoInitValue} />
-          <Input type="text" label="Checkbox Three" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxThree')} value={props.checkboxThreeInitValue} />
-          <Input type="text" label="Checkbox Four" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxFour')} value={props.checkboxFourInitValue} />
+          <Input type="text" placeholder="Enter Checkbox Name" label="Checkbox One" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxOne')} value={props.checkboxOneInitValue} />
+          <Input type="text" placeholder="Enter Checkbox Name" label="Checkbox Two" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxTwo')} value={props.checkboxTwoInitValue} />
+          <Input type="text" placeholder="Enter Checkbox Name" label="Checkbox Three" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxThree')} value={props.checkboxThreeInitValue} />
+          <Input type="text" placeholder="Enter Checkbox Name" label="Checkbox Four" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxFour')} value={props.checkboxFourInitValue} />
           <Button size='sm' onClick={(checkbox) => props.saveCheckboxNameHandler('checkboxFour')}>Save Names</Button></>);
       checkboxFive = (<>
-          <Input type="text" label="Checkbox One" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxOne')} value={props.checkboxOneInitValue} />
-          <Input type="text" label="Checkbox Two" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxTwo')} value={props.checkboxTwoInitValue} />
-          <Input type="text" label="Checkbox Three" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxThree')} value={props.checkboxThreeInitValue} />
-          <Input type="text" label="Checkbox Four" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxFour')} value={props.checkboxFourInitValue} />
-          <Input type="text" label="Checkbox Five" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxFive')} value={props.checkboxFiveInitValue} />
+          <Input type="text" placeholder="Enter Checkbox Name" label="Checkbox One" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxOne')} value={props.checkboxOneInitValue} />
+          <Input type="text" placeholder="Enter Checkbox Name" label="Checkbox Two" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxTwo')} value={props.checkboxTwoInitValue} />
+          <Input type="text" placeholder="Enter Checkbox Name" label="Checkbox Three" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxThree')} value={props.checkboxThreeInitValue} />
+          <Input type="text" placeholder="Enter Checkbox Name" label="Checkbox Four" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxFour')} value={props.checkboxFourInitValue} />
+          <Input type="text" placeholder="Enter Checkbox Name" label="Checkbox Five" onChange={(event, checkbox) => props.surveyCheckboxNameChangeHandler(event, 'checkboxFive')} value={props.checkboxFiveInitValue} />
           <Button size='sm' onClick={(checkbox) => props.saveCheckboxNameHandler('checkboxFive')}>Save Names</Button></>);
     } else {
       checkboxOne = (<>

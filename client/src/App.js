@@ -133,7 +133,7 @@ class App extends Component {
          <Route path="/surveys/credits/new" component={PurchaseCredits} />
          <Route path="/surveys/credits" component={Credits} />
          <Route path="/surveys/surveylist" component={SurveyList} />
-         <Route path="/surveys/review_final" component={SurveyFinalReview} />
+         <Route path="/surveys/review_final/:id" component={SurveyFinalReview} />
          <Route path="/surveys/customize_email" component={CustomizeEmail} />
          <Route path="/surveys/new" component={CreateSurvey} />
          <Route path="/surveys" component={Dashboard} />
@@ -164,4 +164,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));   
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));

@@ -13,7 +13,10 @@ class SurveyFinalReview extends Component {
   }
 
   componentDidMount() {
-    axios.post('/api/survey_data', {surveyId: this.props.location.state.surveyId})
+    // : this.props.location.state.surveyId
+    const surveyId = window.location.pathname.split("/")[3];
+    console.log(surveyId);
+    axios.post('/api/survey_data', { surveyId })
     .then(result => {
        const newSurvey = {...result.data.survey};
        this.setState({ survey: newSurvey });
@@ -31,7 +34,7 @@ class SurveyFinalReview extends Component {
           // To render checkbox items
           checkboxItems = Object.keys(checkboxObj.surveyCheckboxNames)
           .map(checkbox => {
-            return <CustomInput type="checkbox" id="exampleCustomInline2" label={checkbox} inline />
+            return <CustomInput key={Math.random()} type="checkbox" id="exampleCustomInline2" label={checkbox} inline />
           });
         }
         return (
@@ -55,7 +58,6 @@ class SurveyFinalReview extends Component {
                 <div>
                   <CustomInput value={radioObj.surveyRadioOptionNames[0]} type="radio" id="exampleCustomRadio" name="customRadio" label={radioObj.surveyRadioOptionNames[0]} inline />
                   <CustomInput value={radioObj.surveyRadioOptionNames[1]} type="radio" id="exampleCustomRadio2" name="customRadio" label={radioObj.surveyRadioOptionNames[1]} inline />
-                  <Button size='sm' onClick={(radio) => this.deleteSurveyRadioOptionHandler(radioObj)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
                 </div>
                 </FormGroup>
                 </FormGroup>
@@ -71,12 +73,17 @@ class SurveyFinalReview extends Component {
       <div id="inputArea" className={classes.InputArea}>
       {
         Object.keys(this.state.survey.surveyInputs).map(key => {
-               return (<Input
-                  key={key + new Date().getMilliseconds()}
-                  id={key}
-                  type="text"
-                  placeholder={this.state.survey.surveyInputs[key]}
-                />
+               return (
+                 <FormGroup>
+                    <Label>{key}</Label>
+                     <Input
+                      style={{ borderRadius: 0, height: '1.8rem' }}
+                      key={key + new Date().getMilliseconds()}
+                      id={key}
+                      type="text"
+                      placeholder={this.state.survey.surveyInputs[key]}
+                    />
+                 </FormGroup>
               )
       })
       }

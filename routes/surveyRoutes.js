@@ -12,6 +12,8 @@ router.post('/api/survey_data', surveyController.returnSurveyData);
 
 router.get('/api/surveys', surveyController.getSurveyList);
 
+router.post('/api/survey/delete', surveyController.deleteSurvey);
+
 // router.post('/api/surveys', surveyController.getSurvey);
 
 module.exports = router;

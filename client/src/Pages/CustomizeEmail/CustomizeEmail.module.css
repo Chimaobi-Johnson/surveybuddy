@@ -41,3 +41,18 @@ h5 {
   overflow-y: scroll;
   font-size: .7rem;
 }
+
+
+@media (max-width: 699px) {
+  .Container {
+    display: block;
+    height: auto;
+  }
+  .SideBarContainer {
+     min-height: 60vh;
+  }
+  .FormContainer {
+    padding: 2rem;
+  }
+
+}

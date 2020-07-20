@@ -20,7 +20,6 @@ class CustomizeEmail extends Component {
    }
 
    componentDidMount () {
-     console.log(this.props.location);
      this.setState({ surveyId: this.props.location.state.surveyId });
    }
 
@@ -46,7 +45,7 @@ class CustomizeEmail extends Component {
         axios.post('/api/store_survey_email_details', formdata)
         .then(response => {
           alert('Form Submitted Successfully');
-          this.props.history.push('/surveys/review_final', {surveyId: this.state.surveyId});
+          this.props.history.push(`/surveys/review_final/${this.state.surveyId}`);
         })
         .catch(err => {
           this.setState({ loading: false });

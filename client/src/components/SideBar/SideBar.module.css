@@ -33,5 +33,6 @@
 @media (max-width: 699px) {
   .SideBarContent {
     padding: 1rem 0;
+    min-height: 100vh;
   }
 }

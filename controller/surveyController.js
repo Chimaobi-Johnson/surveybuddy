@@ -178,3 +178,16 @@ exports.storeUserSurveyForm = (req, res) => {
 
   }
 }
+
+exports.deleteSurvey = (req, res, next) => {
+   const surveyId = req.body.surveyId;
+   Survey.deleteOne({ _id: surveyId })
+   .then(response => {
+      res.status(200).json({ message: "Survey deleted!" });
+   })
+   .catch(err => {
+     const error = new Error(err);
+     error.httpStatusCode = 500;
+     return next(error);
+   })
+}
