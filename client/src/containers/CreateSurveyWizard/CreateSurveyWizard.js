@@ -132,17 +132,17 @@ class CreateSurveyWizard extends React.Component {
     switch(dialogName) {
       case "surveyTitleDialog":
         inputArray = [ ...this.state.componentArray];
-        inputArray.push(<div><h2 style={{textAlign: 'center',fontSize: '1.2rem', paddingTop: '1rem'}}>{this.state.surveyTitleText}</h2></div>)
+        inputArray.push(<div id="surveyTitle" componentIdenifier={Math.random()} onClick={this.deleteSurveyTitleComponent}><h2 style={{textAlign: 'center',fontSize: '1.2rem', paddingTop: '1rem'}}>{this.state.surveyTitleText}</h2></div>)
         this.setState({ componentArray: inputArray });
         break
       case "surveyDescrDialog":
         inputArray = [ ...this.state.componentArray];
-        inputArray.push(<div> <p style={{textAlign: 'center', fontSize: '.9rem'}}>{this.state.surveyDescrText}</p></div>)
+        inputArray.push(<div id="surveyDescription" componentIdenifier={Math.random()}><p style={{textAlign: 'center', fontSize: '.9rem'}}>{this.state.surveyDescrText}</p></div>)
         this.setState({ componentArray: inputArray });
         break
       case "surveyImageDialog":
         inputArray = [ ...this.state.componentArray];
-        inputArray.push(<div className={classes.SurveyImageBox}>
+        inputArray.push(<div id="surveyImage" componentIdenifier={Math.random()} className={classes.SurveyImageBox}>
           {!this.state.imagePreviewUrl ? null : <img src={this.state.imagePreviewUrl} />}
           <br />
           <Button style={{ display: 'none', margin: '0 auto' }} size='sm' id="removeImageBtn" onClick={this.removeSurveyImageHandler}>Remove Image</Button>
@@ -275,6 +275,15 @@ class CreateSurveyWizard extends React.Component {
   
     // })
 
+  }
+
+  deleteSurveyTitleComponent = () => {
+    const key = document.getElementById("surveyTitle").getAttribute("componentIdenifier")
+    let inputArray = [ ...this.state.componentArray ];
+    const newArr = inputArray.filter(item => item.props.componentIdenifier != key);
+    console.log(key);
+    console.log(this.state.componentArray[0].props.componentIdenifier)
+    this.setState({ componentArray: newArr })
   }
 
   deleteSurveyInputHandler = (key) => {
