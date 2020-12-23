@@ -247,14 +247,15 @@ class CreateSurveyWizard extends React.Component {
     const surveyInputs = {...this.state.surveyInputs};
     // clear inputs
     surveyInputs[inputLabel] = '';
-    // this.setState({ surveyInputs: surveyInputs, surveyInputDialog: false })
-    // this.setState({surveyInputDialog: false});
+
     // add to components array
 
     let inputArray = []
+    // this method of generating random ids is used for simplicity sake
+    let randomId = Math.random().toString(36).substr(2, 15);
     inputArray = [...this.state.componentArray];
     inputArray.push(
-      <div id="inputArea" className={classes.InputArea}>
+      <div id={randomId} componentIdentifier={Math.random()} className={classes.InputArea}>
         <FormGroup>
             <Label>{inputLabel}</Label>
             <Input
@@ -265,7 +266,7 @@ class CreateSurveyWizard extends React.Component {
               value=""
               onChange={(event, key) => this.surveyInputChangeHandler(event, inputLabel)}
             />
-          <Button size='sm' key={inputLabel + 'btn' + new Date().getMilliseconds()} onClick={(identifier) => this.deleteSurveyInputHandler(`${inputLabel}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+          <Button size='sm' key={inputLabel + 'btn' + new Date().getMilliseconds()} onClick={(arg1, arg2) => this.deleteSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
         </FormGroup>
       </div>
     )
@@ -281,15 +282,21 @@ class CreateSurveyWizard extends React.Component {
     const key = document.getElementById("surveyTitle").getAttribute("componentIdenifier")
     let inputArray = [ ...this.state.componentArray ];
     const newArr = inputArray.filter(item => item.props.componentIdenifier != key);
-    console.log(key);
-    console.log(this.state.componentArray[0].props.componentIdenifier)
     this.setState({ componentArray: newArr })
   }
 
-  deleteSurveyInputHandler = (key) => {
+  deleteSurveyInputHandler = (key, randomId) => {
+    // delete from component array
+    const identifier = document.getElementById(`${randomId}`).getAttribute("componentIdentifier")
+    let inputArray = [ ...this.state.componentArray ];
+    console.log(this.state.componentArray[0].props.componentIdentifier)
+    console.log(identifier)
+    const newArr = inputArray.filter(item => item.props.componentIdentifier != identifier);
+
+    // delete from surveyinputs obj
     const currentSurveyInputObj = {...this.state.surveyInputs};
     delete currentSurveyInputObj[key];
-    this.setState({surveyInputs: currentSurveyInputObj});
+    this.setState({ surveyInputs: currentSurveyInputObj, componentArray: newArr });
   }
 
   initSurveyCheckboxDialog = () => {
