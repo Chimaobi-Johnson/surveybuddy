@@ -16,6 +16,7 @@ import loader from '../../assets/images/gifs/pulse.gif';
 import axios from 'axios';
 
 import * as classes from './CreateSurveyWizard.module.css';
+import RenderUpdateInputModal from './Input/RenderUpdateInputModal';
 
 class CreateSurveyWizard extends React.Component {
 
@@ -32,6 +33,13 @@ class CreateSurveyWizard extends React.Component {
     surveyCheckboxDialog: false,
     surveyRadioDialog: false,
     surveyFooterDialog: false,
+    surveyTitleUpdateDialog: false,
+    surveyDescrUpdateDialog: false,
+    surveyImageUpdateDialog: false,
+    surveyInputUpdateDialog: false,
+    surveyCheckboxUpdateDialog: false,
+    surveyRadioUpdateDialog: false,
+    surveyFooterUpdateDialog: false,
     surveyCheckboxes: [],
     surveyCheckboxInitValues: {
       checkboxOne: {
@@ -77,7 +85,9 @@ class CreateSurveyWizard extends React.Component {
     responseStatus: null,
     responseData: null,
     modalOpen: true,
-    sidebarOpen: false
+    sidebarOpen: false,
+    componentIndex: -1,
+    formerSurveyInputLabelName: ''
   }
 
   cancelNewSurvey = () => {
@@ -123,6 +133,10 @@ class CreateSurveyWizard extends React.Component {
 
 
      // this.props.history.push('/surveys/confirm');
+  }
+
+  updateDialog = (dialogName) => {
+    this.setState({[dialogName]: false, componentIndex: -1 });
   }
 
 
@@ -255,18 +269,18 @@ class CreateSurveyWizard extends React.Component {
     let randomId = Math.random().toString(36).substr(2, 15);
     inputArray = [...this.state.componentArray];
     inputArray.push(
-      <div id={randomId} componentIdentifier={Math.random()} className={classes.InputArea}>
+      <div id={randomId} key={inputLabel + new Date().getMilliseconds()} componentIdentifier={Math.random()} className={classes.InputArea}>
         <FormGroup>
             <Label>{inputLabel}</Label>
             <Input
               style={{ borderRadius: 0, height: '1.8rem' }}
-              key={inputLabel + new Date().getMilliseconds()}
               id={inputLabel}
               type="text"
               value=""
               onChange={(event, key) => this.surveyInputChangeHandler(event, inputLabel)}
             />
-          <Button size='sm' key={inputLabel + 'btn' + new Date().getMilliseconds()} onClick={(arg1, arg2) => this.deleteSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+          <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+          <Button size='sm' onClick={(arg1, arg2) => this.editSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-pen-o" aria-hidden="true"></i></Button>
         </FormGroup>
       </div>
     )
@@ -277,6 +291,9 @@ class CreateSurveyWizard extends React.Component {
     // })
 
   }
+
+
+  // {{ DELETE COMPONENTS }}
 
   deleteSurveyTitleComponent = () => {
     const key = document.getElementById("surveyTitle").getAttribute("componentIdenifier")
@@ -289,8 +306,6 @@ class CreateSurveyWizard extends React.Component {
     // delete from component array
     const identifier = document.getElementById(`${randomId}`).getAttribute("componentIdentifier")
     let inputArray = [ ...this.state.componentArray ];
-    console.log(this.state.componentArray[0].props.componentIdentifier)
-    console.log(identifier)
     const newArr = inputArray.filter(item => item.props.componentIdentifier != identifier);
 
     // delete from surveyinputs obj
@@ -298,6 +313,64 @@ class CreateSurveyWizard extends React.Component {
     delete currentSurveyInputObj[key];
     this.setState({ surveyInputs: currentSurveyInputObj, componentArray: newArr });
   }
+
+
+  // {{ EDIT COMPONENTS }}
+
+  editSurveyInputHandler = (key, randomId) => {
+    // get the index of array in the components array
+    let inputArray = [ ...this.state.componentArray ];
+    const componentIndex = inputArray.map(e => e.props.id).indexOf(`${randomId}`);
+    // store it to state to be used for updating the component
+    this.setState({ surveyInputUpdateDialog: true, formerSurveyInputLabelName: key, surveyInputLabelName: key, componentIndex: componentIndex });
+  }
+
+
+  // {{ UPDATE COMPONENTS }}
+
+
+  updateSurveyInputHandler = () => {
+    // update survey inputs object
+
+    let inputLabel = this.state.surveyInputLabelName;
+
+    const surveyInputs = {...this.state.surveyInputs};
+
+    delete surveyInputs[this.state.formerSurveyInputLabelName];
+    //update obj
+
+    Object.assign(surveyInputs, {[inputLabel]: ""})
+    // add to components array
+
+    let inputArray = []
+    // this method of generating random ids is used for simplicity sake
+    let randomId = Math.random().toString(36).substr(2, 15);
+    inputArray = [...this.state.componentArray];
+    if (this.state.componentIndex !== -1) {
+      inputArray[this.state.componentIndex] = (
+        <div id={randomId} componentIdentifier={Math.random()} key={inputLabel + new Date().getMilliseconds()} className={classes.InputArea}>
+          <FormGroup>
+              <Label>{inputLabel}</Label>
+              <Input
+                style={{ borderRadius: 0, height: '1.8rem' }}
+                id={inputLabel}
+                type="text"
+                value=""
+                onChange={(event, key) => this.surveyInputChangeHandler(event, inputLabel)}
+              />
+            </FormGroup>
+            <div>
+            <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+            <Button size='sm' onClick={(arg1, arg2) => this.editSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-pen-o" aria-hidden="true"></i></Button>
+            </div>
+        </div>
+      );
+    }
+
+    this.setState({ componentArray: inputArray, surveyInputs: surveyInputs, surveyInputDialog: false, componentIndex: -1, surveyInputUpdateDialog: false });
+
+  }
+
 
   initSurveyCheckboxDialog = () => {
     // document.getElementById('drawer-toggle').checked = false;
@@ -536,6 +609,8 @@ class CreateSurveyWizard extends React.Component {
                    editRadioNamesHandler={this.editRadioNamesHandler} saveRadioNamesHandler={this.saveRadioNamesHandler}
                    />
           <RenderFooterModal surveyFooterDialog={this.state.surveyFooterDialog} surveyFooterText={this.state.surveyFooterText} changeSurveyFooterText={this.changeSurveyFooterText} removeDialog={(mode) => this.removeDialog('surveyFooterDialog')}/>
+
+          <RenderUpdateInputModal updateSurveyInputHandler={this.updateSurveyInputHandler} changeSurveyInputLabelName={this.changeSurveyInputLabelName} surveyInputLabelName={this.state.surveyInputLabelName} surveyInputUpdateDialog={this.state.surveyInputUpdateDialog} updateDialog={(mode) => this.updateDialog('surveyInputUpdateDialog')} />
 
           <div id="surveySidebar" className={classes.SideBarContainer}>
              <Button onClick={this.toggleSidebarOpen} className={classes.SideBarToggle}>
