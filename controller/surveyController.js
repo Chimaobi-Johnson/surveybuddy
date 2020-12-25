@@ -106,8 +106,8 @@ exports.storeUserSurveyForm = (req, res) => {
   let file;
   const surveyId = req.body.surveyId;
   const surveyName = req.body.surveyName;
-  const surveyTitleText = req.body.surveyTitleText;
-  const surveyDescrText = req.body.surveyDescrText;
+  const surveyTitleText = JSON.parse(req.body.surveyTitleText);
+  const surveyDescrText = JSON.parse(req.body.surveyDescrText);
   const surveyFooterText = req.body.surveyFooterText;
   if(!req.file) {
      file = null;
@@ -117,17 +117,19 @@ exports.storeUserSurveyForm = (req, res) => {
   const surveyInputs = JSON.parse(req.body.surveyInputs);
   const surveyCheckboxes = JSON.parse(req.body.surveyCheckboxes);
   const surveyRadioOptions = JSON.parse(req.body.surveyRadioOptions);
+  const componentArray = JSON.parse(req.body.componentArray);
   console.log(surveyId);
   if(surveyId === "null") {
     // if surveyId is null that means the user is saving survey for the first time
       const survey = new Survey({
           surveyName: surveyName,
-          surveyTitleText: surveyTitleText,
-          surveyDescrText: surveyDescrText,
+          surveyTitleText: [...surveyTitleText],
+          surveyDescrText: [...surveyDescrText],
           surveyFooterText: surveyFooterText,
-          surveyInputs: {...surveyInputs},
-          surveyCheckboxes: {...surveyCheckboxes},
-          surveyRadioOptions: {...surveyRadioOptions},
+          surveyInputs: [...surveyInputs],
+          surveyCheckboxes: [...surveyCheckboxes],
+          surveyRadioOptions: [...surveyRadioOptions],
+          componentArray: [...componentArray],
           imageUrl: file,
           _user: req.user._id
         });
@@ -150,12 +152,13 @@ exports.storeUserSurveyForm = (req, res) => {
            }
 
            survey.surveyName = surveyName;
-           survey.surveyTitleText = surveyTitleText;
-           survey.surveyDescrText = surveyDescrText;
+           survey.surveyTitleText = [...surveyTitleText];
+           survey.surveyDescrText = [...surveyDescrText];
            survey.surveyFooterText = surveyFooterText;
-           survey.surveyInputs = {...surveyInputs};
-           survey.surveyCheckboxes = {...surveyCheckboxes};
-           survey.surveyRadioOptions = {...surveyRadioOptions};
+           survey.surveyInputs = [...surveyInputs];
+           survey.surveyCheckboxes = [...surveyCheckboxes];
+           survey.surveyRadioOptions = [...surveyRadioOptions];
+           survey.componentArray = [...componentArray];
            survey.imageUrl = file;
            survey._id = surveyId;
            survey.save()

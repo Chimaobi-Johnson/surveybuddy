@@ -3,12 +3,13 @@ const { Schema } = mongoose;
 
 const surveySchema = new Schema({
   surveyName: String,
-  surveyTitleText: String,
-  surveyDescrText: String,
+  componentArray: [],
+  surveyTitleText: [],
+  surveyDescrText: [],
   surveyFooterText: String,
-  surveyInputs: {},
-  surveyCheckboxes: {},
-  surveyRadioOptions: {},
+  surveyInputs: [],
+  surveyCheckboxes: [],
+  surveyRadioOptions: [],
   imageUrl: String,
   emailSubject: String,
   emailBody: String,

@@ -108,17 +108,21 @@ class CreateSurveyWizard extends React.Component {
      const surveyInputs = JSON.stringify(this.state.surveyInputs);
      const surveyCheckboxes = JSON.stringify(this.state.surveyCheckboxes);
      const surveyRadioOptions = JSON.stringify(this.state.surveyRadioOptions);
+     const surveyTitleText = JSON.stringify(this.state.surveyTitleText);
+     const surveyDescrText = JSON.stringify(this.state.surveyDescrText)
+     const componentArray = JSON.stringify(this.state.componentArray);
 
      let customForm = new FormData();
      customForm.append('surveyId', this.state.surveyId);
      customForm.append('surveyName', this.state.surveyNameText);
-     customForm.append('surveyTitleText', this.state.surveyTitleText);
-     customForm.append('surveyDescrText', this.state.surveyDescrText);
+     customForm.append('surveyTitleText', surveyTitleText);
+     customForm.append('surveyDescrText', surveyDescrText);
      customForm.append('surveyFooterText', this.state.surveyFooterText);
      customForm.append('image', this.state.file);
      customForm.append('surveyInputs', surveyInputs);
      customForm.append('surveyCheckboxes', surveyCheckboxes);
      customForm.append('surveyRadioOptions', surveyRadioOptions);
+     customForm.append('componentArray', componentArray);
 
      axios.post('/api/store_survey_form', customForm)
      .then(response => {
