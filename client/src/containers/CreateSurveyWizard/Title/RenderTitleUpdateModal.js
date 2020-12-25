@@ -1,16 +1,15 @@
 import React from 'react';
 import { Modal, Input, Button } from 'reactstrap';
 
-
-const renderTitleModal = props => (
+const renderTitleUpdateModal = props => (
         <Modal
           className="modal-dialog-centered"
-          toggle={props.removeDialog}
-          isOpen={props.surveyTitleDialog}
+          toggle={props.updateDialog}
+          isOpen={props.surveyTitleUpdateDialog}
         >
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
-             Add a Title
+             Edit Heading
             </h5>
           </div>
           <div className="modal-body">
@@ -22,11 +21,11 @@ const renderTitleModal = props => (
                onChange={props.changeSurveyTitle} />
           </div>
           <div className="modal-footer">
-            <Button onClick={props.removeDialog} size="sm" color="primary" type="button">
-              Save
+            <Button onClick={props.updateSurveyTitleHandler} size="sm" color="primary" type="button">
+              Update
             </Button>
           </div>
         </Modal>
 )
 
-export default renderTitleModal;
+export default renderTitleUpdateModal;

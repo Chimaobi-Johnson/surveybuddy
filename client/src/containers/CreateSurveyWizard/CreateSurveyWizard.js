@@ -20,6 +20,7 @@ import RenderUpdateInputModal from './Input/RenderUpdateInputModal';
 import RenderUpdateCheckboxModal from './Checkbox/RenderUpdateCheckboxModal';
 import RenderRadioUpdateModal from './Radio/RenderRadioUpdateModal';
 import RenderImageUpdateModal from './Image/RenderImageUpdateModal';
+import RenderTitleUpdateModal from './Title/RenderTitleUpdateModal'
 
 class CreateSurveyWizard extends React.Component {
 
@@ -78,7 +79,9 @@ class CreateSurveyWizard extends React.Component {
     surveyCheckboxNumber: 0,
     surveyCheckboxTempValue: '',
     surveyTitleText: '',
+    surveyTitleArray: [],
     surveyDescrText: '',
+    descriptionArray: [],
     surveyFooterText: '',
     surveyInputLabelName: '',
     surveyInputs: {},
@@ -108,15 +111,15 @@ class CreateSurveyWizard extends React.Component {
      const surveyInputs = JSON.stringify(this.state.surveyInputs);
      const surveyCheckboxes = JSON.stringify(this.state.surveyCheckboxes);
      const surveyRadioOptions = JSON.stringify(this.state.surveyRadioOptions);
-     const surveyTitleText = JSON.stringify(this.state.surveyTitleText);
-     const surveyDescrText = JSON.stringify(this.state.surveyDescrText)
+     const surveyTitleArray = JSON.stringify(this.state.surveyTitleArray);
+     const descriptionArray = JSON.stringify(this.state.descriptionArray)
      const componentArray = JSON.stringify(this.state.componentArray);
 
      let customForm = new FormData();
      customForm.append('surveyId', this.state.surveyId);
      customForm.append('surveyName', this.state.surveyNameText);
-     customForm.append('surveyTitleText', surveyTitleText);
-     customForm.append('surveyDescrText', surveyDescrText);
+     customForm.append('surveyTitleArray', surveyTitleArray);
+     customForm.append('descriptionArray', descriptionArray);
      customForm.append('surveyFooterText', this.state.surveyFooterText);
      customForm.append('image', this.state.file);
      customForm.append('surveyInputs', surveyInputs);
@@ -144,18 +147,41 @@ class CreateSurveyWizard extends React.Component {
   }
 
   removeDialog = (dialogName) => {
+    let randomId;
     this.setState({[dialogName]: false});
     let inputArray = [];
     switch(dialogName) {
       case "surveyTitleDialog":
         inputArray = [ ...this.state.componentArray];
-        inputArray.push(<div id="surveyTitle" componentIdenifier={Math.random()} onClick={this.deleteSurveyTitleComponent}><h2 style={{textAlign: 'center',fontSize: '1.2rem', paddingTop: '1rem'}}>{this.state.surveyTitleText}</h2></div>)
-        this.setState({ componentArray: inputArray });
+        const titleArr = [ ...this.state.surveyTitleArray]
+        randomId = Math.random().toString(36).substr(2, 15);
+        const titleObj = {
+          id: Math.random(),
+          text: this.state.surveyTitleText
+        }
+        titleArr.push(titleObj);
+        inputArray.push(<div id={randomId} componentIdenifier={Math.random()} onClick={this.deleteSurveyTitleComponent}>
+          <h2 style={{textAlign: 'center',fontSize: '1.2rem', paddingTop: '1rem'}}>{this.state.surveyTitleText}</h2>
+          <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.deleteSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}>D</Button>
+          <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.editSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}>E</Button>
+          </div>)
+        this.setState({ componentArray: inputArray, surveyTitleArray: titleArr });
         break
       case "surveyDescrDialog":
-        inputArray = [ ...this.state.componentArray];
-        inputArray.push(<div id="surveyDescription" componentIdenifier={Math.random()}><p style={{textAlign: 'center', fontSize: '.9rem'}}>{this.state.surveyDescrText}</p></div>)
-        this.setState({ componentArray: inputArray });
+        randomId = Math.random().toString(36).substr(2, 15);
+        inputArray = [ ...this.state.componentArray ];
+        const descrArr = [ ...this.state.descriptionArray ];
+        const descrObj = {
+          id: Math.random(),
+          text: this.state.surveyDescrText
+        }
+        descrArr.push(descrObj);
+        inputArray.push(<div id={randomId} componentIdenifier={Math.random()}>
+          <p style={{textAlign: 'center', fontSize: '.9rem'}}>{this.state.surveyDescrText}</p>
+          <Button style={{ margin: '0 auto' }} size='sm' onClick={this.deleteSurveyImageHandler}>D</Button>
+          <Button style={{ margin: '0 auto' }} size='sm' onClick={this.editSurveyImageHandler}>E</Button>
+          </div>)
+        this.setState({ componentArray: inputArray, descriptionArray: descrArr });
         break
       case "surveyImageDialog":
         inputArray = [ ...this.state.componentArray];
@@ -496,6 +522,16 @@ class CreateSurveyWizard extends React.Component {
     this.setState({surveyNameEditingMode: true});
   }
 
+  editSurveyTitleHandler = (key, randomId) => {
+     // get the index of array in the components array
+     let inputArray = [ ...this.state.componentArray ];
+     const titleArr = [ ...this.state.surveyTitleArray ];
+     const componentIndex = inputArray.map(e => e.props.id).indexOf(`${randomId}`);
+     const dataIndex = titleArr.map(e => e.id).indexOf(`${key}`);
+     // store it to state to be used for updating the component
+     this.setState({ surveyTitleUpdateDialog: true, surveyTitleText: "", componentIndex: componentIndex, dataIndex });
+  }
+
   editSurveyInputHandler = (key, randomId) => {
     // get the index of array in the components array
     let inputArray = [ ...this.state.componentArray ];
@@ -551,6 +587,30 @@ class CreateSurveyWizard extends React.Component {
   
   updateDialog = (dialogName) => {
     this.setState({[dialogName]: false, componentIndex: -1, dataIndex: -1 });
+  }
+
+  updateSurveyTitleHandler = () => {
+    let inputArray;
+    inputArray = [ ...this.state.componentArray ];
+    const titleArr = [ ...this.state.surveyTitleArray ];  
+    const titleObj = {
+      id: Math.random(),
+      text: this.state.surveyTitleText
+    }
+    if (this.state.dataIndex !== -1) {
+      titleArr[this.state.dataIndex] = titleObj
+    }
+    const randomId = Math.random().toString(36).substr(2, 15);
+    if (this.state.componentIndex !== -1) {
+      inputArray[this.state.componentIndex] = (
+        <div id={randomId} componentIdenifier={Math.random()} onClick={this.deleteSurveyTitleComponent}>
+          <h2 style={{textAlign: 'center',fontSize: '1.2rem', paddingTop: '1rem'}}>{this.state.surveyTitleText}</h2>
+          <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.deleteSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}>D</Button>
+          <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.editSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}>E</Button>
+        </div>
+      )
+    }
+      this.setState({ componentArray: inputArray, surveyTitleArray: titleArr, componentIndex: -1, dataIndex: -1, surveyTitleUpdateDialog: false });
   }
 
   updateSurveyInputHandler = () => {
@@ -714,11 +774,14 @@ class CreateSurveyWizard extends React.Component {
   
   // {{ DELETE COMPONENTS }}
 
-  deleteSurveyTitleComponent = () => {
-    const key = document.getElementById("surveyTitle").getAttribute("componentIdenifier")
+  deleteSurveyTitleHandler = (key, randomId) => {
+    const identifier = document.getElementById(`${randomId}`).getAttribute("componentIdenifier")
     let inputArray = [ ...this.state.componentArray ];
-    const newArr = inputArray.filter(item => item.props.componentIdenifier != key);
-    this.setState({ componentArray: newArr })
+    const newArr = inputArray.filter(item => item.props.componentIdenifier != identifier);
+
+    const titleArr = [ ...this.state.surveyTitleArray ];
+    const filteredArr = titleArr.filter(item => item.id != key);
+    this.setState({ componentArray: newArr, surveyTitleArray: filteredArr })
   }
 
   deleteSurveyInputHandler = (key, randomId) => {
@@ -841,6 +904,7 @@ class CreateSurveyWizard extends React.Component {
             <RenderImageUpdateModal surveyImageUpdateDialog={this.state.surveyImageUpdateDialog} updateDialog={(mode) => this.updateDialog("surveyImageUpdateDialog")} 
               surveyImagePath={this.state.surveyImagePath} updateSurveyImageHandler={this.updateSurveyImageHandler} changeSurveyImage={this.changeSurveyImage} imagePreviewUrl={this.state.imagePreviewUrl}
             />
+            <RenderTitleUpdateModal updateSurveyTitleHandler={this.updateSurveyTitleHandler} surveyTitleUpdateDialog={this.state.surveyTitleUpdateDialog} surveyTitleText={this.state.surveyTitleText} changeSurveyTitle={this.changeSurveyTitle} updateDialog={(mode) => this.updateDialog('surveyTitleUpdateDialog')} />
 
           <div id="surveySidebar" className={classes.SideBarContainer}>
              <Button onClick={this.toggleSidebarOpen} className={classes.SideBarToggle}>
