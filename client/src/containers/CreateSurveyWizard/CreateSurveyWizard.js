@@ -18,6 +18,7 @@ import axios from 'axios';
 import * as classes from './CreateSurveyWizard.module.css';
 import RenderUpdateInputModal from './Input/RenderUpdateInputModal';
 import RenderUpdateCheckboxModal from './Checkbox/RenderUpdateCheckboxModal';
+import RenderRadioUpdateModal from './Radio/RenderRadioUpdateModal';
 
 class CreateSurveyWizard extends React.Component {
 
@@ -42,24 +43,24 @@ class CreateSurveyWizard extends React.Component {
     surveyRadioUpdateDialog: false,
     surveyFooterUpdateDialog: false,
     surveyCheckboxes: [],
-    surveyCheckboxInitValues: {
-      checkboxOne: {
+    surveyCheckboxInitValues: [
+      {checkboxOne: {
         value: '',
         editingMode: false
-      },
-      checkboxTwo: {
+      }},
+      {checkboxTwo: {
         value: ''
-      },
-      checkboxThree: {
+      }},
+      {checkboxThree: {
         value: ''
-      },
-      checkboxFour: {
+      }},
+      {checkboxFour: {
         value: ''
-      },
-      checkboxFive: {
+      }},
+      {checkboxFive: {
         value: ''
-      },
-    },
+      }},
+    ],
     surveyRadioOptions: [],
     surveyRadioInitValues: {
       optionOne: {
@@ -324,9 +325,22 @@ class CreateSurveyWizard extends React.Component {
 
     // delete from survey checkbox array
     const surveyArr = [ ...this.state.surveyCheckboxes ]
-    const newCheckboxArr = surveyArr.find(item => item.id !== key);
+    const newCheckboxArr = surveyArr.filter(item => item.id != key);
 
     this.setState({ surveyCheckboxes: newCheckboxArr, componentArray: newArr });
+  }
+
+  deleteSurveyRadioOptionHandler = (key, randomId) => {
+    // delete from component array
+    const identifier = document.getElementById(`${randomId}`).getAttribute("componentIdentifier")
+    let inputArray = [ ...this.state.componentArray ];
+    const newArr = inputArray.filter(item => item.props.componentIdentifier != identifier);
+
+    // delete from survey radio array
+    const surveyArr = [ ...this.state.surveyRadioOptions ]
+    const newRadioArr = surveyArr.filter(item => item.id != key);
+
+    this.setState({ surveyRadioOptions: newRadioArr, componentArray: newArr });
   }
 
 
@@ -348,6 +362,17 @@ class CreateSurveyWizard extends React.Component {
     const dataIndex = checkboxArr.map(e => e.id).indexOf(`${key}`);
     // store it to state to be used for updating the component
     this.setState({ surveyCheckboxUpdateDialog: true, componentIndex: componentIndex, dataIndex: dataIndex });
+  }
+
+  editSurveyRadioOptionHandler = (key, randomId) => {
+    //update radio options
+    // get the index of array in the components array
+    const inputArray = [ ...this.state.componentArray ];
+    const radioArr = [ ...this.state.surveyRadioOptions ];
+    const componentIndex = inputArray.map(e => e.props.id).indexOf(`${randomId}`);
+    const dataIndex = radioArr.map(e => e.id).indexOf(`${key}`);
+    // store it to state to be used for updating the component
+    this.setState({ surveyRadioUpdateDialog: true, componentIndex: componentIndex, dataIndex: dataIndex });
   }
 
 
@@ -404,7 +429,7 @@ class CreateSurveyWizard extends React.Component {
         // loop each checkbox from one to three and transfer it from the initial state which is surveyCheckboxInitValues
         // to the permanent state which is either in checkbox one, two or three depending on how many the users wants
         
-          if(isEmpty(surveyCheckboxInitValues.checkboxOne.value)) {
+          if(isEmpty(surveyCheckboxInitValues[0].checkboxOne.value)) {
             alert('Please Edit Survey Form Checkbox Names');
           } else if (isEmpty(this.state.surveyCheckboxTempQuestion)) {
             alert('Please Edit Survey Form Checkbox Question');
@@ -425,7 +450,6 @@ class CreateSurveyWizard extends React.Component {
               checkBoxNames: checkBoxNames,
             }
             if (this.state.dataIndex !== -1) {
-              console.log(this.state.dataIndex)
               surveyArr[this.state.dataIndex] = checkboxObj
             }
             if (this.state.componentIndex !== -1) {
@@ -435,7 +459,7 @@ class CreateSurveyWizard extends React.Component {
                   <Label for="exampleCheckbox">{this.state.surveyCheckboxTempQuestion}</Label>
                   <div>
                   {checkBoxNames.map(item => (
-                    item === undefined ? null : <CustomInput key={Math.random() + "-ent"} type="checkbox" id="exampleCustomInline2" label="Yes" inline />
+                    item === undefined ? null : <CustomInput key={Math.random() + "-ent"} type="checkbox" id="exampleCustomInline2" label={`${item}`} inline />
                   ))}
                   <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyCheckBoxHandler(`${checkboxObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
                   <Button size='sm' onClick={(arg1, arg2) => this.editSurveyCheckBoxHandler(`${checkboxObj.id}`, `${randomId}`)}><i className="fa fa-pen-o" aria-hidden="true"></i></Button>
@@ -444,8 +468,57 @@ class CreateSurveyWizard extends React.Component {
               </div>
               )
             }
-            this.setState({ surveyCheckboxes: surveyArr, surveyCheckboxUpdateDialog: false, componentIndex: -1, surveyCheckboxTempQuestion: '', componentArray: inputArray, surveyCheckboxDialog: false  });
+            this.setState({ surveyCheckboxes: surveyArr, surveyCheckboxUpdateDialog: false, componentIndex: -1, dataIndex: -1, surveyCheckboxTempQuestion: '', componentArray: inputArray, surveyCheckboxDialog: false  });
           }
+  }
+
+  updateSurveyRadioOptionHandler = () => {
+    const surveyRadioArr = [...this.state.surveyRadioOptions];
+    const surveyRadioInitValues = {...this.state.surveyRadioInitValues};
+    let radioOptions = {};
+
+      Object.values(surveyRadioInitValues).map(radioObj => {
+         if(radioObj.value === '') {
+           return  // this is to prevent a checkbox with an empty name from being displayed in the form
+         }
+          // transfer object to as its been looped to checkboxNames obj using Object.assign method
+           return Object.assign(radioOptions, {[radioObj.value]: false});
+       });
+
+       surveyRadioInitValues.optionOne.value = "Option 1"
+       surveyRadioInitValues.optionTwo.value = "Option 2"
+
+      const radioObj = {
+        id: Math.random(),
+        options: radioOptions
+      }
+      if (this.state.dataIndex !== -1) {
+        surveyRadioArr[this.state.dataIndex] = radioObj
+      }
+      let inputArray = [];
+      inputArray = [ ...this.state.componentArray ]
+      const randomId = Math.random().toString(36).substr(2, 15);
+      if (this.state.componentIndex !== -1) {
+        inputArray[this.state.componentIndex] = (
+          <div id={randomId} componentIdentifier={Math.random()} key={Math.random()}>
+            <FormGroup tag="fieldset">
+              <legend style={{ fontSize: '1rem' }}></legend>
+              <FormGroup>
+              <Label for="exampleCheckbox">{this.state.surveyRadioTempQuestion}</Label>
+              <div>
+            {Object.keys(radioOptions).map(key => (
+              <CustomInput key={Math.random()} value={false} type="radio" id="exampleCustomRadio" name="customRadio" label={key} inline />
+            ))}
+           <Button size='sm' onClick={(radio) => this.deleteSurveyRadioOptionHandler(`${radioObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+           <Button size='sm' onClick={(radio) => this.editSurveyRadioOptionHandler(`${radioObj.id}`, `${randomId}`)}><i className="fa fa-pen-o" aria-hidden="true"></i></Button>
+            </div>
+              </FormGroup>
+            </FormGroup>
+            </div>
+        )
+      }
+
+      this.setState({ surveyRadioInitValues: surveyRadioInitValues, surveyRadioOptions: surveyRadioArr, componentIndex: -1, dataIndex: -1, surveyRadioTempQuestion: '', componentArray: inputArray, surveyRadioUpdateDialog: false  });
   }
   
   
@@ -466,45 +539,69 @@ class CreateSurveyWizard extends React.Component {
   }
 
   surveyCheckboxNameChangeHandler = (event, checkbox) => {
-    const checkboxInitValues = {...this.state.surveyCheckboxInitValues};
-    checkboxInitValues[checkbox].value = event.target.value;
-    this.setState({surveyCheckboxInitValues: checkboxInitValues});
-  }
-
-
-  surveyCheckboxNameChangeHandler = (event, checkbox) => {
-    const checkboxInitValues = {...this.state.surveyCheckboxInitValues};
-    checkboxInitValues[checkbox].value = event.target.value;
+    const checkboxNo = this.state.surveyCheckboxNumber;
+    // remove remaining objs from surveyCheckboxInitValues
+    const checkboxInitValues = [...this.state.surveyCheckboxInitValues];
+    // checkboxInitValues.substr(checkboxNo, 0);
+    // const newCheckboxInitVal = checkboxInitValues.splice(checkboxNo, 1);
+    // checkboxInitValues.splice(checkboxNo, checkboxNo - 5, "Lemon", "Kiwi");
+    // console.log(newCheckboxInitVal)
+    let index;
+    switch(checkbox) {
+      case "checkboxOne":
+       index = 0
+       break;
+       case "checkboxTwo":
+       index = 1
+       break;
+       case "checkboxThree":
+       index = 2
+       break;
+       case "checkboxFour":
+       index = 3
+       break;
+       case "checkboxFive":
+       index = 4
+       break;
+       default:
+         return
+    }
+    checkboxInitValues[index][checkbox].value = event.target.value;
+    // checkboxInitValues[checkbox].value = event.target.value;
     this.setState({surveyCheckboxInitValues: checkboxInitValues});
   }
 
   saveSurveyCheckboxHandler = () => {
     // const surveyCheckbox = {...this.state.surveyCheckboxes};
     const surveyArr = [...this.state.surveyCheckboxes];
-    const surveyCheckboxInitValues = {...this.state.surveyCheckboxInitValues};
+    const surveyCheckboxInitValues = [...this.state.surveyCheckboxInitValues];
     let checkboxNames = {};
     // loop each checkbox from one to three and transfer it from the initial state which is surveyCheckboxInitValues
     // to the permanent state which is either in checkbox one, two or three depending on how many the users wants
     
-      if(isEmpty(surveyCheckboxInitValues.checkboxOne.value)) {
+      if(isEmpty(surveyCheckboxInitValues[0].checkboxOne.value)) {
         alert('Please Edit Survey Form Checkbox Names');
       } else if (isEmpty(this.state.surveyCheckboxTempQuestion)) {
         alert('Please Edit Survey Form Checkbox Question');
       } else {
-        const checkBoxNames = Object.values(surveyCheckboxInitValues).map(checkboxObj => {
-           if(checkboxObj.value === '') {
-             return  // this is to prevent a checkbox with an empty name from being displayed in the form
-           }
-            // transfer object to as its been looped to checkboxNames obj using Object.assign method
-             return Object.assign(checkboxNames, {[checkboxObj.value]: false});
+         surveyCheckboxInitValues.map(checkboxObj => {
+           console.log(checkboxObj)
+           Object.values(checkboxObj).map(item => {
+            if(item.value === '') {
+              return  // this is to prevent a checkbox with an empty name from being displayed in the form
+            }
+             // transfer object to as its been looped to checkboxNames obj using Object.assign method
+            Object.assign(checkboxNames, {[item.value]: false});
+          })
          });
+
         let inputArray = [];
         inputArray = [ ...this.state.componentArray ]
         const randomId = Math.random().toString(36).substr(2, 15);
         const checkboxObj = {
           id: Math.random().toString(36).substr(2, 15),
           question: this.state.surveyCheckboxTempQuestion,
-          checkBoxNames: checkBoxNames,
+          checkboxNames: checkboxNames,
         }
         surveyArr.push(checkboxObj);
         inputArray.push(
@@ -512,8 +609,8 @@ class CreateSurveyWizard extends React.Component {
             <FormGroup>
               <Label for="exampleCheckbox">{this.state.surveyCheckboxTempQuestion}</Label>
               <div>
-              {checkBoxNames.map(item => (
-                item === undefined ? null : <CustomInput type="checkbox" id="exampleCustomInline2" label="Yes" inline />
+              {Object.keys(checkboxNames).map(key => (
+                <CustomInput key={Math.random()} type="checkbox" id="exampleCustomInline2" label={`${key}`} inline />
               ))}
               <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyCheckBoxHandler(`${checkboxObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
               <Button size='sm' onClick={(arg1, arg2) => this.editSurveyCheckBoxHandler(`${checkboxObj.id}`, `${randomId}`)}><i className="fa fa-pen-o" aria-hidden="true"></i></Button>
@@ -526,14 +623,14 @@ class CreateSurveyWizard extends React.Component {
   }
 
     saveCheckboxNameHandler = () => {
-      const checkboxInitValues = {...this.state.surveyCheckboxInitValues};
-      checkboxInitValues.checkboxOne.editingMode = false;
+      const checkboxInitValues = [...this.state.surveyCheckboxInitValues];
+      checkboxInitValues[0].checkboxOne.editingMode = false;
       this.setState({surveyCheckboxInitValues: checkboxInitValues});
     }
 
     editCheckboxNameHandler = () => {
-      const checkboxInitValues = {...this.state.surveyCheckboxInitValues};
-      checkboxInitValues.checkboxOne.editingMode = true;
+      const checkboxInitValues = [...this.state.surveyCheckboxInitValues];
+      checkboxInitValues[0].checkboxOne.editingMode = true;
       this.setState({surveyCheckboxInitValues: checkboxInitValues});
     }
 
@@ -579,55 +676,51 @@ class CreateSurveyWizard extends React.Component {
 
   saveSurveyRadioHandler = () => {
 
-    const surveyRadioArr = {...this.state.surveyRadioOptions};
+    const surveyRadioArr = [...this.state.surveyRadioOptions];
     const surveyRadioInitValues = {...this.state.surveyRadioInitValues};
     let radioOptions = {};
 
-    const surveyRadioNames = Object.values(surveyRadioInitValues).map(radioObj => {
+      Object.values(surveyRadioInitValues).map(radioObj => {
          if(radioObj.value === '') {
            return  // this is to prevent a checkbox with an empty name from being displayed in the form
          }
           // transfer object to as its been looped to checkboxNames obj using Object.assign method
            return Object.assign(radioOptions, {[radioObj.value]: false});
        });
+
+       surveyRadioInitValues.optionOne.value = "Option 1"
+       surveyRadioInitValues.optionTwo.value = "Option 2"
+
+      const radioObj = {
+        id: Math.random(),
+        options: radioOptions
+      }
+      surveyRadioArr.push(radioObj);
       let inputArray = [];
       inputArray = [ ...this.state.componentArray ]
+      const randomId = Math.random().toString(36).substr(2, 15);
       inputArray.push(
-          <div key={Math.random()}>
+          <div id={randomId} componentIdentifier={Math.random()} key={Math.random()}>
             <FormGroup tag="fieldset">
               <legend style={{ fontSize: '1rem' }}></legend>
               <FormGroup>
               <Label for="exampleCheckbox">{this.state.surveyRadioTempQuestion}</Label>
               <div>
-          {surveyRadioNames.map(item => (
-            item === undefined ? null : <CustomInput value="" type="radio" id="exampleCustomRadio" name="customRadio" label="" inline />
-          ))}
-           <Button size='sm' onClick={(radio) => this.deleteSurveyRadioOptionHandler("")}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+            {Object.keys(radioOptions).map(key => (
+              <CustomInput key={Math.random()} value={false} type="radio" id="exampleCustomRadio" name="customRadio" label={key} inline />
+            ))}
+          {/* {surveyRadioNames.map(item => (
+            item === undefined ? null : <CustomInput key={Math.random()} value="" type="radio" id="exampleCustomRadio" name="customRadio" label="" inline />
+          ))} */}
+           <Button size='sm' onClick={(radio) => this.deleteSurveyRadioOptionHandler(`${radioObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+           <Button size='sm' onClick={(radio) => this.editSurveyRadioOptionHandler(`${radioObj.id}`, `${randomId}`)}><i className="fa fa-pen-o" aria-hidden="true"></i></Button>
             </div>
               </FormGroup>
             </FormGroup>
             </div>
       )
-    this.setState({ surveyRadioOptions: surveyRadioArr, surveyRadioTempQuestion: '', componentArray: inputArray, surveyRadioDialog: false  });
+    this.setState({ surveyRadioInitValues: surveyRadioInitValues, surveyRadioOptions: surveyRadioArr, surveyRadioTempQuestion: '', componentArray: inputArray, surveyRadioDialog: false  });
   }
-
-
-  deleteSurveyRadioOptionHandler = (radio) => {
-    // radio is an Object
-    // surveyRadioOptions is spread out here and the surveyRadioQuestion is used as
-    // a unique identifier to compare and get the current radio the user wants to delete
-    const surveyRadioOptions = {...this.state.surveyRadioOptions};
-    Object.values(surveyRadioOptions).map(radioObj => {
-      if(radioObj.id === radio.id) {
-        radioObj.surveyRadioQuestion = '';
-        radioObj.surveyRadioOptionNames.length = 0;
-        radioObj.isDisplayed = false;
-      }
-    });
-    this.setState({ surveyRadioOptions });
-    console.log(radio);
-  }
-
 
  toggleSidebarOpen = () => {
    const sidebar = document.getElementById('surveySidebar');
@@ -666,12 +759,12 @@ class CreateSurveyWizard extends React.Component {
          <RenderCheckboxModal surveyCheckboxDialog={this.state.surveyCheckboxDialog} removeDialog={(mode) => this.removeDialog('surveyCheckboxDialog')}
                    surveyCheckboxTempQuestion={this.state.surveyCheckboxTempQuestion} changeSurveyCheckboxQuestion={this.changeSurveyCheckboxQuestion} surveyCheckboxNumber={this.state.surveyCheckboxNumber}
                    changeCheckboxNumber={this.changeCheckboxNumber} saveSurveyCheckboxHandler={this.saveSurveyCheckboxHandler} saveCheckboxNameHandler={this.saveCheckboxNameHandler} surveyCheckboxNameChangeHandler={this.surveyCheckboxNameChangeHandler}
-                   surveyCheckboxInitValues={this.state.surveyCheckboxInitValues.checkboxOne.editingMode} editCheckboxNameHandler={this.editCheckboxNameHandler}
-                   checkboxOneInitValue={this.state.surveyCheckboxInitValues.checkboxOne.value}
-                   checkboxTwoInitValue={this.state.surveyCheckboxInitValues.checkboxTwo.value}
-                   checkboxThreeInitValue={this.state.surveyCheckboxInitValues.checkboxThree.value}
-                   checkboxFourInitValue={this.state.surveyCheckboxInitValues.checkboxFour.value}
-                   checkboxFiveInitValue={this.state.surveyCheckboxInitValues.checkboxFive.value}
+                   surveyCheckboxInitValues={this.state.surveyCheckboxInitValues[0].checkboxOne.editingMode} editCheckboxNameHandler={this.editCheckboxNameHandler}
+                   checkboxOneInitValue={this.state.surveyCheckboxInitValues[0].checkboxOne.value}
+                   checkboxTwoInitValue={this.state.surveyCheckboxInitValues[1].checkboxTwo.value}
+                   checkboxThreeInitValue={this.state.surveyCheckboxInitValues[2].checkboxThree.value}
+                   checkboxFourInitValue={this.state.surveyCheckboxInitValues[3].checkboxFour.value}
+                   checkboxFiveInitValue={this.state.surveyCheckboxInitValues[4].checkboxFive.value}
                    surveyCheckboxNumber={this.state.surveyCheckboxNumber}
                    />
           <RenderRadioModal surveyRadioDialog={this.state.surveyRadioDialog} removeDialog={(mode) => this.removeDialog('surveyRadioDialog')}
@@ -686,14 +779,20 @@ class CreateSurveyWizard extends React.Component {
           <RenderUpdateCheckboxModal surveyCheckboxUpdateDialog={this.state.surveyCheckboxUpdateDialog} updateDialog={(mode) => this.updateDialog("surveyCheckboxUpdateDialog")}
                   surveyCheckboxTempQuestion={this.state.surveyCheckboxTempQuestion} changeSurveyCheckboxQuestion={this.changeSurveyCheckboxQuestion} surveyCheckboxNumber={this.state.surveyCheckboxNumber}
                   changeCheckboxNumber={this.changeCheckboxNumber} updateSurveyCheckboxHandler={this.updateSurveyCheckboxHandler} saveCheckboxNameHandler={this.saveCheckboxNameHandler} surveyCheckboxNameChangeHandler={this.surveyCheckboxNameChangeHandler}
-                  surveyCheckboxInitValues={this.state.surveyCheckboxInitValues.checkboxOne.editingMode} editCheckboxNameHandler={this.editCheckboxNameHandler}
-                  checkboxOneInitValue={this.state.surveyCheckboxInitValues.checkboxOne.value}
-                  checkboxTwoInitValue={this.state.surveyCheckboxInitValues.checkboxTwo.value}
-                  checkboxThreeInitValue={this.state.surveyCheckboxInitValues.checkboxThree.value}
-                  checkboxFourInitValue={this.state.surveyCheckboxInitValues.checkboxFour.value}
-                  checkboxFiveInitValue={this.state.surveyCheckboxInitValues.checkboxFive.value}
+                  surveyCheckboxInitValues={this.state.surveyCheckboxInitValues[0].checkboxOne.editingMode} editCheckboxNameHandler={this.editCheckboxNameHandler}
+                  checkboxOneInitValue={this.state.surveyCheckboxInitValues[0].checkboxOne.value}
+                  checkboxTwoInitValue={this.state.surveyCheckboxInitValues[1].checkboxTwo.value}
+                  checkboxThreeInitValue={this.state.surveyCheckboxInitValues[2].checkboxThree.value}
+                  checkboxFourInitValue={this.state.surveyCheckboxInitValues[3].checkboxFour.value}
+                  checkboxFiveInitValue={this.state.surveyCheckboxInitValues[4].checkboxFive.value}
                   surveyCheckboxNumber={this.state.surveyCheckboxNumber} 
               />
+            <RenderRadioUpdateModal surveyRadioUpdateDialog={this.state.surveyRadioUpdateDialog} updateDialog={(mode) => this.updateDialog("surveyRadioUpdateDialog")}
+              surveyRadioTempQuestion={this.state.surveyRadioTempQuestion} changeSurveyRadioQuestion={this.changeSurveyRadioQuestion} updateSurveyRadioOptionHandler={this.updateSurveyRadioOptionHandler}
+              optionOne={this.state.surveyRadioInitValues.optionOne.value} optionTwo={this.state.surveyRadioInitValues.optionTwo.value}
+              editingMode={this.state.surveyRadioInitValues.optionOne.editingMode} changeSurveyRadioName={this.changeSurveyRadioName}
+              editRadioNamesHandler={this.editRadioNamesHandler} saveRadioNamesHandler={this.saveRadioNamesHandler}
+            />
 
           <div id="surveySidebar" className={classes.SideBarContainer}>
              <Button onClick={this.toggleSidebarOpen} className={classes.SideBarToggle}>
