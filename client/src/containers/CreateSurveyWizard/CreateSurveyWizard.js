@@ -19,6 +19,7 @@ import * as classes from './CreateSurveyWizard.module.css';
 import RenderUpdateInputModal from './Input/RenderUpdateInputModal';
 import RenderUpdateCheckboxModal from './Checkbox/RenderUpdateCheckboxModal';
 import RenderRadioUpdateModal from './Radio/RenderRadioUpdateModal';
+import RenderImageUpdateModal from './Image/RenderImageUpdateModal';
 
 class CreateSurveyWizard extends React.Component {
 
@@ -154,12 +155,20 @@ class CreateSurveyWizard extends React.Component {
         break
       case "surveyImageDialog":
         inputArray = [ ...this.state.componentArray];
-        inputArray.push(<div id="surveyImage" componentIdenifier={Math.random()} className={classes.SurveyImageBox}>
+        const surveyImage = inputArray.filter(item => item.props.id === "surveyImage");
+        console.log(surveyImage);
+        if(surveyImage.length > 0) {
+          alert("You are allowed to add only one image")
+          return
+        } else {
+          inputArray.push(<div id="surveyImage" componentIdenifier={Math.random()} className={classes.SurveyImageBox}>
           {!this.state.imagePreviewUrl ? null : <img src={this.state.imagePreviewUrl} />}
           <br />
-          <Button style={{ display: 'none', margin: '0 auto' }} size='sm' id="removeImageBtn" onClick={this.removeSurveyImageHandler}>Remove Image</Button>
+          <Button style={{ margin: '0 auto' }} size='sm' id="removeImageBtn" onClick={this.deleteSurveyImageHandler}>Remove Image</Button>
+          <Button style={{ margin: '0 auto' }} size='sm' id="deleteImg" onClick={this.editSurveyImageHandler}>Edit Image</Button>
        </div>)
         this.setState({ componentArray: inputArray });
+        }
         break
       case "surveyFooterDialog":
         inputArray = [ ...this.state.componentArray];
@@ -417,11 +426,11 @@ class CreateSurveyWizard extends React.Component {
     this.setState({surveyDescrText: event.target.value});
   }
 
-  changeSurveyImage = (event) => {
-    event.preventDefault();
+  changeSurveyImage = (e) => {
+    e.preventDefault();
 
       let reader = new FileReader();
-      let file = event.target.files[0];
+      let file = e.target.files[0];
 
       reader.onloadend = () => {
       this.setState({
@@ -433,19 +442,6 @@ class CreateSurveyWizard extends React.Component {
      reader.readAsDataURL(file);
     //  document.getElementById('removeImageBtn').style.display = 'block';
   }
-
-
-
-  editSurveyName = () => {
-    this.setState({surveyNameEditingMode: true});
-  }
-
-
-  removeSurveyImageHandler = () => {
-    document.getElementById('removeImageBtn').style.display = 'none';
-    this.setState({ imagePreviewUrl: null });
-  }
-
 
   changeSurveyInputLabelName = (event) => {
     this.setState({surveyInputLabelName: event.target.value});
@@ -491,12 +487,25 @@ class CreateSurveyWizard extends React.Component {
 
   // {{ EDIT COMPONENTS }}
 
+  
+  editSurveyName = () => {
+    this.setState({surveyNameEditingMode: true});
+  }
+
   editSurveyInputHandler = (key, randomId) => {
     // get the index of array in the components array
     let inputArray = [ ...this.state.componentArray ];
     const componentIndex = inputArray.map(e => e.props.id).indexOf(`${randomId}`);
     // store it to state to be used for updating the component
     this.setState({ surveyInputUpdateDialog: true, formerSurveyInputLabelName: key, surveyInputLabelName: key, componentIndex: componentIndex });
+  }
+
+  editSurveyImageHandler = () => {
+     // get the index of array in the components array
+     let inputArray = [ ...this.state.componentArray ];
+     const componentIndex = inputArray.map(e => e.props.id).indexOf("surveyImage");
+     // store it to state to be used for updating the component
+    this.setState({ surveyImageUpdateDialog: true, componentIndex: componentIndex })
   }
 
   editSurveyCheckBoxHandler = (key, randomId) => {
@@ -580,6 +589,22 @@ class CreateSurveyWizard extends React.Component {
 
     this.setState({ componentArray: inputArray, surveyInputs: surveyInputs, surveyInputDialog: false, componentIndex: -1, surveyInputUpdateDialog: false });
 
+  }
+
+  updateSurveyImageHandler = (e) => {
+    let inputArray;
+    inputArray = [ ...this.state.componentArray ];
+    if (this.state.componentIndex !== -1) {
+      inputArray[this.state.componentIndex] = (
+        <div id="surveyImage" componentIdenifier={Math.random()} className={classes.SurveyImageBox}>
+          {!this.state.imagePreviewUrl ? null : <img src={this.state.imagePreviewUrl} />}
+          <br />
+          <Button style={{ margin: '0 auto' }} size='sm' id="removeImageBtn" onClick={this.deleteSurveyImageHandler}>Remove Image</Button>
+          <Button style={{ margin: '0 auto' }} size='sm' id="deleteImg" onClick={this.editSurveyImageHandler}>Edit Image</Button>
+       </div>
+      )
+    }
+    this.setState({ componentArray: inputArray, surveyImageUpdateDialog: false, componentIndex: -1, dataIndex: -1 })
   }
 
   updateSurveyCheckboxHandler = () => {
@@ -704,6 +729,13 @@ class CreateSurveyWizard extends React.Component {
     this.setState({ surveyInputs: currentSurveyInputObj, componentArray: newArr });
   }
 
+  deleteSurveyImageHandler = () => {
+    const identifier = document.getElementById("surveyImage").getAttribute("componentIdentifier")
+    let inputArray = [ ...this.state.componentArray ];
+    const newArr = inputArray.filter(item => item.props.componentIdentifier != identifier);
+    this.setState({ componentArray: newArr, file: null, imagePreviewUrl: null })
+  }
+
   deleteSurveyCheckBoxHandler = (key, randomId) => {
     // delete from component array
     const identifier = document.getElementById(`${randomId}`).getAttribute("componentIdentifier")
@@ -801,6 +833,9 @@ class CreateSurveyWizard extends React.Component {
               optionOne={this.state.surveyRadioInitValues.optionOne.value} optionTwo={this.state.surveyRadioInitValues.optionTwo.value}
               editingMode={this.state.surveyRadioInitValues.optionOne.editingMode} changeSurveyRadioName={this.changeSurveyRadioName}
               editRadioNamesHandler={this.editRadioNamesHandler} saveRadioNamesHandler={this.saveRadioNamesHandler}
+            />
+            <RenderImageUpdateModal surveyImageUpdateDialog={this.state.surveyImageUpdateDialog} updateDialog={(mode) => this.updateDialog("surveyImageUpdateDialog")} 
+              surveyImagePath={this.state.surveyImagePath} updateSurveyImageHandler={this.updateSurveyImageHandler} changeSurveyImage={this.changeSurveyImage} imagePreviewUrl={this.state.imagePreviewUrl}
             />
 
           <div id="surveySidebar" className={classes.SideBarContainer}>
