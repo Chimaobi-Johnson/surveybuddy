@@ -39,13 +39,6 @@
   padding: 1rem 6rem;
 }
 
-.SurveyImageBox img{
-  width: 10rem;
-  height: 7rem;
-  display: block;
-  margin: 0 auto;
-}
-
 .SideBarContent {
   font-size: .8rem;
   text-align: center;
@@ -171,6 +164,8 @@
 
 /* COMPONENTS STYLING */
 
+/* TITLE */
+
 .titleWrapper {
   position: relative;
   cursor: pointer;
@@ -204,6 +199,8 @@
   border-radius: 0 !important;
 }
 
+/* DESCRIPTION */
+
 .descrWrapper {
   position: relative;
   cursor: pointer;
@@ -233,4 +230,39 @@
 
 .descrActionsWrapper button {
   border-radius: 0 !important;
+}
+
+/* IMAGE */
+
+.imageWrapper {
+  position: relative;
+  cursor: pointer;
+  transition: all .3s;
+  padding: 1rem;
+}
+
+.imageWrapper img{
+  width: 10rem;
+  height: 7rem;
+  display: block;
+  margin: 0 auto;
+}
+
+.imageWrapper:hover {
+  background-color: #e6e6e6;
+}
+
+.imageWrapper:hover > .imageActionsWrapper {
+  display: block;
+}
+
+.imageActionsWrapper button {
+  border-radius: 0 !important;
+}
+
+.imageActionsWrapper {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }

@@ -26,7 +26,7 @@ const renderImageModal = props => (
        {!props.imagePreviewUrl ? null : <img style={{margin: '0'}} src={props.imagePreviewUrl} />}
     </div>
     <div className="modal-footer">
-      <Button onClick={props.removeDialog} size="sm" color="primary" type="button">
+      <Button onClick={props.saveComponentDialog} size="sm" color="primary" type="button">
         Save
       </Button>
     </div>

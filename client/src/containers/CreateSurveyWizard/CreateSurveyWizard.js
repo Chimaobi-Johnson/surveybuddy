@@ -204,12 +204,15 @@ class CreateSurveyWizard extends React.Component {
           alert("You are allowed to add only one image")
           return
         } else {
-          inputArray.push(<div id="surveyImage" componentIdenifier={Math.random()} className={classes.SurveyImageBox}>
-          {!this.state.imagePreviewUrl ? null : <img src={this.state.imagePreviewUrl} />}
-          <br />
-          <Button style={{ margin: '0 auto' }} size='sm' id="removeImageBtn" onClick={this.deleteSurveyImageHandler}>Remove Image</Button>
-          <Button style={{ margin: '0 auto' }} size='sm' id="deleteImg" onClick={this.editSurveyImageHandler}>Edit Image</Button>
-       </div>)
+          inputArray.push(
+          <div className={classes.imageWrapper} id="surveyImage" componentIdenifier={Math.random()}>
+            {!this.state.imagePreviewUrl ? null : <img src={this.state.imagePreviewUrl} />}
+            <br />
+            <div className={classes.imageActionsWrapper}>
+              <Button size='sm' id="removeImageBtn" onClick={this.deleteSurveyImageHandler}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+              <Button size='sm' id="deleteImg" onClick={this.editSurveyImageHandler}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+            </div>
+          </div>)
         this.setState({ componentArray: inputArray });
         }
         break
@@ -712,12 +715,14 @@ class CreateSurveyWizard extends React.Component {
     inputArray = [ ...this.state.componentArray ];
     if (this.state.componentIndex !== -1) {
       inputArray[this.state.componentIndex] = (
-        <div id="surveyImage" componentIdenifier={Math.random()} className={classes.SurveyImageBox}>
-          {!this.state.imagePreviewUrl ? null : <img src={this.state.imagePreviewUrl} />}
-          <br />
-          <Button style={{ margin: '0 auto' }} size='sm' id="removeImageBtn" onClick={this.deleteSurveyImageHandler}>Remove Image</Button>
-          <Button style={{ margin: '0 auto' }} size='sm' id="deleteImg" onClick={this.editSurveyImageHandler}>Edit Image</Button>
-       </div>
+      <div className={classes.imageWrapper} id="surveyImage" componentIdenifier={Math.random()}>
+        {!this.state.imagePreviewUrl ? null : <img src={this.state.imagePreviewUrl} />}
+        <br />
+        <div className={classes.imageActionsWrapper}>
+          <Button size='sm' id="removeImageBtn" onClick={this.deleteSurveyImageHandler}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+          <Button size='sm' id="deleteImg" onClick={this.editSurveyImageHandler}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+        </div>
+      </div>
       )
     }
     this.setState({ componentArray: inputArray, surveyImageUpdateDialog: false, componentIndex: -1, dataIndex: -1 })
@@ -924,7 +929,7 @@ class CreateSurveyWizard extends React.Component {
          <MessageModal responseStatus={this.state.responseStatus} surveyName={this.state.savedData ? this.state.savedData.surveyForm.surveyName : null} surveyId={this.state.savedData ? this.state.savedData.surveyForm._id : null} modalOpen={this.state.modalOpen} closeModal={this.closeMessageModalHandler}/>
          <RenderTitleModal saveComponentDialog={(mode) => this.saveComponentDialog('surveyTitleDialog')} surveyTitleDialog={this.state.surveyTitleDialog} surveyTitleText={this.state.surveyTitleText} changeSurveyTitle={this.changeSurveyTitle} removeDialog={(mode) => this.removeDialog('surveyTitleDialog')}/>
          <RenderDescriptionModal saveComponentDialog={(mode) => this.saveComponentDialog('surveyDescrDialog')} surveyDescrDialog={this.state.surveyDescrDialog} removeDialog={(mode) => this.removeDialog('surveyDescrDialog')} surveyDescrText={this.state.surveyDescrText} changeSurveyDescr={this.changeSurveyDescr} />
-         <RenderImageModal surveyImageDialog={this.state.surveyImageDialog} removeDialog={(mode) => this.removeDialog('surveyImageDialog')} surveyImagePath={this.state.surveyImagePath} changeSurveyImage={this.changeSurveyImage} imagePreviewUrl={this.state.imagePreviewUrl}/>
+         <RenderImageModal saveComponentDialog={(mode) => this.saveComponentDialog('surveyImageDialog')} surveyImageDialog={this.state.surveyImageDialog} removeDialog={(mode) => this.removeDialog('surveyImageDialog')} surveyImagePath={this.state.surveyImagePath} changeSurveyImage={this.changeSurveyImage} imagePreviewUrl={this.state.imagePreviewUrl}/>
          <RenderInputModal surveyInputDialog={this.state.surveyInputDialog} removeDialog={(mode) => this.removeDialog('surveyInputDialog')} surveyInputLabelName={this.state.surveyInputLabelName} changeSurveyInputLabelName={this.changeSurveyInputLabelName} addInputHandler={this.addInputHandler}/>
          <RenderCheckboxModal surveyCheckboxDialog={this.state.surveyCheckboxDialog} removeDialog={(mode) => this.removeDialog('surveyCheckboxDialog')}
                    surveyCheckboxTempQuestion={this.state.surveyCheckboxTempQuestion} changeSurveyCheckboxQuestion={this.changeSurveyCheckboxQuestion} surveyCheckboxNumber={this.state.surveyCheckboxNumber}
