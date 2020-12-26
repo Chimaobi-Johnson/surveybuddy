@@ -14,9 +14,9 @@
   font-weight: bold;
 }
 
-.LandingTextContainer Button {
+/* .LandingTextContainer Button {
 
-}
+} */
 
 .LandingCarousel {
   flex-basis: 50%;
@@ -39,14 +39,14 @@
   box-shadow: 2px 4px 8px #dcdcdc;
 
 }
-
+/* 
 .carouselItem {
 
-}
+} */
 
-.fade {
+/* .fade {
 
-}
+} */
 
 @media (max-width: 699px) {
   .LandingContainer {

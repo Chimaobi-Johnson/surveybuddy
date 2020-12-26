@@ -16,6 +16,7 @@ import loader from '../../assets/images/gifs/pulse.gif';
 import axios from 'axios';
 
 import * as classes from './CreateSurveyWizard.module.css';
+
 import RenderUpdateInputModal from './Input/RenderUpdateInputModal';
 import RenderUpdateCheckboxModal from './Checkbox/RenderUpdateCheckboxModal';
 import RenderRadioUpdateModal from './Radio/RenderRadioUpdateModal';
@@ -148,6 +149,10 @@ class CreateSurveyWizard extends React.Component {
   }
 
   removeDialog = (dialogName) => {
+    this.setState({[dialogName]: false, componentIndex: -1, dataIndex: -1 });
+  }
+
+  saveComponentDialog = (dialogName) => {
     let randomId;
     this.setState({[dialogName]: false});
     let inputArray = [];
@@ -161,11 +166,14 @@ class CreateSurveyWizard extends React.Component {
           text: this.state.surveyTitleText
         }
         titleArr.push(titleObj);
-        inputArray.push(<div id={randomId} componentIdenifier={Math.random()} onClick={this.deleteSurveyTitleComponent}>
-          <h2 style={{textAlign: 'center',fontSize: '1.2rem', paddingTop: '1rem'}}>{this.state.surveyTitleText}</h2>
-          <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.deleteSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}>D</Button>
-          <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.editSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}>E</Button>
-          </div>)
+        inputArray.push(
+        <div className={classes.titleWrapper} id={randomId} componentIdenifier={Math.random()} onClick={this.deleteSurveyTitleComponent}>
+          <h2>{this.state.surveyTitleText}</h2>
+          <div className={classes.titleActionsWrapper}>
+            <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.deleteSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+            <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.editSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+          </div>
+        </div>)
         this.setState({ componentArray: inputArray, surveyTitleArray: titleArr });
         break
       case "surveyDescrDialog":
@@ -179,8 +187,8 @@ class CreateSurveyWizard extends React.Component {
         descrArr.push(descrObj);
         inputArray.push(<div id={randomId} componentIdenifier={Math.random()}>
           <p style={{textAlign: 'center', fontSize: '.9rem'}}>{this.state.surveyDescrText}</p>
-          <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.deleteSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}>D</Button>
-          <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.editSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}>E</Button>
+          <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}>D</Button>
+          <Button size='sm' onClick={(arg1, arg2) => this.editSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}>E</Button>
           </div>)
         this.setState({ componentArray: inputArray, descriptionArray: descrArr });
         break
@@ -616,10 +624,12 @@ class CreateSurveyWizard extends React.Component {
     const randomId = Math.random().toString(36).substr(2, 15);
     if (this.state.componentIndex !== -1) {
       inputArray[this.state.componentIndex] = (
-        <div id={randomId} componentIdenifier={Math.random()} onClick={this.deleteSurveyTitleComponent}>
-          <h2 style={{textAlign: 'center',fontSize: '1.2rem', paddingTop: '1rem'}}>{this.state.surveyTitleText}</h2>
-          <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.deleteSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}>D</Button>
-          <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.editSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}>E</Button>
+        <div className={classes.titleWrapper} id={randomId} componentIdenifier={Math.random()} onClick={this.deleteSurveyTitleComponent}>
+          <h2>{this.state.surveyTitleText}</h2>
+          <div className={classes.titleActionsWrapper}>
+            <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.deleteSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+            <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.editSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+          </div>
         </div>
       )
     }
@@ -905,8 +915,8 @@ class CreateSurveyWizard extends React.Component {
          {/* <Button onClick={this.cancelNewSurvey} className={classes.goBack}><i className="fa fa-chevron-left" aria-hidden="true"></i></Button> */}
          <Button onClick={this.storeCustomSurveyFormHandler} className={classes.goForward}><span>Save</span><i class="fa fa-floppy-o" aria-hidden="true"></i></Button>
          <MessageModal responseStatus={this.state.responseStatus} surveyName={this.state.savedData ? this.state.savedData.surveyForm.surveyName : null} surveyId={this.state.savedData ? this.state.savedData.surveyForm._id : null} modalOpen={this.state.modalOpen} closeModal={this.closeMessageModalHandler}/>
-         <RenderTitleModal surveyTitleDialog={this.state.surveyTitleDialog} surveyTitleText={this.state.surveyTitleText} changeSurveyTitle={this.changeSurveyTitle} removeDialog={(mode) => this.removeDialog('surveyTitleDialog')}/>
-         <RenderDescriptionModal surveyDescrDialog={this.state.surveyDescrDialog} removeDialog={(mode) => this.removeDialog('surveyDescrDialog')} surveyDescrText={this.state.surveyDescrText} changeSurveyDescr={this.changeSurveyDescr} />
+         <RenderTitleModal saveComponentDialog={(mode) => this.saveComponentDialog('surveyTitleDialog')} surveyTitleDialog={this.state.surveyTitleDialog} surveyTitleText={this.state.surveyTitleText} changeSurveyTitle={this.changeSurveyTitle} removeDialog={(mode) => this.removeDialog('surveyTitleDialog')}/>
+         <RenderDescriptionModal saveComponentDialog={(mode) => this.saveComponentDialog('surveyDescrDialog')} surveyDescrDialog={this.state.surveyDescrDialog} removeDialog={(mode) => this.removeDialog('surveyDescrDialog')} surveyDescrText={this.state.surveyDescrText} changeSurveyDescr={this.changeSurveyDescr} />
          <RenderImageModal surveyImageDialog={this.state.surveyImageDialog} removeDialog={(mode) => this.removeDialog('surveyImageDialog')} surveyImagePath={this.state.surveyImagePath} changeSurveyImage={this.changeSurveyImage} imagePreviewUrl={this.state.imagePreviewUrl}/>
          <RenderInputModal surveyInputDialog={this.state.surveyInputDialog} removeDialog={(mode) => this.removeDialog('surveyInputDialog')} surveyInputLabelName={this.state.surveyInputLabelName} changeSurveyInputLabelName={this.changeSurveyInputLabelName} addInputHandler={this.addInputHandler}/>
          <RenderCheckboxModal surveyCheckboxDialog={this.state.surveyCheckboxDialog} removeDialog={(mode) => this.removeDialog('surveyCheckboxDialog')}
@@ -926,7 +936,7 @@ class CreateSurveyWizard extends React.Component {
                    editingMode={this.state.surveyRadioInitValues.optionOne.editingMode} changeSurveyRadioName={this.changeSurveyRadioName}
                    editRadioNamesHandler={this.editRadioNamesHandler} saveRadioNamesHandler={this.saveRadioNamesHandler}
                    />
-          <RenderFooterModal surveyFooterDialog={this.state.surveyFooterDialog} surveyFooterText={this.state.surveyFooterText} changeSurveyFooterText={this.changeSurveyFooterText} removeDialog={(mode) => this.removeDialog('surveyFooterDialog')}/>
+          <RenderFooterModal saveComponentDialog={(mode) => this.saveComponentDialog('surveyFooterDialog')} surveyFooterDialog={this.state.surveyFooterDialog} surveyFooterText={this.state.surveyFooterText} changeSurveyFooterText={this.changeSurveyFooterText} removeDialog={(mode) => this.removeDialog('surveyFooterDialog')}/>
 
           <RenderUpdateInputModal updateSurveyInputHandler={this.updateSurveyInputHandler} changeSurveyInputLabelName={this.changeSurveyInputLabelName} surveyInputLabelName={this.state.surveyInputLabelName} surveyInputUpdateDialog={this.state.surveyInputUpdateDialog} updateDialog={(mode) => this.updateDialog('surveyInputUpdateDialog')} />
           <RenderUpdateCheckboxModal surveyCheckboxUpdateDialog={this.state.surveyCheckboxUpdateDialog} updateDialog={(mode) => this.updateDialog("surveyCheckboxUpdateDialog")}
@@ -953,9 +963,9 @@ class CreateSurveyWizard extends React.Component {
             <RenderDescriptionUpdateModal updateSurveyDescrHandler={this.updateSurveyDescrHandler} surveyDescrUpdateDialog={this.state.surveyDescrUpdateDialog} updateDialog={(mode) => this.updateDialog('surveyDescrUpdateDialog')} surveyDescrText={this.state.surveyDescrText} changeSurveyDescr={this.changeSurveyDescr} />
 
             <div id="surveySidebar" className={classes.SideBarContainer}>
-             <Button onClick={this.toggleSidebarOpen} className={classes.SideBarToggle}>
+             {/* <Button onClick={this.toggleSidebarOpen} className={classes.SideBarToggle}>
                { this.state.sidebarOpen ? <i className="fa fa-close"></i> : <i className="fa fa-bars"></i> }
-             </Button>
+             </Button> */}
              <SideBar>
                 <div className={classes.SideBarContent}>
                   <SurveyName surveyNameEditingMode={this.state.surveyNameEditingMode} surveyNameText={this.state.surveyNameText} surveyNameChange={this.surveyNameChange} saveSurveyName={this.saveSurveyName} editSurveyName={this.editSurveyName} />
@@ -963,31 +973,31 @@ class CreateSurveyWizard extends React.Component {
                   <div className={classes.SurveyControls}>
                       <Button onClick={this.initSurveyTitleDialog} className={classes.ActionButton}>
                         <i className="fa fa-text-width" aria-hidden="true"></i>
-                        <h5>Title</h5>
+                        <h5>Heading</h5>
                       </Button>
                       <Button onClick={this.initSurveyDescrDialog} className={classes.ActionButton}>
                         <i className="fa fa-file-text-o" aria-hidden="true"></i>
-                        <h5>description</h5>
+                        <h5>Paragraph</h5>
                       </Button>
                       <Button onClick={this.initSurveyImageDialog} className={classes.ActionButton}>
                         <i className="fa fa-file-image-o" aria-hidden="true"></i>
-                        <h5>logo/image</h5>
+                        <h5>Logo/image</h5>
                       </Button>
                       <Button onClick={this.initSurveyInputDialog} className={classes.ActionButton}>
                         <i className="fa fa-plus-square-o" aria-hidden="true"></i>
-                        <h5>input</h5>
+                        <h5>Input</h5>
                       </Button>
                       <Button onClick={this.initSurveyCheckboxDialog} className={classes.ActionButton}>
                         <i className="fa fa-check-square-o" aria-hidden="true"></i>
-                        <h5>checkbox</h5>
+                        <h5>Checkbox</h5>
                       </Button>
                       <Button onClick={this.initSurveyRadioDialog} className={classes.ActionButton}>
                         <i className="fa fa-dot-circle-o" aria-hidden="true"></i>
-                        <h5>radio options</h5>
+                        <h5>Radio options</h5>
                       </Button>
                       <Button onClick={this.initSurveyFooterDialog} className={classes.ActionButton}>
                         <i className="fa fa-font" aria-hidden="true"></i>
-                        <h5>footer text</h5>
+                        <h5>Footer text</h5>
                       </Button>
                   </div>
                 </div>

@@ -3,6 +3,7 @@
   background-color: #b18c2c;
   padding: .5rem;
   margin-bottom: 1rem;
+  align-items: baseline;
 }
 
 .SurveyNameContainer h6 {

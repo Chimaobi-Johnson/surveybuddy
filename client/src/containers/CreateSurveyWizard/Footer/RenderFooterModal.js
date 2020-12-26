@@ -20,7 +20,7 @@ const renderFooterModal = props => (
                onChange={props.changeSurveyFooterText} />
           </div>
           <div className="modal-footer">
-            <Button onClick={props.removeDialog} size="sm" color="primary" type="button">
+            <Button onClick={props.saveComponentDialog} size="sm" color="primary" type="button">
               Save
             </Button>
           </div>
