@@ -203,3 +203,34 @@
 .titleActionsWrapper button {
   border-radius: 0 !important;
 }
+
+.descrWrapper {
+  position: relative;
+  cursor: pointer;
+  transition: all .3s;
+  padding: 1rem;
+}
+
+.descrWrapper p {
+  text-align: center;
+  font-size: .9rem;
+}
+
+.descrWrapper:hover {
+  background-color: #e6e6e6;
+}
+
+.descrWrapper:hover > .descrActionsWrapper {
+  display: block;
+}
+
+.descrActionsWrapper {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.descrActionsWrapper button {
+  border-radius: 0 !important;
+}

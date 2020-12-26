@@ -185,11 +185,15 @@ class CreateSurveyWizard extends React.Component {
           text: this.state.surveyDescrText
         }
         descrArr.push(descrObj);
-        inputArray.push(<div id={randomId} componentIdenifier={Math.random()}>
-          <p style={{textAlign: 'center', fontSize: '.9rem'}}>{this.state.surveyDescrText}</p>
-          <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}>D</Button>
-          <Button size='sm' onClick={(arg1, arg2) => this.editSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}>E</Button>
-          </div>)
+        inputArray.push(
+        <div className={classes.descrWrapper} id={randomId} componentIdenifier={Math.random()}>
+          <p>{this.state.surveyDescrText}</p>
+          <div className={classes.descrActionsWrapper}>
+            <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+            <Button size='sm' onClick={(arg1, arg2) => this.editSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+          </div>
+        </div>
+        )
         this.setState({ componentArray: inputArray, descriptionArray: descrArr });
         break
       case "surveyImageDialog":
@@ -649,11 +653,14 @@ class CreateSurveyWizard extends React.Component {
     }
     if (this.state.componentIndex !== -1) {
       inputArray[this.state.componentIndex] = (
-      <div id={randomId} componentIdenifier={Math.random()}>
-        <p style={{textAlign: 'center', fontSize: '.9rem'}}>{this.state.surveyDescrText}</p>
-        <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.deleteSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}>D</Button>
-        <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.editSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}>E</Button>
-      </div>)
+        <div className={classes.descrWrapper} id={randomId} componentIdenifier={Math.random()}>
+          <p>{this.state.surveyDescrText}</p>
+          <div className={classes.descrActionsWrapper}>
+            <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+            <Button size='sm' onClick={(arg1, arg2) => this.editSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+          </div>
+        </div>
+      )
     }
     this.setState({ componentArray: inputArray, descriptionArray: descrArr, componentIndex: -1, dataIndex: -1, surveyDescrUpdateDialog: false });
   }
