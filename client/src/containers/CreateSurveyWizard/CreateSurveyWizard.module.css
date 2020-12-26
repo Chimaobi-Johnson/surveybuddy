@@ -34,11 +34,6 @@
   border-radius: 0;
 }
 
-
-.InputArea {
-  padding: 1rem 6rem;
-}
-
 .SideBarContent {
   font-size: .8rem;
   text-align: center;
@@ -261,6 +256,35 @@
 }
 
 .imageActionsWrapper {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+
+/* INPUT */
+
+.inputWrapper {
+  position: relative;
+  cursor: pointer;
+  transition: all .3s;
+  padding: 1rem 4rem;
+}
+
+.inputWrapper:hover {
+  background-color: #e6e6e6;
+}
+
+.inputWrapper:hover > .inputActionsWrapper {
+  display: block;
+}
+
+.inputActionsWrapper button {
+  border-radius: 0 !important;
+}
+
+.inputActionsWrapper {
   display: none;
   position: absolute;
   bottom: 0;

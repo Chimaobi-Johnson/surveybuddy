@@ -288,6 +288,41 @@ class CreateSurveyWizard extends React.Component {
     this.setState({surveyNameEditingMode: false});
   }
 
+  addInputHandler = () => {
+    let inputLabel = this.state.surveyInputLabelName;
+    const surveyInputs = {...this.state.surveyInputs};
+    // clear inputs
+    surveyInputs[inputLabel] = '';
+
+    // add to components array
+
+    let inputArray = []
+    // this method of generating random ids is used for simplicity sake
+    let randomId = Math.random().toString(36).substr(2, 15);
+    inputArray = [...this.state.componentArray];
+    inputArray.push(
+      <div  className={classes.inputWrapper} id={randomId} key={inputLabel + new Date().getMilliseconds()} componentIdentifier={Math.random()}>
+        <FormGroup>
+            <Label>{inputLabel}</Label>
+            <Input
+              style={{ borderRadius: 0, height: '1.8rem' }}
+              id={inputLabel}
+              type="text"
+              value=""
+              onChange={(event, key) => this.surveyInputChangeHandler(event, inputLabel)}
+            />
+        </FormGroup>
+        <div className={classes.inputActionsWrapper}>
+          <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+          <Button size='sm' onClick={(arg1, arg2) => this.editSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+        </div>
+      </div>
+    )
+    {/* <Button key={key + 'btn' + new Date().getSeconds()} size='small' style={{ fontWeight: 'bold', color: '#303f9f'}} onClick={(identifier) => this.editSurveyInputHandler(`${key}`)}>Edit</Button> */}
+    this.setState({ componentArray: inputArray, surveyInputs: surveyInputs, surveyInputDialog: false });
+
+  }
+
   saveSurveyCheckboxHandler = () => {
     // const surveyCheckbox = {...this.state.surveyCheckboxes};
     const surveyArr = [...this.state.surveyCheckboxes];
@@ -497,38 +532,6 @@ class CreateSurveyWizard extends React.Component {
     alert('You cant write on this form now');
   }
 
-  addInputHandler = () => {
-    let inputLabel = this.state.surveyInputLabelName;
-    const surveyInputs = {...this.state.surveyInputs};
-    // clear inputs
-    surveyInputs[inputLabel] = '';
-
-    // add to components array
-
-    let inputArray = []
-    // this method of generating random ids is used for simplicity sake
-    let randomId = Math.random().toString(36).substr(2, 15);
-    inputArray = [...this.state.componentArray];
-    inputArray.push(
-      <div id={randomId} key={inputLabel + new Date().getMilliseconds()} componentIdentifier={Math.random()} className={classes.InputArea}>
-        <FormGroup>
-            <Label>{inputLabel}</Label>
-            <Input
-              style={{ borderRadius: 0, height: '1.8rem' }}
-              id={inputLabel}
-              type="text"
-              value=""
-              onChange={(event, key) => this.surveyInputChangeHandler(event, inputLabel)}
-            />
-          <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
-          <Button size='sm' onClick={(arg1, arg2) => this.editSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-pen-o" aria-hidden="true"></i></Button>
-        </FormGroup>
-      </div>
-    )
-    {/* <Button key={key + 'btn' + new Date().getSeconds()} size='small' style={{ fontWeight: 'bold', color: '#303f9f'}} onClick={(identifier) => this.editSurveyInputHandler(`${key}`)}>Edit</Button> */}
-    this.setState({ componentArray: inputArray, surveyInputs: surveyInputs, surveyInputDialog: false });
-
-  }
 
 
   // {{ EDIT COMPONENTS }}
@@ -687,7 +690,7 @@ class CreateSurveyWizard extends React.Component {
     inputArray = [...this.state.componentArray];
     if (this.state.componentIndex !== -1) {
       inputArray[this.state.componentIndex] = (
-        <div id={randomId} componentIdentifier={Math.random()} key={inputLabel + new Date().getMilliseconds()} className={classes.InputArea}>
+        <div className={classes.inputWrapper} id={randomId} componentIdentifier={Math.random()} key={inputLabel + new Date().getMilliseconds()}>
           <FormGroup>
               <Label>{inputLabel}</Label>
               <Input
@@ -698,9 +701,9 @@ class CreateSurveyWizard extends React.Component {
                 onChange={(event, key) => this.surveyInputChangeHandler(event, inputLabel)}
               />
             </FormGroup>
-            <div>
-            <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
-            <Button size='sm' onClick={(arg1, arg2) => this.editSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-pen-o" aria-hidden="true"></i></Button>
+            <div className={classes.inputActionsWrapper}>
+              <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+              <Button size='sm' onClick={(arg1, arg2) => this.editSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
             </div>
         </div>
       );
