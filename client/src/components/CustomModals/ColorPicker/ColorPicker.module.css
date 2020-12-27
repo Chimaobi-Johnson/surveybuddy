@@ -1,0 +1,74 @@
+.modalWrapper {
+    background: white;
+    border: 1px solid #d0cccc;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+    margin: 100px auto 0;
+    transition: all 0.8s;
+    width: 15%;
+    border-radius: 10px;
+    position: fixed;
+    z-index: 500;
+    right: 0;
+    top: 20%;
+}
+
+.modalHeader {
+    background: #e2e2e2;
+    height: 40px;
+    line-height: 40px;
+    padding: 5px 20px;
+    text-align: right;
+}
+
+.modalHeader h2 {
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+.modalBody {
+    padding: 10px 15px;
+    text-align: center;
+    height: 200px;
+}
+
+.modalFooter {
+    background: #e2e2e2;
+    height: 35px;
+    padding: 15px;
+}
+
+.closeModalBtn {
+    color: white;
+    cursor: pointer;
+    float: right;
+    font-size: 30px;
+    margin: 0;
+}
+
+.closeModalBtn:hover {
+    color: black;
+}
+
+.btnCancel {
+    background-color: #b71c1c;
+    float: left;
+}
+
+.btnContinue {
+    background-color: #1b5e20;
+    float: right;
+}
+
+.backShed {
+    background-color: rgba(48, 49, 48, 0.42);
+    height: 100%;
+    position: fixed;
+    transition: all 1.3s;
+    width: 100%;
+}
+
+.openModalBtn {
+    margin: 15px;
+    padding: 10px;
+}

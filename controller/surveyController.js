@@ -102,12 +102,12 @@ exports.storeSurveyEmailDetails = (req, res) => {
 
 }
 
-exports.storeUserSurveyForm = (req, res) => {
+exports.storeUserSurveyForm = (req, res, next) => {
   let file;
   const surveyId = req.body.surveyId;
   const surveyName = req.body.surveyName;
-  const surveyTitleText = JSON.parse(req.body.surveyTitleText);
-  const surveyDescrText = JSON.parse(req.body.surveyDescrText);
+  const surveyTitleArray = JSON.parse(req.body.surveyTitleArray);
+  const descriptionArray = JSON.parse(req.body.descriptionArray);
   const surveyFooterText = req.body.surveyFooterText;
   if(!req.file) {
      file = null;
@@ -119,14 +119,14 @@ exports.storeUserSurveyForm = (req, res) => {
   const surveyRadioOptions = JSON.parse(req.body.surveyRadioOptions);
   const componentArray = JSON.parse(req.body.componentArray);
   console.log(surveyId);
-  if(surveyId === "null") {
+  if(surveyId == "null") {
     // if surveyId is null that means the user is saving survey for the first time
       const survey = new Survey({
           surveyName: surveyName,
-          surveyTitleText: [...surveyTitleText],
-          surveyDescrText: [...surveyDescrText],
+          surveyTitleArray: [...surveyTitleArray],
+          descriptionArray: [...descriptionArray],
           surveyFooterText: surveyFooterText,
-          surveyInputs: [...surveyInputs],
+          surveyInputs: {...surveyInputs},
           surveyCheckboxes: [...surveyCheckboxes],
           surveyRadioOptions: [...surveyRadioOptions],
           componentArray: [...componentArray],
@@ -152,10 +152,10 @@ exports.storeUserSurveyForm = (req, res) => {
            }
 
            survey.surveyName = surveyName;
-           survey.surveyTitleText = [...surveyTitleText];
-           survey.surveyDescrText = [...surveyDescrText];
+           survey.surveyTitleArray = [...surveyTitleArray];
+           survey.descriptionArray = [...descriptionArray];
            survey.surveyFooterText = surveyFooterText;
-           survey.surveyInputs = [...surveyInputs];
+           survey.surveyInputs = {...surveyInputs};
            survey.surveyCheckboxes = [...surveyCheckboxes];
            survey.surveyRadioOptions = [...surveyRadioOptions];
            survey.componentArray = [...componentArray];

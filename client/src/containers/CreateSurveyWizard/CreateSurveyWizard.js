@@ -24,6 +24,7 @@ import RenderImageUpdateModal from './Image/RenderImageUpdateModal';
 import RenderTitleUpdateModal from './Title/RenderTitleUpdateModal'
 import RenderDescriptionUpdateModal from './Description/RenderDescriptionUpdateModal';
 import RenderFooterUpdateModal from './Footer/RenderFooterUpdateModal';
+import ColorPicker from '../../components/CustomModals/ColorPicker/ColorPicker';
 
 class CreateSurveyWizard extends React.Component {
 
@@ -97,7 +98,7 @@ class CreateSurveyWizard extends React.Component {
     sidebarOpen: false,
     componentIndex: -1,
     dataIndex: -1,
-    formerSurveyInputLabelName: ''
+    formerSurveyInputLabelName: '',
   }
 
   cancelNewSurvey = () => {
@@ -153,6 +154,12 @@ class CreateSurveyWizard extends React.Component {
     this.setState({[dialogName]: false, componentIndex: -1, dataIndex: -1 });
   }
 
+  changeTitleColor = (e, titleIndex) => {
+    const titleArr = [ ...this.state.surveyTitleArray ];
+    titleArr[titleIndex].colors.backgroundColor = e.target.value;
+    this.setState({ surveyTitleArray: titleArr })
+  }
+
   saveComponentDialog = (dialogName) => {
     let randomId;
     this.setState({[dialogName]: false});
@@ -164,15 +171,26 @@ class CreateSurveyWizard extends React.Component {
         randomId = Math.random().toString(36).substr(2, 15);
         const titleObj = {
           id: Math.random().toString(),
-          text: this.state.surveyTitleText
+          text: this.state.surveyTitleText,
+          colors: {
+            backgroundColor: '#ffffff'
+          }
         }
         titleArr.push(titleObj);
+        const titleIndex = titleArr.indexOf(titleObj);
+        console.log(titleIndex);
+        // get color from titleArr because it hasnt been stored to state yet
+        const backgroundColor = titleArr[titleIndex].colors.backgroundColor;
+        const newBgColor = this.state.surveyTitleArray.length > 0 ? this.state.surveyTitleArray[titleIndex].colors.backgroundColor : '#eaeaea'
+
         inputArray.push(
         <div className={classes.titleWrapper} id={randomId} componentIdenifier={Math.random()} onClick={this.deleteSurveyTitleComponent}>
           <h2>{this.state.surveyTitleText}</h2>
           <div className={classes.titleActionsWrapper}>
             <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.deleteSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
             <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.editSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+            {/* <Input type="color" id="colorpicker" onChange={(e, arg2) => this.changeTitleColor(e, `${titleIndex}`)} value={newBgColor} /> */}
+            {/* <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.selectSurveyTitleColor(`${titleObj.id}`, `${randomId}`)}><i className="fa fa-pencil-o" aria-hidden="true"></i></Button> */}
           </div>
         </div>)
         this.setState({ componentArray: inputArray, surveyTitleArray: titleArr });
@@ -933,6 +951,12 @@ class CreateSurveyWizard extends React.Component {
     }
   }
 
+  selectSurveyTitleColor = (key, randomId) => {
+    const colorPickers = { ...this.state.colorPickers }
+    colorPickers.heading = true;
+    this.setState({ colorPickers: colorPickers })
+  }
+
   renderFooterContent() {
     if(this.state.surveyFooterText) {
     return (
@@ -953,9 +977,13 @@ class CreateSurveyWizard extends React.Component {
 
   renderDashboardContent() {
    return (
-     <div className={classes.DashboardContent}>
-       {this.state.componentArray.map(item => item)}
-       {this.renderFooterContent()}
+     <div className={classes.dashboardContent}>
+       <div>
+        {this.state.componentArray.map(item => item)}
+       </div>
+       <div style={{ marginTop: 'auto' }}>
+        {this.renderFooterContent()}
+       </div> 
      </div>
    )
  }

@@ -4,8 +4,8 @@ const { Schema } = mongoose;
 const surveySchema = new Schema({
   surveyName: String,
   componentArray: [],
-  surveyTitleText: [],
-  surveyDescrText: [],
+  surveyTitleArray: [],
+  descriptionArray: [],
   surveyFooterText: String,
   surveyInputs: [],
   surveyCheckboxes: [],

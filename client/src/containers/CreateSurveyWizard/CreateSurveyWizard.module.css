@@ -1,3 +1,10 @@
+
+.dashboardContent {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .SurveyContainer {
   display: flex;
   background-color: #eee;
@@ -345,9 +352,9 @@
 /* FOOTER TEXT */
 
 .footerWrapper {
-  position: absolute;
+  /* position: absolute;
   bottom: 0;
-  left: 0;
+  left: 0; */
   cursor: pointer;
   transition: all .3s;
   padding: .5rem 4rem;
