@@ -290,3 +290,60 @@
   bottom: 0;
   right: 0;
 }
+
+/* CHECKBOX */
+
+.checkboxWrapper {
+  position: relative;
+  cursor: pointer;
+  transition: all .3s;
+  padding: .5rem 4rem;
+}
+
+.checkboxWrapper:hover {
+  background-color: #e6e6e6;
+}
+
+.checkboxWrapper:hover > .checkboxActionsWrapper {
+  display: block;
+}
+
+.checkboxActionsWrapper button {
+  border-radius: 0 !important;
+}
+
+.checkboxActionsWrapper {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+/* RADIO OPTIONS */
+
+
+.radioWrapper {
+  position: relative;
+  cursor: pointer;
+  transition: all .3s;
+  padding: .5rem 4rem;
+}
+
+.radioWrapper:hover {
+  background-color: #e6e6e6;
+}
+
+.radioWrapper:hover > .radioActionsWrapper {
+  display: block;
+}
+
+.radioActionsWrapper button {
+  border-radius: 0 !important;
+}
+
+.radioActionsWrapper {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
