@@ -1,16 +1,15 @@
 import React from 'react';
 import { Modal, Input, Button } from 'reactstrap';
 
-
-const renderFooterModal = props => (
+const renderFooterUpdateModal = props => (
         <Modal
           className="modal-dialog-centered"
-          toggle={props.removeDialog}
-          isOpen={props.surveyFooterDialog}
+          toggle={props.updateDialog}
+          isOpen={props.surveyFooterUpdateDialog}
         >
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
-             Add Footer Text
+              Edit Footer Text
             </h5>
           </div>
           <div className="modal-body">
@@ -22,11 +21,11 @@ const renderFooterModal = props => (
                onChange={props.changeSurveyFooterText} />
           </div>
           <div className="modal-footer">
-            <Button onClick={props.saveFooterText} size="sm" color="primary" type="button">
-              Save
+            <Button onClick={props.updateSurveyFooterText} size="sm" color="primary" type="button">
+              Update
             </Button>
           </div>
         </Modal>
 )
 
-export default renderFooterModal;
+export default renderFooterUpdateModal;

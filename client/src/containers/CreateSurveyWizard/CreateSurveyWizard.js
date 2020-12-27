@@ -23,6 +23,7 @@ import RenderRadioUpdateModal from './Radio/RenderRadioUpdateModal';
 import RenderImageUpdateModal from './Image/RenderImageUpdateModal';
 import RenderTitleUpdateModal from './Title/RenderTitleUpdateModal'
 import RenderDescriptionUpdateModal from './Description/RenderDescriptionUpdateModal';
+import RenderFooterUpdateModal from './Footer/RenderFooterUpdateModal';
 
 class CreateSurveyWizard extends React.Component {
 
@@ -215,11 +216,6 @@ class CreateSurveyWizard extends React.Component {
           </div>)
         this.setState({ componentArray: inputArray });
         }
-        break
-      case "surveyFooterDialog":
-        inputArray = [ ...this.state.componentArray];
-        inputArray.push(<div className={classes.SurveyFooterText}>{this.state.surveyFooterText ? this.state.surveyFooterText : null}</div>)
-        this.setState({ componentArray: inputArray });
         break
         default:
           return
@@ -438,6 +434,9 @@ class CreateSurveyWizard extends React.Component {
     this.setState({ surveyRadioInitValues: surveyRadioInitValues, surveyRadioOptions: surveyRadioArr, surveyRadioTempQuestion: '', componentArray: inputArray, surveyRadioDialog: false  });
   }
 
+  saveFooterText = () => {
+    this.setState({ surveyFooterDialog: false })
+  }
 
   // {{ NAME CHANGE }}
 
@@ -614,6 +613,10 @@ class CreateSurveyWizard extends React.Component {
     const dataIndex = radioArr.map(e => e.id).indexOf(`${key}`);
     // store it to state to be used for updating the component
     this.setState({ surveyRadioUpdateDialog: true, componentIndex: componentIndex, dataIndex: dataIndex });
+  }
+
+  editSurveyFooterHandler = () => {
+    this.setState({ surveyFooterUpdateDialog: true });
   }
  
 
@@ -841,6 +844,10 @@ class CreateSurveyWizard extends React.Component {
 
       this.setState({ surveyRadioInitValues: surveyRadioInitValues, surveyRadioOptions: surveyRadioArr, componentIndex: -1, dataIndex: -1, surveyRadioTempQuestion: '', componentArray: inputArray, surveyRadioUpdateDialog: false  });
   }
+
+  updateSurveyFooterText = () => {
+    this.setState({ surveyFooterUpdateDialog: false })
+  }
   
   
   // {{ DELETE COMPONENTS }}
@@ -910,6 +917,10 @@ class CreateSurveyWizard extends React.Component {
     this.setState({ surveyRadioOptions: newRadioArr, componentArray: newArr });
   }
 
+  
+  deleteSurveyFooterHandler = () => {
+    this.setState({ surveyFooterText: '' })
+  }
 
   toggleSidebarOpen = () => {
     const sidebar = document.getElementById('surveySidebar');
@@ -922,11 +933,29 @@ class CreateSurveyWizard extends React.Component {
     }
   }
 
+  renderFooterContent() {
+    if(this.state.surveyFooterText) {
+    return (
+      <div id="surveyFooter" className={classes.footerWrapper}>
+        <div className={classes.footerLine}></div>
+        <p>{this.state.surveyFooterText}</p>
+        <div className={classes.footerActionsWrapper}>
+            <Button size='sm' onClick={this.deleteSurveyFooterHandler}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+            <Button size='sm' onClick={this.editSurveyFooterHandler}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+        </div>
+      </div>
+    )
+    } else {
+      return
+    }
+  }
+
 
   renderDashboardContent() {
    return (
      <div className={classes.DashboardContent}>
        {this.state.componentArray.map(item => item)}
+       {this.renderFooterContent()}
      </div>
    )
  }
@@ -962,7 +991,7 @@ class CreateSurveyWizard extends React.Component {
                    editingMode={this.state.surveyRadioInitValues.optionOne.editingMode} changeSurveyRadioName={this.changeSurveyRadioName}
                    editRadioNamesHandler={this.editRadioNamesHandler} saveRadioNamesHandler={this.saveRadioNamesHandler}
                    />
-          <RenderFooterModal saveComponentDialog={(mode) => this.saveComponentDialog('surveyFooterDialog')} surveyFooterDialog={this.state.surveyFooterDialog} surveyFooterText={this.state.surveyFooterText} changeSurveyFooterText={this.changeSurveyFooterText} removeDialog={(mode) => this.removeDialog('surveyFooterDialog')}/>
+          <RenderFooterModal saveFooterText={this.saveFooterText} surveyFooterDialog={this.state.surveyFooterDialog} surveyFooterText={this.state.surveyFooterText} changeSurveyFooterText={this.changeSurveyFooterText} removeDialog={(mode) => this.removeDialog('surveyFooterDialog')}/>
 
           <RenderUpdateInputModal updateSurveyInputHandler={this.updateSurveyInputHandler} changeSurveyInputLabelName={this.changeSurveyInputLabelName} surveyInputLabelName={this.state.surveyInputLabelName} surveyInputUpdateDialog={this.state.surveyInputUpdateDialog} updateDialog={(mode) => this.updateDialog('surveyInputUpdateDialog')} />
           <RenderUpdateCheckboxModal surveyCheckboxUpdateDialog={this.state.surveyCheckboxUpdateDialog} updateDialog={(mode) => this.updateDialog("surveyCheckboxUpdateDialog")}
@@ -987,6 +1016,7 @@ class CreateSurveyWizard extends React.Component {
             />
             <RenderTitleUpdateModal updateSurveyTitleHandler={this.updateSurveyTitleHandler} surveyTitleUpdateDialog={this.state.surveyTitleUpdateDialog} surveyTitleText={this.state.surveyTitleText} changeSurveyTitle={this.changeSurveyTitle} updateDialog={(mode) => this.updateDialog('surveyTitleUpdateDialog')} />
             <RenderDescriptionUpdateModal updateSurveyDescrHandler={this.updateSurveyDescrHandler} surveyDescrUpdateDialog={this.state.surveyDescrUpdateDialog} updateDialog={(mode) => this.updateDialog('surveyDescrUpdateDialog')} surveyDescrText={this.state.surveyDescrText} changeSurveyDescr={this.changeSurveyDescr} />
+            <RenderFooterUpdateModal updateSurveyFooterText={this.updateSurveyFooterText} surveyFooterUpdateDialog={this.state.surveyFooterUpdateDialog} surveyFooterText={this.state.surveyFooterText} changeSurveyFooterText={this.changeSurveyFooterText} updateDialog={(mode) => this.updateDialog('surveyFooterDialog')}/>
 
             <div id="surveySidebar" className={classes.SideBarContainer}>
              {/* <Button onClick={this.toggleSidebarOpen} className={classes.SideBarToggle}>
