@@ -117,7 +117,7 @@ exports.storeUserSurveyForm = (req, res, next) => {
   const surveyInputs = JSON.parse(req.body.surveyInputs);
   const surveyCheckboxes = JSON.parse(req.body.surveyCheckboxes);
   const surveyRadioOptions = JSON.parse(req.body.surveyRadioOptions);
-  const componentArray = JSON.parse(req.body.componentArray);
+  const surveyDataArray = JSON.parse(req.body.surveyDataArray);
   console.log(surveyId);
   if(surveyId == "null") {
     // if surveyId is null that means the user is saving survey for the first time
@@ -129,7 +129,7 @@ exports.storeUserSurveyForm = (req, res, next) => {
           surveyInputs: {...surveyInputs},
           surveyCheckboxes: [...surveyCheckboxes],
           surveyRadioOptions: [...surveyRadioOptions],
-          componentArray: [...componentArray],
+          surveyDataArray: [...surveyDataArray],
           imageUrl: file,
           _user: req.user._id
         });
@@ -158,7 +158,7 @@ exports.storeUserSurveyForm = (req, res, next) => {
            survey.surveyInputs = {...surveyInputs};
            survey.surveyCheckboxes = [...surveyCheckboxes];
            survey.surveyRadioOptions = [...surveyRadioOptions];
-           survey.componentArray = [...componentArray];
+           survey.surveyDataArray = [...surveyDataArray];
            survey.imageUrl = file;
            survey._id = surveyId;
            survey.save()

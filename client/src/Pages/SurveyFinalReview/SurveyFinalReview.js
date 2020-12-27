@@ -26,92 +26,121 @@ class SurveyFinalReview extends Component {
     })
   }
 
-
-    renderSurveyCheckbox() {
-     let checkboxItems, checkboxDeleteBtn;
-      return Object.values(this.state.survey.surveyCheckboxes).map(checkboxObj => {
-        if(checkboxObj.surveyCheckboxNames) {
-          // To render checkbox items
-          checkboxItems = Object.keys(checkboxObj.surveyCheckboxNames)
-          .map(checkbox => {
-            return <CustomInput key={Math.random()} type="checkbox" id="exampleCustomInline2" label={checkbox} inline />
-          });
-        }
-        return (
-          <>
-            <h4>{checkboxObj.surveyCheckboxQuestion}</h4>
-            {checkboxItems}
-          </>
-        )
-      })
-    }
-
-    renderSurveyRadioOptions() {
-        return Object.values(this.state.survey.surveyRadioOptions).map(radioObj => {
-          if(radioObj.surveyRadioOptionNames.length !== 0) {
-            return (
-              <div key={Math.random()}>
-               <FormGroup tag="fieldset">
-                <legend style={{ fontSize: '1rem' }}></legend>
-                <FormGroup>
-                <Label for="exampleCheckbox">{radioObj.surveyRadioQuestion}</Label>
-                <div>
-                  <CustomInput value={radioObj.surveyRadioOptionNames[0]} type="radio" id="exampleCustomRadio" name="customRadio" label={radioObj.surveyRadioOptionNames[0]} inline />
-                  <CustomInput value={radioObj.surveyRadioOptionNames[1]} type="radio" id="exampleCustomRadio2" name="customRadio" label={radioObj.surveyRadioOptionNames[1]} inline />
-                </div>
-                </FormGroup>
-                </FormGroup>
-                </div>
-              )
-          }
-        });
-    }
-
-  renderSurveyInputs() {
-    if(this.state.survey.surveyInputs) {
+  titleComponent (titleName) {
     return (
-      <div id="inputArea" className={classes.InputArea}>
-      {
-        Object.keys(this.state.survey.surveyInputs).map(key => {
-               return (
-                 <FormGroup>
-                    <Label>{key}</Label>
-                     <Input
-                      style={{ borderRadius: 0, height: '1.8rem' }}
-                      key={key + new Date().getMilliseconds()}
-                      id={key}
-                      type="text"
-                      placeholder={this.state.survey.surveyInputs[key]}
-                    />
-                 </FormGroup>
-              )
-      })
-      }
+      <div className={classes.titleWrapper}>
+        <h2>{titleName}</h2>
       </div>
     )
   }
+
+  descriptionComponent (text) {
+    return (
+      <div className={classes.descrWrapper}>
+        <p>{text}</p>
+      </div>
+    )
   }
 
-  renderFormContent() {
+  imageComponent (imageUrl) {
+    return (
+      <div className={classes.imageWrapper}>
+        {!imageUrl ? null : <img src={imageUrl} />}
+      </div>
+    )
+  }
+
+  inputComponent (inputLabel) {
+    return (
+      <div className={classes.inputWrapper}>
+        <FormGroup>
+            <Label>{inputLabel}</Label>
+            <Input
+              style={{ borderRadius: 0, height: '1.8rem' }}
+              id={inputLabel}
+              type="text"
+              value=""
+            />
+        </FormGroup>
+      </div>
+    )
+  }
+
+  checkboxComponent (surveyCheckboxQuestion, checkboxNames) {
+    return (
+      <div className={classes.checkboxWrapper}>
+        <FormGroup>
+          <Label for="exampleCheckbox">{surveyCheckboxQuestion}</Label>
+          <div>
+          {Object.keys(checkboxNames).map(key => (
+            <CustomInput key={Math.random()} type="checkbox" id="exampleCustomInline2" label={`${key}`} inline />
+          ))}
+          </div>
+        </FormGroup>
+      </div>
+    )
+  }
+
+  radioOptionsComponent (radioQuestion, radioOptions) {
+    return (
+      <div className={classes.radioWrapper}>
+        <FormGroup tag="fieldset">
+          <legend style={{ fontSize: '1rem' }}></legend>
+          <FormGroup>
+          <Label for="exampleCheckbox">{radioQuestion}</Label>
+          <div>
+          {Object.keys(radioOptions).map(key => (
+            <CustomInput key={Math.random()} value={false} type="radio" id="exampleCustomRadio" name="customRadio" label={key} inline />
+          ))}
+        </div>
+          </FormGroup>
+        </FormGroup>
+      </div>
+    )
+  }
+
+  renderFooterContent () {
     if(this.state.survey) {
       return (
-        <div className={classes.FormBox}>
-         <div className={classes.InnerFormBox}>
-          <h2>{this.state.survey.surveyTitleText ? this.state.survey.surveyTitleText : null}</h2>
-          <p>{this.state.survey.surveyDescrText ? this.state.survey.surveyDescrText : null}</p>
-          <div className={classes.SurveyImageBox}>
-             {!this.state.survey.imageUrl ? null : <img alt="survey image" src={this.state.survey.imageUrl} />}
-          </div>
-            {this.renderSurveyInputs()}
-          <div>
-           {this.renderSurveyCheckbox()}
-           {this.renderSurveyRadioOptions()}
-          </div>
-          <div className={classes.SurveyFooterText}>{this.state.survey.surveyFooterText ? this.state.survey.surveyFooterText : null}</div>
-        </div>
+        <div id="surveyFooter" className={classes.footerWrapper}>
+          <div className={classes.footerLine}></div>
+          <p>{this.state.survey.surveyFooterText}</p>
         </div>
       )
     }
+  }
+
+  renderFormContent() {
+    // if(this.state.survey) {
+      return (
+        <div className={classes.FormBox}>
+          <div className={classes.InnerFormBox}>
+            <div>
+              {this.state.survey ? this.state.survey.surveyDataArray.map(item => {
+                if(item.identifier === 'title') {
+                  return this.titleComponent(item.text);
+                } else if (item.identifier === 'descr') {
+                  return this.descriptionComponent(item.text)
+                } else if (item.identifier === 'input') {
+                  return this.inputComponent(item.text)
+                } else if (item.identifier === 'image') {
+                  return this.imageComponent(item.imagePreviewUrl)
+                } else if (item.identifier === 'checkbox') {
+                  return this.checkboxComponent(item.question, item.checkboxNames)
+                } else if (item.identifier === 'radio') {
+                  return this.radioOptionsComponent(item.question, item.options)
+                } else {
+                  return
+                }
+              }) : null}
+            </div>
+            <div style={{ marginTop: 'auto' }}>
+              {this.renderFooterContent()}
+            </div> 
+          </div>
+        </div>
+      )
+    // }
   }
 
   render () {

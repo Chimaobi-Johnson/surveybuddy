@@ -30,6 +30,7 @@ class CreateSurveyWizard extends React.Component {
 
   state = {
     componentArray: [],
+    surveyDataArray: [],
     surveyPage: null,
     surveyId: null,
     surveyNameEditingMode: false,
@@ -117,7 +118,7 @@ class CreateSurveyWizard extends React.Component {
      const surveyRadioOptions = JSON.stringify(this.state.surveyRadioOptions);
      const surveyTitleArray = JSON.stringify(this.state.surveyTitleArray);
      const descriptionArray = JSON.stringify(this.state.descriptionArray)
-     const componentArray = JSON.stringify(this.state.componentArray);
+     const surveyDataArray = JSON.stringify(this.state.surveyDataArray);
 
      let customForm = new FormData();
      customForm.append('surveyId', this.state.surveyId);
@@ -129,7 +130,7 @@ class CreateSurveyWizard extends React.Component {
      customForm.append('surveyInputs', surveyInputs);
      customForm.append('surveyCheckboxes', surveyCheckboxes);
      customForm.append('surveyRadioOptions', surveyRadioOptions);
-     customForm.append('componentArray', componentArray);
+     customForm.append('surveyDataArray', surveyDataArray);
 
      axios.post('/api/store_survey_form', customForm)
      .then(response => {
@@ -151,7 +152,18 @@ class CreateSurveyWizard extends React.Component {
   }
 
   removeDialog = (dialogName) => {
-    this.setState({[dialogName]: false, componentIndex: -1, dataIndex: -1 });
+    if(dialogName === 'surveyFooterDialog') {
+      const surveyDataArray = [...this.state.surveyDataArray];
+      const footerObj = {
+        id: Math.random(),
+        identifier: 'footer',
+        text: this.state.surveyFooterText
+      }
+      surveyDataArray.push(footerObj)
+      this.setState({[dialogName]: false, surveyDataArray, componentIndex: -1, dataIndex: -1 });
+    } else {
+      this.setState({[dialogName]: false, componentIndex: -1, dataIndex: -1 });
+    }
   }
 
   changeTitleColor = (e, titleIndex) => {
@@ -161,7 +173,7 @@ class CreateSurveyWizard extends React.Component {
   }
 
   saveComponentDialog = (dialogName) => {
-    let randomId;
+    let randomId, surveyDataArray;
     this.setState({[dialogName]: false});
     let inputArray = [];
     switch(dialogName) {
@@ -171,14 +183,16 @@ class CreateSurveyWizard extends React.Component {
         randomId = Math.random().toString(36).substr(2, 15);
         const titleObj = {
           id: Math.random().toString(),
+          identifier: 'title',
           text: this.state.surveyTitleText,
           colors: {
             backgroundColor: '#ffffff'
           }
         }
         titleArr.push(titleObj);
+        surveyDataArray = [...this.state.surveyDataArray];
+        surveyDataArray.push(titleObj)
         const titleIndex = titleArr.indexOf(titleObj);
-        console.log(titleIndex);
         // get color from titleArr because it hasnt been stored to state yet
         const backgroundColor = titleArr[titleIndex].colors.backgroundColor;
         const newBgColor = this.state.surveyTitleArray.length > 0 ? this.state.surveyTitleArray[titleIndex].colors.backgroundColor : '#eaeaea'
@@ -193,7 +207,7 @@ class CreateSurveyWizard extends React.Component {
             {/* <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.selectSurveyTitleColor(`${titleObj.id}`, `${randomId}`)}><i className="fa fa-pencil-o" aria-hidden="true"></i></Button> */}
           </div>
         </div>)
-        this.setState({ componentArray: inputArray, surveyTitleArray: titleArr });
+        this.setState({ surveyDataArray, componentArray: inputArray, surveyTitleArray: titleArr });
         break
       case "surveyDescrDialog":
         randomId = Math.random().toString(36).substr(2, 15);
@@ -201,8 +215,11 @@ class CreateSurveyWizard extends React.Component {
         const descrArr = [ ...this.state.descriptionArray ];
         const descrObj = {
           id: Math.random().toString(),
+          identifier: 'descr',
           text: this.state.surveyDescrText
         }
+        surveyDataArray = [...this.state.surveyDataArray];
+        surveyDataArray.push(descrObj)
         descrArr.push(descrObj);
         inputArray.push(
         <div className={classes.descrWrapper} id={randomId} componentIdenifier={Math.random()}>
@@ -213,16 +230,22 @@ class CreateSurveyWizard extends React.Component {
           </div>
         </div>
         )
-        this.setState({ componentArray: inputArray, descriptionArray: descrArr });
+        this.setState({ surveyDataArray, componentArray: inputArray, descriptionArray: descrArr });
         break
       case "surveyImageDialog":
         inputArray = [ ...this.state.componentArray];
         const surveyImage = inputArray.filter(item => item.props.id === "surveyImage");
-        console.log(surveyImage);
         if(surveyImage.length > 0) {
           alert("You are allowed to add only one image")
           return
         } else {
+          surveyDataArray = [...this.state.surveyDataArray];
+          const imageObj = {
+            id: Math.random(),
+            identifier: 'image',
+            imagePreviewUrl: this.state.imagePreviewUrl
+          }
+          surveyDataArray.push(imageObj)
           inputArray.push(
           <div className={classes.imageWrapper} id="surveyImage" componentIdenifier={Math.random()}>
             {!this.state.imagePreviewUrl ? null : <img src={this.state.imagePreviewUrl} />}
@@ -232,7 +255,7 @@ class CreateSurveyWizard extends React.Component {
               <Button size='sm' id="deleteImg" onClick={this.editSurveyImageHandler}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
             </div>
           </div>)
-        this.setState({ componentArray: inputArray });
+        this.setState({ surveyDataArray, componentArray: inputArray });
         }
         break
         default:
@@ -314,8 +337,15 @@ class CreateSurveyWizard extends React.Component {
     // this method of generating random ids is used for simplicity sake
     let randomId = Math.random().toString(36).substr(2, 15);
     inputArray = [...this.state.componentArray];
+    const surveyDataArray = [...this.state.surveyDataArray];
+    const inputObj = {
+      id: Math.random(),
+      identifier: 'input',
+      text: inputLabel
+    }
+    surveyDataArray.push(inputObj);
     inputArray.push(
-      <div  className={classes.inputWrapper} id={randomId} key={inputLabel + new Date().getMilliseconds()} componentIdentifier={Math.random()}>
+      <div className={classes.inputWrapper} id={randomId} key={inputLabel + new Date().getMilliseconds()} componentIdentifier={Math.random()}>
         <FormGroup>
             <Label>{inputLabel}</Label>
             <Input
@@ -333,7 +363,7 @@ class CreateSurveyWizard extends React.Component {
       </div>
     )
     {/* <Button key={key + 'btn' + new Date().getSeconds()} size='small' style={{ fontWeight: 'bold', color: '#303f9f'}} onClick={(identifier) => this.editSurveyInputHandler(`${key}`)}>Edit</Button> */}
-    this.setState({ componentArray: inputArray, surveyInputs: surveyInputs, surveyInputDialog: false });
+    this.setState({ surveyDataArray, componentArray: inputArray, surveyInputs: surveyInputs, surveyInputDialog: false });
 
   }
 
@@ -363,13 +393,16 @@ class CreateSurveyWizard extends React.Component {
 
         let inputArray = [];
         inputArray = [ ...this.state.componentArray ]
+        const surveyDataArray = [...this.state.surveyDataArray];
         const randomId = Math.random().toString(36).substr(2, 15);
         const checkboxObj = {
           id: Math.random().toString(36).substr(2, 15),
+          identifier: 'checkbox',
           question: this.state.surveyCheckboxTempQuestion,
           checkboxNames: checkboxNames,
         }
         surveyArr.push(checkboxObj);
+        surveyDataArray.push(checkboxObj);
         inputArray.push(
           <div className={classes.checkboxWrapper} id={randomId} key={Math.random()} componentIdentifier={Math.random()}>
             <FormGroup>
@@ -386,7 +419,7 @@ class CreateSurveyWizard extends React.Component {
             </div>
           </div>
         )
-      this.setState({ surveyCheckboxes: surveyArr, surveyCheckboxTempQuestion: '', componentArray: inputArray, surveyCheckboxDialog: false  });
+      this.setState({ surveyDataArray, surveyCheckboxes: surveyArr, surveyCheckboxTempQuestion: '', componentArray: inputArray, surveyCheckboxDialog: false  });
     }
   }
 
@@ -416,13 +449,16 @@ class CreateSurveyWizard extends React.Component {
            return Object.assign(radioOptions, {[radioObj.value]: false});
        });
 
-       surveyRadioInitValues.optionOne.value = "Option 1"
-       surveyRadioInitValues.optionTwo.value = "Option 2"
-
+      surveyRadioInitValues.optionOne.value = "Option 1"
+      surveyRadioInitValues.optionTwo.value = "Option 2"
+      const surveyDataArray = [...this.state.surveyDataArray];
       const radioObj = {
         id: Math.random(),
+        identifier: 'radio',
+        question: this.state.surveyRadioTempQuestion,
         options: radioOptions
       }
+      surveyDataArray.push(radioObj);
       surveyRadioArr.push(radioObj);
       let inputArray = [];
       inputArray = [ ...this.state.componentArray ]
@@ -434,12 +470,9 @@ class CreateSurveyWizard extends React.Component {
               <FormGroup>
               <Label for="exampleCheckbox">{this.state.surveyRadioTempQuestion}</Label>
               <div>
-            {Object.keys(radioOptions).map(key => (
-              <CustomInput key={Math.random()} value={false} type="radio" id="exampleCustomRadio" name="customRadio" label={key} inline />
-            ))}
-            {/* {surveyRadioNames.map(item => (
-              item === undefined ? null : <CustomInput key={Math.random()} value="" type="radio" id="exampleCustomRadio" name="customRadio" label="" inline />
-            ))} */}
+              {Object.keys(radioOptions).map(key => (
+                <CustomInput key={Math.random()} value={false} type="radio" id="exampleCustomRadio" name="customRadio" label={key} inline />
+              ))}
             </div>
               </FormGroup>
             </FormGroup>
@@ -449,11 +482,18 @@ class CreateSurveyWizard extends React.Component {
             </div>
             </div>
       )
-    this.setState({ surveyRadioInitValues: surveyRadioInitValues, surveyRadioOptions: surveyRadioArr, surveyRadioTempQuestion: '', componentArray: inputArray, surveyRadioDialog: false  });
+    this.setState({ surveyDataArray, surveyRadioInitValues: surveyRadioInitValues, surveyRadioOptions: surveyRadioArr, surveyRadioTempQuestion: '', componentArray: inputArray, surveyRadioDialog: false  });
   }
 
   saveFooterText = () => {
-    this.setState({ surveyFooterDialog: false })
+    const surveyDataArray = [...this.state.surveyDataArray];
+    const footerObj = {
+      id: Math.random(),
+      identifier: 'footer',
+      text: this.state.surveyFooterText
+    }
+    surveyDataArray.push(footerObj)
+    this.setState({ surveyDataArray, surveyFooterDialog: false })
   }
 
   // {{ NAME CHANGE }}

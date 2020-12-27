@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const surveySchema = new Schema({
   surveyName: String,
-  componentArray: [],
+  surveyDataArray: [],
   surveyTitleArray: [],
   descriptionArray: [],
   surveyFooterText: String,
