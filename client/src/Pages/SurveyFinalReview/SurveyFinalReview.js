@@ -26,6 +26,20 @@ class SurveyFinalReview extends Component {
     })
   }
 
+  sendSurvey = () => {
+    const data = {
+      emailBody: this.state.survey.emailBody,
+      emailRecipients: this.state.survey.emailRecipients,
+      emailSubject: this.state.emailSubject,
+      surveyId: this.state.survey._id
+    }
+    axios.post('/api/survey/send', data).then(response => {
+      console.log(response)
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
   titleComponent (titleName) {
     return (
       <div className={classes.titleWrapper}>
@@ -176,7 +190,7 @@ class SurveyFinalReview extends Component {
          </div>
          <div className={classes.DashboardContainer}>
                <div className={classes.DashboardMain}>
-               <a href="#" className={classes.NextBtn}>SEND OUT SURVEY</a>
+               <a href="#" onClick={this.sendSurvey} className={classes.NextBtn}>SEND OUT SURVEY</a>
                <a href="/surveys" className={classes.SendLaterBtn}>SEND LATER</a>
                <div className={classes.DashboardInnerBox}>
                   {this.renderFormContent()}

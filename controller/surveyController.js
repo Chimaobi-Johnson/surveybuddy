@@ -2,9 +2,10 @@ const User = require('../models/User');
 const Survey = require('../models/Survey');
 const fs = require('fs');
 const path = require('path');
+const { sendSurveyLink } = require('../mail/survey');
 
 
-exports.getSurveyList = (req, res) => {
+exports.getSurveyList = (req, res, next) => {
   const currentPage = req.query.page || 1;
   const perPage = 8;
   let totalItems;
@@ -193,4 +194,12 @@ exports.deleteSurvey = (req, res, next) => {
      error.httpStatusCode = 500;
      return next(error);
    })
+}
+
+exports.sendSurveyEmailLink = (req, res, next) => {
+  let { surveyId, emailRecipients, emailBody, emailSubject } = req.body;
+  emailBody = 'Please click on the link below to start survey';
+  sendSurveyLink(emailRecipients, emailSubject, emailBody)
+
+  // Update isSent to yes or true
 }
