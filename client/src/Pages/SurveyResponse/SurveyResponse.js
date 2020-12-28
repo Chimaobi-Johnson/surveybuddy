@@ -33,27 +33,38 @@ class SurveyResponse extends Component {
   changeInputHandler = (e, obj) => {
 
       const surveyDataArray = [...this.state.survey.surveyDataArray];
-      const surveyInputs = { ...this.state.survey.surveyInputs };
+    //   const surveyInputs = { ...this.state.survey.surveyInputs };
       surveyDataArray.map(item => {
           if(item.id == obj.id) {
               item.value = e.target.value
           }
       })
-      surveyInputs[obj.text] = e.target.value
+    //   surveyInputs[obj.text] = e.target.value
       this.setState({ survey: {
           ...this.state.survey,
-          surveyDataArray,
-          surveyInputs
+          surveyDataArray
       }})
 
   }
 
   changeCheckboxHandler = (key, obj) => {
     const surveyDataArray = [...this.state.survey.surveyDataArray];
-    console.log(key)
     surveyDataArray.map(item => {
         if(item.id == obj.id) {
             item.checkboxNames[key] = !obj.checkboxNames[key]
+        }
+    })
+    this.setState({ survey: {
+        ...this.state.survey,
+        surveyDataArray,
+    }})
+  }
+
+  changeRadioOptionsHandler = (e, obj) => {
+    const surveyDataArray = [...this.state.survey.surveyDataArray];
+    surveyDataArray.map(item => {
+        if(item.id == obj.id) {
+            item.value = e.target.value
         }
     })
     this.setState({ survey: {
@@ -127,7 +138,7 @@ class SurveyResponse extends Component {
           <Label for="exampleCheckbox">{obj.question}</Label>
           <div>
           {Object.keys(obj.options).map(key => (
-            <CustomInput key={Math.random()} value={false} type="radio" id="exampleCustomRadio" name="customRadio" label={key} inline />
+            <CustomInput key={Math.random()} type="radio" checked={key == obj.value} value={`${key}`} onChange={(e, arg) => this.changeRadioOptionsHandler(e, obj)} id={Math.random()} name={obj.question} label={key} inline />
           ))}
         </div>
           </FormGroup>
