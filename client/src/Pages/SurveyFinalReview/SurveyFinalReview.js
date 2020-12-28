@@ -115,7 +115,7 @@ class SurveyFinalReview extends Component {
       return (
         <div className={classes.FormBox}>
           <div className={classes.InnerFormBox}>
-            <div>
+            <div style={{ textAlign: 'left' }}>
               {this.state.survey ? this.state.survey.surveyDataArray.map(item => {
                 if(item.identifier === 'title') {
                   return this.titleComponent(item.text);
