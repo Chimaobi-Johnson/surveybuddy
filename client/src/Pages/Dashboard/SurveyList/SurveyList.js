@@ -138,7 +138,7 @@ class SurveyList extends Component {
                  <tr className={classes.TableRow} key={this.state.surveys.indexOf(survey)}>
                    <td>{this.state.surveys.indexOf(survey) + 1}</td>
                    <td><Link to={`/surveys/review_final/${survey._id}`}>{survey.surveyName}</Link></td>
-                   <td>No</td>
+                   <td>{survey.isSent ? "Yes" : "No"}</td>
                    <td>{survey.emailRecipients.length}</td>
                    <td>{survey.noOfRespondents}</td>
                    <td>25/01/2020</td>

@@ -234,16 +234,7 @@ class CreateSurveyWizard extends React.Component {
   
 
   initSurveyInputDialog = () => {
-    const surveyInputsData = {...this.state.surveyInputs};
-    const surveyInputLength = Object.keys(surveyInputsData).length
-    if(surveyInputLength <= 4) {
-      // document.getElementById('drawer-toggle').checked = false;
-      // this.toggleSidebarOpen();
-      this.setState({surveyInputDialog: true});
-    } else {
-      // document.getElementById('drawer-toggle').checked = false;
-      alert('You have reached the maximum number of inputs');
-    }
+    this.setState({surveyInputDialog: true});
   }
 
 

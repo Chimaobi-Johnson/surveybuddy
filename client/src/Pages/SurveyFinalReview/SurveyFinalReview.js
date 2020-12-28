@@ -245,9 +245,9 @@ class SurveyFinalReview extends Component {
              <div>{this.state.survey.emailSubject ? this.state.survey.emailSubject : null}</div>
              <h3>EMAIL BODY</h3>
              <div>
-              <p>{this.state.survey.emailBody ? this.state.survey.emailBody : null}</p>
+              <p>{this.state.survey.emailBody ? this.state.survey.emailBody.split("<p>")[0] : null}</p>
               <br />
-              {/* <p style={{ fontStyle: 'italic', fontSize: '.7rem' }}>Please click on the link below to start survey <a href="#">Start Survey</a></p> */}
+              <p style={{ fontStyle: 'italic', fontSize: '.7rem' }}>Please click on the link below to start survey <a href={`/survey/respond/${this.state.survey._id}`}>Start Survey</a></p>
               </div>
              <h3>EMAIL RECIPIENTS</h3>
              <div>{this.state.survey.emailRecipients ? this.state.survey.emailRecipients.map(recipient => recipient) : null}</div>
