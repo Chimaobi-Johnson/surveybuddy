@@ -3,13 +3,20 @@ import { Input, FormGroup, Label, Button, CustomInput } from 'reactstrap';
 import axios from 'axios';
 
 import SideBar from '../../components/SideBar/SideBar';
+import loader from '../../assets/images/gifs/pulse.gif';
+import { Modal } from 'reactstrap';
+
 import * as classes from './SurveyFinalReview.module.css';
+import { withRouter } from 'react-router';
 
 
 class SurveyFinalReview extends Component {
 
   state = {
-    survey: null
+    survey: null,
+    loading: false,
+    modalOpen: false,
+    errorModal: false
   }
 
   componentDidMount() {
@@ -27,6 +34,7 @@ class SurveyFinalReview extends Component {
   }
 
   sendSurvey = () => {
+    this.setState({ loading: true })
     const data = {
       emailBody: this.state.survey.emailBody,
       emailRecipients: this.state.survey.emailRecipients,
@@ -34,10 +42,66 @@ class SurveyFinalReview extends Component {
       surveyId: this.state.survey._id
     }
     axios.post('/api/survey/send', data).then(response => {
+      this.setState({ loading: false })
       console.log(response)
+      if(response.status === 200) {
+        this.setState({ modalOpen: true })
+      }
     }).catch(err => {
       console.log(err);
+      this.setState({ loading: false, errorModal: true })
     })
+  }
+
+  gotoDashboard () {
+    this.props.history.push('/surveys')
+  }
+
+  closeModal () {
+    this.setState({ modalOpen: !this.state.modalOpen })
+  }
+
+  closeErrorModal () {
+    this.setState({ errorModal: !this.state.errorModal })
+  }
+
+  messageModal () {
+    return (
+      <Modal
+        className="modal-dialog-centered"
+        toggle={this.closeModal}
+        isOpen={this.state.modalOpen}
+      >
+        <div className="modal-body">
+            <h1> E-mail sent successfully. Go to your dashboard to check for responses to your survey</h1>
+        </div>
+        <div className="modal-footer">
+          <Button onClick={() => this.props.history.push('/surveys')} size="sm">
+            Okay
+          </Button>
+        </div>
+      </Modal>
+    )
+  }
+
+  
+  errorMessageModal () {
+    return (
+      <Modal
+        className="modal-dialog-centered"
+        toggle={this.closeErrorModal}
+        isOpen={this.state.errorModal}
+      >
+        <div className="modal-body">
+            <h1>Server Error. Please check connection settings</h1>
+        </div>
+        <div className="modal-footer">
+          <Button onClick={this.closeErrorModal} size="sm">
+            Okay
+          </Button>
+        </div>
+      </Modal>
+    )
   }
 
   titleComponent (titleName) {
@@ -166,6 +230,9 @@ class SurveyFinalReview extends Component {
     if(this.state.survey) {
       reviewData = (
         <div className={classes.SurveyContainer}>
+         {this.state.loading ? <div className={classes.LoadingBox}><img style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '50px', height: '50px'}} src={loader} alt="" /><p style={{display: 'block', fontWeight: 'bold',  position: 'absolute', top: '55%', left: '50%', transform: 'translate(-50%, -50%)'}}>Sending...</p></div> : null}
+         {this.messageModal()}
+         {this.errorMessageModal()}
         <div className={classes.SideBarContainer}>
          <SideBar>
            <Button className={classes.goBack}><i className="fa fa-chevron-left" aria-hidden="true"></i></Button>
@@ -180,7 +247,7 @@ class SurveyFinalReview extends Component {
              <div>
               <p>{this.state.survey.emailBody ? this.state.survey.emailBody : null}</p>
               <br />
-              <p style={{ fontStyle: 'italic', fontSize: '.7rem' }}>Please click on the link below to start survey <a href="#">Start Survey</a></p>
+              {/* <p style={{ fontStyle: 'italic', fontSize: '.7rem' }}>Please click on the link below to start survey <a href="#">Start Survey</a></p> */}
               </div>
              <h3>EMAIL RECIPIENTS</h3>
              <div>{this.state.survey.emailRecipients ? this.state.survey.emailRecipients.map(recipient => recipient) : null}</div>
@@ -209,4 +276,4 @@ class SurveyFinalReview extends Component {
   }
 }
 
-export default SurveyFinalReview;
+export default withRouter(SurveyFinalReview);

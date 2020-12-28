@@ -2,14 +2,17 @@ const User = require('../models/User');
 const Survey = require('../models/Survey');
 const fs = require('fs');
 const path = require('path');
-const { sendSurveyLink } = require('../mail/survey');
+const nodemailer = require('nodemailer');
+const smtp = require('nodemailer-smtp-transport');
+
+const keys = require('../config/keys');
 
 
 exports.getSurveyList = (req, res, next) => {
   const currentPage = req.query.page || 1;
   const perPage = 8;
   let totalItems;
-  Survey.find({_user: req.user._id}).countDocuments()
+  Survey.find({_user: req.user._id}).sort({ "createdAt": 1 }).countDocuments()
   .then(count => {
     totalItems = count;
     return Survey.find({_user: req.user._id})
@@ -197,9 +200,51 @@ exports.deleteSurvey = (req, res, next) => {
 }
 
 exports.sendSurveyEmailLink = (req, res, next) => {
-  let { surveyId, emailRecipients, emailBody, emailSubject } = req.body;
-  emailBody = 'Please click on the link below to start survey';
-  sendSurveyLink(emailRecipients, emailSubject, emailBody)
+  const { surveyId, emailRecipients, emailFrom, emailBody, emailSubject } = req.body;
+
+    const transporter = nodemailer.createTransport(smtp({ 
+      service: 'gmail',
+      // secure: true,
+      auth: {
+        user: keys.email,
+        pass: keys.password
+      }
+    })); 
+  
+    const mailOptions = {
+      from: emailFrom,
+      to: emailRecipients,
+      subject: emailSubject,
+      html: emailBody,
+    };
+  
+    transporter.verify((error, success) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Server is ready to take our messages', success);
+      }
+    });
+   
+    transporter.sendMail(mailOptions, (err, info) => {
+        if(err) throw err
+        Survey.findById(surveyId).then(survey => {
+          if(!survey) {
+            res.status(404).json({ message: "Survey not found! Might have been deleted" })
+          }
+          survey.isSent = true
+          return survey.save();
+        }).then(updatedSurvey => {
+          res.status(200).json({ message: 'Mail sent successfully' })
+        }).catch(err => {
+          console.log(err)
+          const error = new Error(err);
+          error.httpStatusCode = 500;
+          return next(error);
+        })
+
+    });
+  
 
   // Update isSent to yes or true
 }

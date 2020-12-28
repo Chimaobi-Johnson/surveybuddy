@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Modal, Input, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import { APP_URL } from '../../config';
 
 import SideBar from '../../components/SideBar/SideBar';
 import * as actions from '../../store/actions';
@@ -13,6 +14,7 @@ class CustomizeEmail extends Component {
    state = {
      emailSubject: '',
      emailBody: '',
+     emailFrom: '',
      emailRecipients: '',
      surveyId: null,
      loading: false,
@@ -28,7 +30,7 @@ class CustomizeEmail extends Component {
     // }
 
     textFieldChangeHandler = (event, textfield) => {
-      this.setState({ [textfield]: event.target.value });
+        this.setState({ [textfield]: event.target.value });
     }
 
     submitSurveyEmailHandler = event => {
@@ -37,7 +39,8 @@ class CustomizeEmail extends Component {
 
        let formdata = {
          emailSubject: this.state.emailSubject,
-         emailBody: this.state.emailBody,
+         emailBody: this.state.emailBody + ' ' + `<p>Please click on the link below to start survey <a href='${APP_URL}/survey/respond/${this.state.surveyId}'>Start Survey</a></p>`,
+         emailFrom: this.state.emailFrom,
          emailRecipients: this.state.emailRecipients,
          surveyId: this.state.surveyId
        }
@@ -89,7 +92,7 @@ class CustomizeEmail extends Component {
               <h5 style={{ color: '#fff' }}>Email Body:</h5>
                <div className={classes.EmailContentBox}>
                    {this.state.emailBody} <br />
-                   <p style={{ fontStyle: 'italic', fontSize: '.7rem' }}>Please click on the link below to start survey <a href="#">Start Survey</a></p>
+                   <p style={{ fontStyle: "italic", fontSize: ".7rem" }}>Please click on the link below to start survey <a href={`${APP_URL}/survey/respond/${this.state.surveyId}`}>Start Survey</a></p>
                </div>
               </div>
            </SideBar>
@@ -103,6 +106,12 @@ class CustomizeEmail extends Component {
                   required
                 />
                  <Input
+                    id="emailFrom"
+                    placeholder="This is the E-mail your recipients will see"
+                    onChange={(event, textfield) => this.textFieldChangeHandler(event, 'emailFrom')}
+                    required
+                  />
+                  <Input
                     id="emailBody"
                     placeholder="Message the Body of the Email will Contain"
                     onChange={(event, textfield) => this.textFieldChangeHandler(event, 'emailBody')}
