@@ -99,7 +99,6 @@ class CreateSurveyWizard extends React.Component {
     sidebarOpen: false,
     componentIndex: -1,
     dataIndex: -1,
-    formerSurveyInputLabelName: '',
   }
 
   cancelNewSurvey = () => {
@@ -193,25 +192,10 @@ class CreateSurveyWizard extends React.Component {
         surveyDataArray = [...this.state.surveyDataArray];
         surveyDataArray.push(titleObj)
         const titleIndex = titleArr.indexOf(titleObj);
-        // get color from titleArr because it hasnt been stored to state yet
-        const backgroundColor = titleArr[titleIndex].colors.backgroundColor;
-        const newBgColor = this.state.surveyTitleArray.length > 0 ? this.state.surveyTitleArray[titleIndex].colors.backgroundColor : '#eaeaea'
-
-        inputArray.push(
-        <div className={classes.titleWrapper} id={randomId} componentIdenifier={Math.random()} onClick={this.deleteSurveyTitleComponent}>
-          <h2>{this.state.surveyTitleText}</h2>
-          <div className={classes.titleActionsWrapper}>
-            <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.deleteSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
-            <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.editSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
-            {/* <Input type="color" id="colorpicker" onChange={(e, arg2) => this.changeTitleColor(e, `${titleIndex}`)} value={newBgColor} /> */}
-            {/* <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.selectSurveyTitleColor(`${titleObj.id}`, `${randomId}`)}><i className="fa fa-pencil-o" aria-hidden="true"></i></Button> */}
-          </div>
-        </div>)
-        this.setState({ surveyDataArray, componentArray: inputArray, surveyTitleArray: titleArr });
+        this.setState({ surveyDataArray, surveyTitleArray: titleArr });
         break
       case "surveyDescrDialog":
         randomId = Math.random().toString(36).substr(2, 15);
-        inputArray = [ ...this.state.componentArray ];
         const descrArr = [ ...this.state.descriptionArray ];
         const descrObj = {
           id: Math.random().toString(),
@@ -221,16 +205,7 @@ class CreateSurveyWizard extends React.Component {
         surveyDataArray = [...this.state.surveyDataArray];
         surveyDataArray.push(descrObj)
         descrArr.push(descrObj);
-        inputArray.push(
-        <div className={classes.descrWrapper} id={randomId} componentIdenifier={Math.random()}>
-          <p>{this.state.surveyDescrText}</p>
-          <div className={classes.descrActionsWrapper}>
-            <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
-            <Button size='sm' onClick={(arg1, arg2) => this.editSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
-          </div>
-        </div>
-        )
-        this.setState({ surveyDataArray, componentArray: inputArray, descriptionArray: descrArr });
+        this.setState({ surveyDataArray, descriptionArray: descrArr });
         break
       case "surveyImageDialog":
         inputArray = [ ...this.state.componentArray];
@@ -246,16 +221,7 @@ class CreateSurveyWizard extends React.Component {
             imagePreviewUrl: this.state.imagePreviewUrl
           }
           surveyDataArray.push(imageObj)
-          inputArray.push(
-          <div className={classes.imageWrapper} id="surveyImage" componentIdenifier={Math.random()}>
-            {!this.state.imagePreviewUrl ? null : <img src={this.state.imagePreviewUrl} />}
-            <br />
-            <div className={classes.imageActionsWrapper}>
-              <Button size='sm' id="removeImageBtn" onClick={this.deleteSurveyImageHandler}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
-              <Button size='sm' id="deleteImg" onClick={this.editSurveyImageHandler}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
-            </div>
-          </div>)
-        this.setState({ surveyDataArray, componentArray: inputArray });
+          this.setState({ surveyDataArray });
         }
         break
         default:
@@ -344,26 +310,9 @@ class CreateSurveyWizard extends React.Component {
       text: inputLabel
     }
     surveyDataArray.push(inputObj);
-    inputArray.push(
-      <div className={classes.inputWrapper} id={randomId} key={inputLabel + new Date().getMilliseconds()} componentIdentifier={Math.random()}>
-        <FormGroup>
-            <Label>{inputLabel}</Label>
-            <Input
-              style={{ borderRadius: 0, height: '1.8rem' }}
-              id={inputLabel}
-              type="text"
-              value=""
-              onChange={(event, key) => this.surveyInputChangeHandler(event, inputLabel)}
-            />
-        </FormGroup>
-        <div className={classes.inputActionsWrapper}>
-          <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
-          <Button size='sm' onClick={(arg1, arg2) => this.editSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
-        </div>
-      </div>
-    )
+
     {/* <Button key={key + 'btn' + new Date().getSeconds()} size='small' style={{ fontWeight: 'bold', color: '#303f9f'}} onClick={(identifier) => this.editSurveyInputHandler(`${key}`)}>Edit</Button> */}
-    this.setState({ surveyDataArray, componentArray: inputArray, surveyInputs: surveyInputs, surveyInputDialog: false });
+    this.setState({ surveyDataArray, surveyInputs: surveyInputs, surveyInputDialog: false });
 
   }
 
@@ -394,7 +343,6 @@ class CreateSurveyWizard extends React.Component {
         let inputArray = [];
         inputArray = [ ...this.state.componentArray ]
         const surveyDataArray = [...this.state.surveyDataArray];
-        const randomId = Math.random().toString(36).substr(2, 15);
         const checkboxObj = {
           id: Math.random().toString(36).substr(2, 15),
           identifier: 'checkbox',
@@ -403,22 +351,6 @@ class CreateSurveyWizard extends React.Component {
         }
         surveyArr.push(checkboxObj);
         surveyDataArray.push(checkboxObj);
-        inputArray.push(
-          <div className={classes.checkboxWrapper} id={randomId} key={Math.random()} componentIdentifier={Math.random()}>
-            <FormGroup>
-              <Label for="exampleCheckbox">{this.state.surveyCheckboxTempQuestion}</Label>
-              <div>
-              {Object.keys(checkboxNames).map(key => (
-                <CustomInput key={Math.random()} type="checkbox" id="exampleCustomInline2" label={`${key}`} inline />
-              ))}
-              </div>
-            </FormGroup>
-            <div className={classes.checkboxActionsWrapper}>
-              <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyCheckBoxHandler(`${checkboxObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
-              <Button size='sm' onClick={(arg1, arg2) => this.editSurveyCheckBoxHandler(`${checkboxObj.id}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
-            </div>
-          </div>
-        )
       this.setState({ surveyDataArray, surveyCheckboxes: surveyArr, surveyCheckboxTempQuestion: '', componentArray: inputArray, surveyCheckboxDialog: false  });
     }
   }
@@ -460,29 +392,8 @@ class CreateSurveyWizard extends React.Component {
       }
       surveyDataArray.push(radioObj);
       surveyRadioArr.push(radioObj);
-      let inputArray = [];
-      inputArray = [ ...this.state.componentArray ]
-      const randomId = Math.random().toString(36).substr(2, 15);
-      inputArray.push(
-          <div className={classes.radioWrapper} id={randomId} componentIdentifier={Math.random()} key={Math.random()}>
-            <FormGroup tag="fieldset">
-              <legend style={{ fontSize: '1rem' }}></legend>
-              <FormGroup>
-              <Label for="exampleCheckbox">{this.state.surveyRadioTempQuestion}</Label>
-              <div>
-              {Object.keys(radioOptions).map(key => (
-                <CustomInput key={Math.random()} value={false} type="radio" id="exampleCustomRadio" name="customRadio" label={key} inline />
-              ))}
-            </div>
-              </FormGroup>
-            </FormGroup>
-            <div className={classes.radioActionsWrapper}>
-              <Button size='sm' onClick={(radio) => this.deleteSurveyRadioOptionHandler(`${radioObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
-              <Button size='sm' onClick={(radio) => this.editSurveyRadioOptionHandler(`${radioObj.id}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
-            </div>
-            </div>
-      )
-    this.setState({ surveyDataArray, surveyRadioInitValues: surveyRadioInitValues, surveyRadioOptions: surveyRadioArr, surveyRadioTempQuestion: '', componentArray: inputArray, surveyRadioDialog: false  });
+
+    this.setState({ surveyDataArray, surveyRadioInitValues: surveyRadioInitValues, surveyRadioOptions: surveyRadioArr, surveyRadioTempQuestion: '', surveyRadioDialog: false  });
   }
 
   saveFooterText = () => {
@@ -602,52 +513,50 @@ class CreateSurveyWizard extends React.Component {
     this.setState({surveyNameEditingMode: true});
   }
 
-  editSurveyTitleHandler = (key, randomId) => {
+  editSurveyTitleHandler = (obj) => {
      // get the index of array in the components array
-     let inputArray = [ ...this.state.componentArray ];
+     let surveyDataArray = [ ...this.state.surveyDataArray ];
      const titleArr = [ ...this.state.surveyTitleArray ];
-     const componentIndex = inputArray.map(e => e.props.id).indexOf(`${randomId}`);
-     const dataIndex = titleArr.map(e => e.id).indexOf(`${key}`);
+     const componentIndex = surveyDataArray.map(e => e.id).indexOf(`${obj.id}`);
+     const dataIndex = titleArr.map(e => e.id).indexOf(`${obj.id}`);
      // store it to state to be used for updating the component
-     this.setState({ surveyTitleUpdateDialog: true, surveyTitleText: "", componentIndex: componentIndex, dataIndex });
+     this.setState({ surveyTitleUpdateDialog: true, surveyTitleText: obj.text, componentIndex, dataIndex });
   }
 
-  editSurveyDescrHandler = (key, randomId) => {
+  editSurveyDescrHandler = (obj) => {
     // get the index of array in the components array
-    let inputArray = [ ...this.state.componentArray ];
+    let surveyDataArray = [ ...this.state.surveyDataArray ];
     const descrArr = [ ...this.state.descriptionArray ];
-    const componentIndex = inputArray.map(e => e.props.id).indexOf(`${randomId}`);
-    const dataIndex = descrArr.map(e => e.id).indexOf(`${key}`);
-    console.log(dataIndex)
-    console.log(key)
+    const componentIndex = surveyDataArray.map(e => e.id).indexOf(`${obj.id}`);
+    const dataIndex = descrArr.map(e => e.id).indexOf(`${obj.id}`);
     // store it to state to be used for updating the component
-    this.setState({ surveyDescrUpdateDialog: true, surveyDescrText: "", componentIndex: componentIndex, dataIndex });
+    this.setState({ surveyDescrUpdateDialog: true, surveyDescrText: obj.text, componentIndex, dataIndex });
  }
 
-  editSurveyInputHandler = (key, randomId) => {
+  editSurveyInputHandler = (obj) => {
     // get the index of array in the components array
-    let inputArray = [ ...this.state.componentArray ];
-    const componentIndex = inputArray.map(e => e.props.id).indexOf(`${randomId}`);
+    let surveyDataArray = [ ...this.state.surveyDataArray ];
+    const componentIndex = surveyDataArray.map(e => e.id).indexOf(obj.id);
     // store it to state to be used for updating the component
-    this.setState({ surveyInputUpdateDialog: true, formerSurveyInputLabelName: key, surveyInputLabelName: key, componentIndex: componentIndex });
+    this.setState({ surveyInputUpdateDialog: true, surveyInputLabelName: obj.text, componentIndex: componentIndex });
   }
 
-  editSurveyImageHandler = () => {
+  editSurveyImageHandler = (obj) => {
      // get the index of array in the components array
-     let inputArray = [ ...this.state.componentArray ];
-     const componentIndex = inputArray.map(e => e.props.id).indexOf("surveyImage");
+     let surveyDataArray = [ ...this.state.surveyDataArray ];
+     const componentIndex = surveyDataArray.map(e => e.id).indexOf(obj.id);
      // store it to state to be used for updating the component
     this.setState({ surveyImageUpdateDialog: true, componentIndex: componentIndex })
   }
 
-  editSurveyCheckBoxHandler = (key, randomId) => {
+  editSurveyCheckBoxHandler = (obj) => {
     // get the index of array in the components array
-    const inputArray = [ ...this.state.componentArray ];
+    const surveyDataArray = [ ...this.state.surveyDataArray ];
     const checkboxArr = [ ...this.state.surveyCheckboxes ];
-    const componentIndex = inputArray.map(e => e.props.id).indexOf(`${randomId}`);
-    const dataIndex = checkboxArr.map(e => e.id).indexOf(`${key}`);
+    const componentIndex = surveyDataArray.map(e => e.id).indexOf(obj.id);
+    const dataIndex = checkboxArr.map(e => e.id).indexOf(obj.id);
     // store it to state to be used for updating the component
-    this.setState({ surveyCheckboxUpdateDialog: true, componentIndex: componentIndex, dataIndex: dataIndex });
+    this.setState({ surveyCheckboxUpdateDialog: true, surveyCheckboxQuestion: obj.question, componentIndex: componentIndex, dataIndex: dataIndex });
   }
 
   editCheckboxNameHandler = () => {
@@ -662,15 +571,15 @@ class CreateSurveyWizard extends React.Component {
     this.setState({ surveyRadioInitValues });
   }
 
-  editSurveyRadioOptionHandler = (key, randomId) => {
+  editSurveyRadioOptionHandler = (obj) => {
     //update radio options
     // get the index of array in the components array
-    const inputArray = [ ...this.state.componentArray ];
+    const surveyDataArray = [ ...this.state.surveyDataArray ];
     const radioArr = [ ...this.state.surveyRadioOptions ];
-    const componentIndex = inputArray.map(e => e.props.id).indexOf(`${randomId}`);
-    const dataIndex = radioArr.map(e => e.id).indexOf(`${key}`);
+    const componentIndex = surveyDataArray.map(e => e.id).indexOf(obj.id);
+    const dataIndex = radioArr.map(e => e.id).indexOf(obj.id);
     // store it to state to be used for updating the component
-    this.setState({ surveyRadioUpdateDialog: true, componentIndex: componentIndex, dataIndex: dataIndex });
+    this.setState({ surveyRadioUpdateDialog: true, surveyRadioTempQuestion: obj.question, componentIndex: componentIndex, dataIndex: dataIndex });
   }
 
   editSurveyFooterHandler = () => {
@@ -686,54 +595,37 @@ class CreateSurveyWizard extends React.Component {
   }
 
   updateSurveyTitleHandler = () => {
-    let inputArray;
-    inputArray = [ ...this.state.componentArray ];
+    const surveyDataArray = [ ...this.state.surveyDataArray ];
     const titleArr = [ ...this.state.surveyTitleArray ];  
     const titleObj = {
       id: Math.random().toString(),
+      identifier: 'title',
       text: this.state.surveyTitleText
     }
     if (this.state.dataIndex !== -1) {
       titleArr[this.state.dataIndex] = titleObj
     }
-    const randomId = Math.random().toString(36).substr(2, 15);
     if (this.state.componentIndex !== -1) {
-      inputArray[this.state.componentIndex] = (
-        <div className={classes.titleWrapper} id={randomId} componentIdenifier={Math.random()} onClick={this.deleteSurveyTitleComponent}>
-          <h2>{this.state.surveyTitleText}</h2>
-          <div className={classes.titleActionsWrapper}>
-            <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.deleteSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
-            <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.editSurveyTitleHandler(`${titleObj.id}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
-          </div>
-        </div>
-      )
+      surveyDataArray[this.state.componentIndex] = titleObj
     }
-      this.setState({ componentArray: inputArray, surveyTitleArray: titleArr, componentIndex: -1, dataIndex: -1, surveyTitleUpdateDialog: false });
+      this.setState({ surveyDataArray, surveyTitleArray: titleArr, componentIndex: -1, dataIndex: -1, surveyTitleUpdateDialog: false });
   }
 
   updateSurveyDescrHandler = () => {
-    const randomId = Math.random().toString(36).substr(2, 15);
-    const inputArray = [ ...this.state.componentArray ];
+    const surveyDataArray = [ ...this.state.surveyDataArray ];
     const descrArr = [ ...this.state.descriptionArray ];
     const descrObj = {
       id: Math.random().toString(),
+      identifier: 'descr',
       text: this.state.surveyDescrText
     }
     if (this.state.dataIndex !== -1) {
       descrArr[this.state.dataIndex] = descrObj
     }
     if (this.state.componentIndex !== -1) {
-      inputArray[this.state.componentIndex] = (
-        <div className={classes.descrWrapper} id={randomId} componentIdenifier={Math.random()}>
-          <p>{this.state.surveyDescrText}</p>
-          <div className={classes.descrActionsWrapper}>
-            <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
-            <Button size='sm' onClick={(arg1, arg2) => this.editSurveyDescrHandler(`${descrObj.id}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
-          </div>
-        </div>
-      )
+      surveyDataArray[this.state.componentIndex] = descrObj
     }
-    this.setState({ componentArray: inputArray, descriptionArray: descrArr, componentIndex: -1, dataIndex: -1, surveyDescrUpdateDialog: false });
+    this.setState({ surveyDataArray, descriptionArray: descrArr, componentIndex: -1, dataIndex: -1, surveyDescrUpdateDialog: false });
   }
 
   updateSurveyInputHandler = () => {
@@ -743,57 +635,38 @@ class CreateSurveyWizard extends React.Component {
 
     const surveyInputs = {...this.state.surveyInputs};
 
-    delete surveyInputs[this.state.formerSurveyInputLabelName];
+    // delete surveyInputs[this.state.formerSurveyInputLabelName];
     //update obj
 
     Object.assign(surveyInputs, {[inputLabel]: ""})
-    // add to components array
 
-    let inputArray = []
-    // this method of generating random ids is used for simplicity sake
-    let randomId = Math.random().toString(36).substr(2, 15);
-    inputArray = [...this.state.componentArray];
+    let surveyDataArray = []
+    surveyDataArray = [...this.state.surveyDataArray];
+    const inputObj = {
+      id: Math.random(),
+      identifier: 'input',
+      text: inputLabel
+    }
     if (this.state.componentIndex !== -1) {
-      inputArray[this.state.componentIndex] = (
-        <div className={classes.inputWrapper} id={randomId} componentIdentifier={Math.random()} key={inputLabel + new Date().getMilliseconds()}>
-          <FormGroup>
-              <Label>{inputLabel}</Label>
-              <Input
-                style={{ borderRadius: 0, height: '1.8rem' }}
-                id={inputLabel}
-                type="text"
-                value=""
-                onChange={(event, key) => this.surveyInputChangeHandler(event, inputLabel)}
-              />
-            </FormGroup>
-            <div className={classes.inputActionsWrapper}>
-              <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
-              <Button size='sm' onClick={(arg1, arg2) => this.editSurveyInputHandler(`${inputLabel}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
-            </div>
-        </div>
-      );
+      surveyDataArray[this.state.componentIndex] = inputObj
     }
 
-    this.setState({ componentArray: inputArray, surveyInputs: surveyInputs, surveyInputDialog: false, componentIndex: -1, surveyInputUpdateDialog: false });
+    this.setState({ surveyDataArray, surveyInputs: surveyInputs, surveyInputDialog: false, componentIndex: -1, surveyInputUpdateDialog: false });
 
   }
 
   updateSurveyImageHandler = (e) => {
-    let inputArray;
-    inputArray = [ ...this.state.componentArray ];
-    if (this.state.componentIndex !== -1) {
-      inputArray[this.state.componentIndex] = (
-      <div className={classes.imageWrapper} id="surveyImage" componentIdenifier={Math.random()}>
-        {!this.state.imagePreviewUrl ? null : <img src={this.state.imagePreviewUrl} />}
-        <br />
-        <div className={classes.imageActionsWrapper}>
-          <Button size='sm' id="removeImageBtn" onClick={this.deleteSurveyImageHandler}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
-          <Button size='sm' id="deleteImg" onClick={this.editSurveyImageHandler}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
-        </div>
-      </div>
-      )
+    let surveyDataArray;
+    surveyDataArray = [ ...this.state.surveyDataArray ];
+    const imageObj = {
+      id: Math.random(),
+      identifier: 'image',
+      imagePreviewUrl: this.state.imagePreviewUrl
     }
-    this.setState({ componentArray: inputArray, surveyImageUpdateDialog: false, componentIndex: -1, dataIndex: -1 })
+    if (this.state.componentIndex !== -1) {
+      surveyDataArray[this.state.componentIndex] = imageObj
+    }
+    this.setState({ surveyDataArray, surveyImageUpdateDialog: false, componentIndex: -1, dataIndex: -1 })
   }
 
   updateSurveyCheckboxHandler = () => {
@@ -810,7 +683,6 @@ class CreateSurveyWizard extends React.Component {
             alert('Please Edit Survey Form Checkbox Question');
           } else {
             surveyCheckboxInitValues.map(checkboxObj => {
-              console.log(checkboxObj)
               Object.values(checkboxObj).map(item => {
                if(item.value === '') {
                  return  // this is to prevent a checkbox with an empty name from being displayed in the form
@@ -819,11 +691,11 @@ class CreateSurveyWizard extends React.Component {
                Object.assign(checkboxNames, {[item.value]: false});
              })
             });
-            let inputArray = [];
-            inputArray = [ ...this.state.componentArray ]
-            const randomId = Math.random().toString(36).substr(2, 15);
+            let surveyDataArray = [];
+            surveyDataArray = [ ...this.state.surveyDataArray ]
             const checkboxObj = {
               id: Math.random().toString(36).substr(2, 15),
+              identifier: 'checkbox',
               question: this.state.surveyCheckboxTempQuestion,
               checkboxNames: checkboxNames,
             }
@@ -831,24 +703,9 @@ class CreateSurveyWizard extends React.Component {
               surveyArr[this.state.dataIndex] = checkboxObj
             }
             if (this.state.componentIndex !== -1) {
-              inputArray[this.state.componentIndex] = (
-              <div className={classes.checkboxWrapper} id={randomId} key={Math.random()} componentIdentifier={Math.random()}>
-                <FormGroup>
-                  <Label for="exampleCheckbox">{this.state.surveyCheckboxTempQuestion}</Label>
-                  <div>
-                  {Object.keys(checkboxNames).map(key => (
-                    <CustomInput key={Math.random()} type="checkbox" id="exampleCustomInline2" label={`${key}`} inline />
-                  ))}
-                  </div>
-                </FormGroup>
-                <div className={classes.checkboxActionsWrapper}>
-                  <Button size='sm' onClick={(arg1, arg2) => this.deleteSurveyCheckBoxHandler(`${checkboxObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
-                  <Button size='sm' onClick={(arg1, arg2) => this.editSurveyCheckBoxHandler(`${checkboxObj.id}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
-                </div>
-              </div>
-              )
+              surveyDataArray[this.state.componentIndex] = checkboxObj
             }
-            this.setState({ surveyCheckboxes: surveyArr, surveyCheckboxUpdateDialog: false, componentIndex: -1, dataIndex: -1, surveyCheckboxTempQuestion: '', componentArray: inputArray, surveyCheckboxDialog: false  });
+            this.setState({ surveyCheckboxes: surveyArr, surveyCheckboxUpdateDialog: false, componentIndex: -1, dataIndex: -1, surveyCheckboxTempQuestion: '', surveyDataArray, surveyCheckboxDialog: false  });
           }
   }
 
@@ -870,37 +727,20 @@ class CreateSurveyWizard extends React.Component {
 
       const radioObj = {
         id: Math.random(),
+        identifier: 'radio',
+        question: this.state.surveyRadioTempQuestion,
         options: radioOptions
       }
       if (this.state.dataIndex !== -1) {
         surveyRadioArr[this.state.dataIndex] = radioObj
       }
-      let inputArray = [];
-      inputArray = [ ...this.state.componentArray ]
-      const randomId = Math.random().toString(36).substr(2, 15);
+      let surveyDataArray = [];
+      surveyDataArray = [ ...this.state.surveyDataArray ]
       if (this.state.componentIndex !== -1) {
-        inputArray[this.state.componentIndex] = (
-          <div className={classes.radioWrapper} id={randomId} componentIdentifier={Math.random()} key={Math.random()}>
-            <FormGroup tag="fieldset">
-              <legend style={{ fontSize: '1rem' }}></legend>
-              <FormGroup>
-              <Label for="exampleCheckbox">{this.state.surveyRadioTempQuestion}</Label>
-              <div>
-              {Object.keys(radioOptions).map(key => (
-                <CustomInput key={Math.random()} value={false} type="radio" id="exampleCustomRadio" name="customRadio" label={key} inline />
-              ))}
-            </div>
-              </FormGroup>
-            </FormGroup>
-            <div className={classes.radioActionsWrapper}>
-              <Button size='sm' onClick={(radio) => this.deleteSurveyRadioOptionHandler(`${radioObj.id}`, `${randomId}`)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
-              <Button size='sm' onClick={(radio) => this.editSurveyRadioOptionHandler(`${radioObj.id}`, `${randomId}`)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
-            </div>
-            </div>
-        )
+        surveyDataArray[this.state.componentIndex] = radioObj
       }
 
-      this.setState({ surveyRadioInitValues: surveyRadioInitValues, surveyRadioOptions: surveyRadioArr, componentIndex: -1, dataIndex: -1, surveyRadioTempQuestion: '', componentArray: inputArray, surveyRadioUpdateDialog: false  });
+      this.setState({ surveyRadioInitValues: surveyRadioInitValues, surveyRadioOptions: surveyRadioArr, componentIndex: -1, dataIndex: -1, surveyRadioTempQuestion: '', surveyDataArray, surveyRadioUpdateDialog: false  });
   }
 
   updateSurveyFooterText = () => {
@@ -910,69 +750,65 @@ class CreateSurveyWizard extends React.Component {
   
   // {{ DELETE COMPONENTS }}
 
-  deleteSurveyTitleHandler = (key, randomId) => {
-    const identifier = document.getElementById(`${randomId}`).getAttribute("componentIdenifier")
-    let inputArray = [ ...this.state.componentArray ];
-    const newArr = inputArray.filter(item => item.props.componentIdenifier != identifier);
+  deleteSurveyTitleHandler = (obj) => {
+
+    const surveyDataArray = [...this.state.surveyDataArray];
+    const newComponentArr = surveyDataArray.filter(item => item.id != obj.id);
 
     const titleArr = [ ...this.state.surveyTitleArray ];
-    const filteredArr = titleArr.filter(item => item.id != key);
-    this.setState({ componentArray: newArr, surveyTitleArray: filteredArr })
+    const filteredArr = titleArr.filter(item => item.id != obj.id);
+
+    this.setState({ surveyDataArray: newComponentArr, surveyTitleArray: filteredArr })
   }
 
-  deleteSurveyDescrHandler = (key, randomId) => {
-    const identifier = document.getElementById(`${randomId}`).getAttribute("componentIdenifier")
-    let inputArray = [ ...this.state.componentArray ];
-    const newArr = inputArray.filter(item => item.props.componentIdenifier != identifier);
+  deleteSurveyDescrHandler = (obj) => {
+    const surveyDataArray = [...this.state.surveyDataArray];
+    const newComponentArr = surveyDataArray.filter(item => item.id != obj.id);
 
     const descrArr = [ ...this.state.descriptionArray ];
-    const filteredArr = descrArr.filter(item => item.id != key);
-    this.setState({ componentArray: newArr, descriptionArray: filteredArr })
+    const filteredArr = descrArr.filter(item => item.id != obj.id);
+    this.setState({ surveyDataArray: newComponentArr, descriptionArray: filteredArr })
   }
 
-  deleteSurveyInputHandler = (key, randomId) => {
+  deleteSurveyInputHandler = (obj) => {
     // delete from component array
-    const identifier = document.getElementById(`${randomId}`).getAttribute("componentIdentifier")
-    let inputArray = [ ...this.state.componentArray ];
-    const newArr = inputArray.filter(item => item.props.componentIdentifier != identifier);
+    const surveyDataArray = [...this.state.surveyDataArray];
+    const newComponentArr = surveyDataArray.filter(item => item.id != obj.id);
 
     // delete from surveyinputs obj
     const currentSurveyInputObj = {...this.state.surveyInputs};
-    delete currentSurveyInputObj[key];
-    this.setState({ surveyInputs: currentSurveyInputObj, componentArray: newArr });
+    delete currentSurveyInputObj[obj.id];
+    this.setState({ surveyInputs: currentSurveyInputObj, surveyDataArray: newComponentArr });
   }
 
-  deleteSurveyImageHandler = () => {
-    const identifier = document.getElementById("surveyImage").getAttribute("componentIdentifier")
-    let inputArray = [ ...this.state.componentArray ];
-    const newArr = inputArray.filter(item => item.props.componentIdentifier != identifier);
-    this.setState({ componentArray: newArr, file: null, imagePreviewUrl: null })
+  deleteSurveyImageHandler = (obj) => {
+    const surveyDataArray = [...this.state.surveyDataArray];
+    const newComponentArr = surveyDataArray.filter(item => item.id != obj.id);
+    this.setState({ surveyDataArray: newComponentArr, file: null, imagePreviewUrl: null })
   }
 
-  deleteSurveyCheckBoxHandler = (key, randomId) => {
+  deleteSurveyCheckBoxHandler = (obj) => {
     // delete from component array
-    const identifier = document.getElementById(`${randomId}`).getAttribute("componentIdentifier")
-    let inputArray = [ ...this.state.componentArray ];
-    const newArr = inputArray.filter(item => item.props.componentIdentifier != identifier);
+    const surveyDataArray = [...this.state.surveyDataArray];
+    const newComponentArr = surveyDataArray.filter(item => item.id != obj.id);
 
     // delete from survey checkbox array
     const surveyArr = [ ...this.state.surveyCheckboxes ]
-    const newCheckboxArr = surveyArr.filter(item => item.id != key);
+    const newCheckboxArr = surveyArr.filter(item => item.id != obj.id);
 
-    this.setState({ surveyCheckboxes: newCheckboxArr, componentArray: newArr });
+    this.setState({ surveyCheckboxes: newCheckboxArr, surveyDataArray: newComponentArr });
   }
 
-  deleteSurveyRadioOptionHandler = (key, randomId) => {
+  deleteSurveyRadioOptionHandler = (obj) => {
     // delete from component array
-    const identifier = document.getElementById(`${randomId}`).getAttribute("componentIdentifier")
-    let inputArray = [ ...this.state.componentArray ];
-    const newArr = inputArray.filter(item => item.props.componentIdentifier != identifier);
+    const surveyDataArray = [...this.state.surveyDataArray];
+    const newComponentArr = surveyDataArray.filter(item => item.id != obj.id);
 
     // delete from survey radio array
     const surveyArr = [ ...this.state.surveyRadioOptions ]
-    const newRadioArr = surveyArr.filter(item => item.id != key);
+    const newRadioArr = surveyArr.filter(item => item.id != obj.id);
 
-    this.setState({ surveyRadioOptions: newRadioArr, componentArray: newArr });
+    this.setState({ surveyRadioOptions: newRadioArr, surveyDataArray: newComponentArr });
   }
 
   
@@ -991,11 +827,11 @@ class CreateSurveyWizard extends React.Component {
     }
   }
 
-  selectSurveyTitleColor = (key, randomId) => {
-    const colorPickers = { ...this.state.colorPickers }
-    colorPickers.heading = true;
-    this.setState({ colorPickers: colorPickers })
-  }
+  // selectSurveyTitleColor = (key, randomId) => {
+  //   const colorPickers = { ...this.state.colorPickers }
+  //   colorPickers.heading = true;
+  //   this.setState({ colorPickers: colorPickers })
+  // }
 
   renderFooterContent() {
     if(this.state.surveyFooterText) {
@@ -1015,11 +851,128 @@ class CreateSurveyWizard extends React.Component {
   }
 
 
+  titleComponent (obj) {
+    return (
+      <div key={obj.id} className={classes.titleWrapper}>
+        <h2>{obj.text}</h2>
+        <div className={classes.titleActionsWrapper}>
+          <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1) => this.deleteSurveyTitleHandler(obj)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+          <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1) => this.editSurveyTitleHandler(obj)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+          {/* <Input type="color" id="colorpicker" onChange={(e, arg2) => this.changeTitleColor(e, `${titleIndex}`)} value={newBgColor} /> */}
+          {/* <Button style={{ margin: '0 auto' }} size='sm' onClick={(arg1, arg2) => this.selectSurveyTitleColor(`${titleObj.id}`, `${randomId}`)}><i className="fa fa-pencil-o" aria-hidden="true"></i></Button> */}
+        </div>
+      </div>
+    )
+  }
+
+  descriptionComponent (obj) {
+    return (
+      <div key={obj.id} className={classes.descrWrapper}>
+        <p>{obj.text}</p>
+        <div className={classes.descrActionsWrapper}>
+          <Button size='sm' onClick={(arg) => this.deleteSurveyDescrHandler(obj)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+          <Button size='sm' onClick={(arg) => this.editSurveyDescrHandler(obj)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+        </div>
+      </div>
+    )
+  }
+
+  imageComponent (obj) {
+    return (
+      <div key={obj.id}className={classes.imageWrapper} id="surveyImage">
+        {!obj.imagePreviewUrl ? null : <img src={obj.imagePreviewUrl} />}
+        <br />
+        <div className={classes.imageActionsWrapper}>
+          <Button size='sm' id="removeImageBtn" onClick={(arg) => this.deleteSurveyImageHandler(obj)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+          <Button size='sm' id="deleteImg" onClick={(arg) => this.editSurveyImageHandler(obj)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+        </div>
+      </div>
+    )
+  }
+
+  inputComponent (obj) {
+    return (
+      <div key={obj.id} className={classes.inputWrapper}>
+        <FormGroup>
+            <Label>{obj.text}</Label>
+            <Input
+              style={{ borderRadius: 0, height: '1.8rem' }}
+              id={Math.random()}
+              type="text"
+              value=""
+            />
+        </FormGroup>
+        <div className={classes.inputActionsWrapper}>
+          <Button size='sm' onClick={(arg) => this.deleteSurveyInputHandler(obj)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+          <Button size='sm' onClick={(arg) => this.editSurveyInputHandler(obj)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+        </div>
+      </div>
+    )
+  }
+
+  checkboxComponent (obj) {
+    return (
+      <div key={obj.id} className={classes.checkboxWrapper}>
+        <FormGroup>
+          <Label for="exampleCheckbox">{obj.question}</Label>
+          <div>
+          {Object.keys(obj.checkboxNames).map(key => (
+            <CustomInput key={Math.random()} type="checkbox" id="exampleCustomInline2" label={`${key}`} inline />
+          ))}
+          </div>
+        </FormGroup>
+        <div className={classes.checkboxActionsWrapper}>
+          <Button size='sm' onClick={(arg) => this.deleteSurveyCheckBoxHandler(obj)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+          <Button size='sm' onClick={(arg) => this.editSurveyCheckBoxHandler(obj)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+        </div>
+      </div>
+    )
+  }
+
+  radioOptionsComponent (obj) {
+    return (
+      <div key={obj.id} className={classes.radioWrapper}>
+        <FormGroup tag="fieldset">
+          <legend style={{ fontSize: '1rem' }}></legend>
+          <FormGroup>
+          <Label for="exampleCheckbox">{obj.question}</Label>
+          <div>
+          {Object.keys(obj.options).map(key => (
+            <CustomInput key={Math.random()} value={false} type="radio" id="exampleCustomRadio" name="customRadio" label={key} inline />
+          ))}
+        </div>
+          </FormGroup>
+        </FormGroup>
+        <div className={classes.radioActionsWrapper}>
+          <Button size='sm' onClick={(arg) => this.deleteSurveyRadioOptionHandler(obj)}><i className="fa fa-trash-o" aria-hidden="true"></i></Button>
+          <Button size='sm' onClick={(arg) => this.editSurveyRadioOptionHandler(obj)}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+        </div>
+      </div>
+    )
+  }
+
   renderDashboardContent() {
    return (
      <div className={classes.dashboardContent}>
        <div>
         {this.state.componentArray.map(item => item)}
+        {this.state.surveyDataArray.map(item => {
+                if(item.identifier === 'title') {
+                  return this.titleComponent(item);
+                } else if (item.identifier === 'descr') {
+                  return this.descriptionComponent(item)
+                } else if (item.identifier === 'input') {
+                  return this.inputComponent(item)
+                } else if (item.identifier === 'image') {
+                  return this.imageComponent(item)
+                } else if (item.identifier === 'checkbox') {
+                  return this.checkboxComponent(item)
+                } else if (item.identifier === 'radio') {
+                  return this.radioOptionsComponent(item)
+                } else {
+                  return
+                }
+              })}
        </div>
        <div style={{ marginTop: 'auto' }}>
         {this.renderFooterContent()}
