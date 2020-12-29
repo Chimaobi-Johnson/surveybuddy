@@ -239,39 +239,32 @@ class CreateSurveyWizard extends React.Component {
 
 
   initSurveyFooterDialog = () => {
-    // document.getElementById('drawer-toggle').checked = false;
-    // this.toggleSidebarOpen();
+    this.toggleSidebarOpen();
     this.setState({ surveyFooterDialog: true });
   }
   
   initSurveyDescrDialog = () => {
-    // document.getElementById('drawer-toggle').checked = false;
-    // this.toggleSidebarOpen();
+    this.toggleSidebarOpen();
     this.setState({surveyDescrDialog: true});
     }
   
   initSurveyImageDialog = () => {
-    // document.getElementById('drawer-toggle').checked = false;
-    // this.toggleSidebarOpen();
+    this.toggleSidebarOpen();
     this.setState({surveyImageDialog: true});
   }
   
   initSurveyTitleDialog = () => {
-    // document.getElementById('drawer-toggle').checked = false;
-    // this.toggleSidebarOpen();
+    this.toggleSidebarOpen();
     this.setState({surveyTitleDialog: true});
   }
 
   initSurveyCheckboxDialog = () => {
-    // document.getElementById('drawer-toggle').checked = false;
-    // this.toggleSidebarOpen();
-    // const surveyCheckboxes = {...this.state.surveyCheckboxes};
+    this.toggleSidebarOpen();
     this.setState({surveyCheckboxDialog: true});
   }
 
   initSurveyRadioDialog = () => {
-  // document.getElementById('drawer-toggle').checked = false;
-  // this.toggleSidebarOpen();
+  this.toggleSidebarOpen();
   this.setState({surveyRadioDialog: true});
   }
 
@@ -808,13 +801,17 @@ class CreateSurveyWizard extends React.Component {
   }
 
   toggleSidebarOpen = () => {
+    const x = window.matchMedia("(max-width: 700px)");
     const sidebar = document.getElementById('surveySidebar');
-    if(sidebar.style.transform === 'translate(-100%)') {
-      sidebar.style.transform = 'translate(0)';
-      this.setState({ sidebarOpen: true });
-    } else {
-      sidebar.style.transform = 'translate(-100%)';
-      this.setState({ sidebarOpen: false });
+    // sidebar will only disappear on mobile devices
+    if(x.matches) {
+      if(sidebar.style.transform === 'translate(-100%)') {
+        sidebar.style.transform = 'translate(0)';
+        this.setState({ sidebarOpen: true });
+      } else {
+        sidebar.style.transform = 'translate(-100%)';
+        this.setState({ sidebarOpen: false });
+      }
     }
   }
 
@@ -1031,9 +1028,9 @@ class CreateSurveyWizard extends React.Component {
             <RenderFooterUpdateModal updateSurveyFooterText={this.updateSurveyFooterText} surveyFooterUpdateDialog={this.state.surveyFooterUpdateDialog} surveyFooterText={this.state.surveyFooterText} changeSurveyFooterText={this.changeSurveyFooterText} updateDialog={(mode) => this.updateDialog('surveyFooterDialog')}/>
 
             <div id="surveySidebar" className={classes.SideBarContainer}>
-             {/* <Button onClick={this.toggleSidebarOpen} className={classes.SideBarToggle}>
+             <Button onClick={this.toggleSidebarOpen} className={classes.SideBarToggle}>
                { this.state.sidebarOpen ? <i className="fa fa-close"></i> : <i className="fa fa-bars"></i> }
-             </Button> */}
+             </Button>
              <SideBar>
                 <div className={classes.SideBarContent}>
                   <SurveyName surveyNameEditingMode={this.state.surveyNameEditingMode} surveyNameText={this.state.surveyNameText} surveyNameChange={this.surveyNameChange} saveSurveyName={this.saveSurveyName} editSurveyName={this.editSurveyName} />

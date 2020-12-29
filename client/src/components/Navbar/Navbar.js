@@ -49,7 +49,7 @@ class MenuBar extends Component {
                       <small>Continue with</small>
                     </div>
                     <div className="btn-wrapper text-center">
-                      <Button
+                      {/* <Button
                         className="btn-neutral btn-icon"
                         color="default"
                         href="/auth/facebook"
@@ -58,7 +58,7 @@ class MenuBar extends Component {
                           <i className="fa fa-facebook-official" aria-hidden="true"></i>
                         </span>
                         <span className="btn-inner--text">Facebook</span>
-                      </Button>
+                      </Button> */}
                       <Button
                         className="btn-neutral btn-icon"
                         color="default"
@@ -91,10 +91,10 @@ class MenuBar extends Component {
              <span style={{ fontWeight: 'bold' }}>{this.props.auth.facebookId ? this.props.auth.displayName : this.props.auth.firstName}</span>
            </DropdownToggle>
            <DropdownMenu right>
-             <DropdownItem>
+             {/* <DropdownItem href="/surveys">
                My Profile
-             </DropdownItem>
-             <DropdownItem>
+             </DropdownItem> */}
+             <DropdownItem href="/surveys">
                My Survey
              </DropdownItem>
              <DropdownItem>
