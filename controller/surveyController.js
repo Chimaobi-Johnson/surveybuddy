@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Survey = require('../models/Survey');
+const Response = require('../models/Response');
 const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
@@ -244,7 +245,16 @@ exports.sendSurveyEmailLink = (req, res, next) => {
         })
 
     });
-  
+}
 
-  // Update isSent to yes or true
+exports.storeSurveyResponse = (req, res, next) => {
+  const response = new Response({
+    ...req.body
+  })
+  response.save()
+  .then(success => {
+    res.status(200).json({ message: 'Response stored successfully' })
+  }).catch(err => {
+    console.log(err)
+  })
 }

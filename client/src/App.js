@@ -20,6 +20,7 @@ import Credits from './Pages/Dashboard/Credits/Credits';
 import PurchaseCredits from './Pages/Dashboard/Credits/PurchaseCredits';
 import SurveyList from './Pages/Dashboard/SurveyList/SurveyList';
 import SurveyResponse from './Pages/SurveyResponse/SurveyResponse';
+import SubmitSuccess from './Pages/SurveyResponse/SubmitSuccess';
 
 class App extends Component {
 
@@ -131,6 +132,7 @@ class App extends Component {
      let routes;
      routes = (
        <Switch>
+         <Route path='/survey/respond/success' component={SubmitSuccess} />
          <Route path="/survey/respond/:id" component={SurveyResponse} />
          <Route path="/surveys/credits/new" component={PurchaseCredits} />
          <Route path="/surveys/credits" component={Credits} />

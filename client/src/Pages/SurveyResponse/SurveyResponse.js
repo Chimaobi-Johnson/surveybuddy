@@ -15,11 +15,11 @@ class SurveyResponse extends Component {
   state = {
     survey: null,
     loading: false,
+    errorModal: false
   }
 
   componentDidMount() {
     const surveyId = window.location.pathname.split("/")[3];
-    console.log(surveyId);
     axios.post('/api/survey_data', { surveyId })
     .then(result => {
        const newSurvey = {...result.data.survey};
@@ -28,6 +28,53 @@ class SurveyResponse extends Component {
     .catch(err => {
       console.log(err);
     })
+  }
+
+  submitResponseHandler = () => {
+    this.setState({ loading: true })
+    const data = {
+        surveyName: this.state.survey.surveyName,
+        surveyDataArray: this.state.survey.surveyDataArray,
+        surveyTitleArray: this.state.surveyTitleArray,
+        descriptionArray: this.state.descriptionArray,
+        surveyFooterText: this.state.survey.surveyFooterText,
+        surveyInputs: this.state.survey.surveyInputs,
+        surveyCheckboxes: this.state.survey.surveyCheckboxes,
+        surveyRadioOptions: this.state.survey.surveyRadioOptions,
+        imageUrl: this.state.survey.imageUrl,
+        _survey: this.state.survey._id
+    }
+    axios.post('/api/survey/response', data)
+    .then(response => {
+        this.setState({ loading: false })
+        this.props.history.push('/survey/respond/success')
+    }).catch(err => {
+        console.log(err)
+        this.setState({ loading: false, errorModal: true })
+    })
+  }
+
+  closeErrorModal = () => {
+      this.setState({ errorModal: !this.state.errorModal })
+  }
+
+  errorMessageModal () {
+    return (
+      <Modal
+        className="modal-dialog-centered"
+        toggle={this.closeErrorModal}
+        isOpen={this.state.errorModal}
+      >
+        <div className="modal-body">
+            <h1>Server Error. Please check connection settings</h1>
+        </div>
+        <div className="modal-footer">
+          <Button onClick={this.closeErrorModal} size="sm">
+            Okay
+          </Button>
+        </div>
+      </Modal>
+    )
   }
 
   changeInputHandler = (e, obj) => {
@@ -199,11 +246,15 @@ class SurveyResponse extends Component {
 
     return (
         <div className={classes.SurveyContainer}>
+            {this.errorMessageModal()}
             {this.state.loading ? <div className={classes.LoadingBox}><img style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '50px', height: '50px'}} src={loader} alt="" /><p style={{display: 'block', fontWeight: 'bold',  position: 'absolute', top: '55%', left: '50%', transform: 'translate(-50%, -50%)'}}>Sending...</p></div> : null}
             <div className={classes.DashboardContainer}>
                 <div className={classes.DashboardMain}>
                 <div className={classes.DashboardInnerBox}>
                     {this.renderFormContent()}
+                </div>
+                <div className={classes.buttonContainer}>
+                    <Button onClick={this.submitResponseHandler} color="danger">Submit Survey</Button>
                 </div>
                 </div>
             </div>

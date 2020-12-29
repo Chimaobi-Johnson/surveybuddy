@@ -18,9 +18,9 @@ const surveySchema = new Schema({
   noOfRespondents: { type: Number, default: 0 },
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
   isSent: { type: Boolean, default: false },
-  dateCreated: { type : Date, default: Date.now },
   dateSent: Date,
   lastResponded: Date
-});
+},
+{ timestamps: true });
 
 module.exports = mongoose.model('survey', surveySchema);

@@ -85,6 +85,7 @@
 .DashboardMain {
     background-color: #fff;
     min-height: 100vh;
+    margin-bottom: 8rem;
     width: 80%;
     margin: 3rem auto;
 }
@@ -213,3 +214,16 @@
     margin-bottom: 0.5rem;
     padding-top: 0.8rem;
 }
+
+.buttonContainer {
+    transform: translateY(120%);
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.buttonContainer button {
+    border-radius: 0;
+}
+
+

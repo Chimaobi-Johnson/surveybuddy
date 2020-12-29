@@ -15,7 +15,7 @@ const keys = require('./config/keys');
 
 require('./models/User');
 require('./models/Survey');
-require('./models/Recipient');
+require('./models/Response');
 require('./models/Payment');
 require('./services/passport');
 

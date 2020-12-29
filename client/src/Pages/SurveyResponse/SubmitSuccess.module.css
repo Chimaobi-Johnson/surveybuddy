@@ -1,0 +1,9 @@
+.Wrapper {
+    padding: 5rem;
+    background-color: rgb(50 50 93);
+    margin: 10rem;
+}
+
+.Wrapper h4 {
+    color: beige;
+}
