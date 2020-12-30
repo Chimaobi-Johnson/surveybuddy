@@ -4,6 +4,10 @@ const surveyController = require('../controller/surveyController');
 
 const router = express.Router();
 
+router.get('/api/survey/response/:id', surveyController.getSurveyResponse);
+
+router.get('/api/survey/responses/:id', surveyController.getSurveyResponses);
+
 router.post('/api/survey/response', surveyController.storeSurveyResponse);
 
 router.post('/api/survey/send', surveyController.sendSurveyEmailLink);

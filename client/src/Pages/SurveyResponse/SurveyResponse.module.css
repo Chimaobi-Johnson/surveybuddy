@@ -1,3 +1,5 @@
+
+
 .SurveyContainer {
     display: flex;
     background-color: #eee;
@@ -86,7 +88,7 @@
     background-color: #fff;
     min-height: 100vh;
     margin-bottom: 8rem;
-    width: 80%;
+    width: 66%;
     margin: 3rem auto;
 }
 
@@ -227,3 +229,37 @@
 }
 
 
+
+@media (max-width: 699px) {
+    
+    .DashboardMain {
+        width: 95% !important;
+        margin: 1.5rem auto !important;
+    }
+    
+    .titleWrapper {
+        padding: 0.5rem 0rem;
+    }
+    
+    .inputWrapper {
+        padding: 0.5rem 0rem;
+    }
+    
+    .descrWrapper {
+        padding: 0.5rem 0rem;
+    }
+    
+    .checkboxWrapper {
+        padding: 0.5rem 0rem;
+    }
+    
+    .radioWrapper {
+        padding: 0.5rem 0rem;
+    }
+    
+    .footerWrapper {
+        padding: 0.5rem 0rem;
+    }
+    
+    
+    }

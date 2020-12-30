@@ -258,3 +258,19 @@ exports.storeSurveyResponse = (req, res, next) => {
     console.log(err)
   })
 }
+
+
+exports.getSurveyResponses = (req, res, next) => {
+  const surveyId = req.params.id;
+  Response.find({ _survey: surveyId })
+  .then(result => {
+    res.status(200).json({ responseList: result })
+  }).catch(err => {
+    console.log(err)
+  })
+}
+
+
+exports.getSurveyResponse = (req, res, next) => {
+
+}

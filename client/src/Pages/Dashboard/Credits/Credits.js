@@ -5,6 +5,7 @@ import { Button } from 'reactstrap';
 import DashboardSideBar from  '../../../components/SideBar/DashboardSideBar';
 
 import * as classes from './Credits.module.css';
+import Dashboard from '../Dashboard';
 
 class Credits extends Component {
 
@@ -56,23 +57,18 @@ class Credits extends Component {
   render () {
 
     return (
-        <div className={classes.DashboardContainer}>
-                <DashboardSideBar />
-                 <div className={classes.DashboardMain}>
-                   <div className={classes.DashboardInnerBox}>
-                      <div className={classes.Credits}>
-                       <h2>CREDITS</h2>
-                       <h3>YOU CURRENTLY HAVE <span style={{ color: 'green', fontWeight: 'bold' }}>{this.props.auth.credits}</span> CREDITS</h3>
-                       <p>1 credit equals one client. this means that you can send your survey to <span style={{ color: 'green', fontWeight: 'bold' }}>{this.props.auth.credits}</span> of your clients</p>
-                       <h4 style={{ textAlign: 'center', backgroundColor: '#282f40', padding: '.5rem', color: 'rgba(255,255,255,.9)', fontSize: '1rem' }}>The following are the list of payments you've made</h4>
+            <Dashboard>
+              <div className={classes.Credits}>
+                <h2>CREDITS</h2>
+                <h3>YOU CURRENTLY HAVE <span style={{ color: 'green', fontWeight: 'bold' }}>{this.props.auth.credits}</span> CREDITS</h3>
+                <p>1 credit equals one client. this means that you can send your survey to <span style={{ color: 'green', fontWeight: 'bold' }}>{this.props.auth.credits}</span> of your clients</p>
+                <h4 style={{ textAlign: 'center', backgroundColor: '#282f40', padding: '.5rem', color: 'rgba(255,255,255,.9)', fontSize: '1rem' }}>The following are the list of payments you've made</h4>
 
-                       <div className={classes.Payments}>
-                         {this.renderPaymentList()}
-                       </div>
-                     </div>
-                   </div>
-                 </div>
-       </div>
+                <div className={classes.Payments}>
+                  {this.renderPaymentList()}
+                </div>
+              </div>
+            </Dashboard>
 
     )
 

@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import loader from '../../../assets/images/gifs/pulse.gif';
 
 import * as classes from './SurveyList.module.css';
+import Dashboard from '../Dashboard';
 
 
 class SurveyList extends Component {
@@ -137,7 +138,7 @@ class SurveyList extends Component {
              return (
                  <tr className={classes.TableRow} key={this.state.surveys.indexOf(survey)}>
                    <td>{this.state.surveys.indexOf(survey) + 1}</td>
-                   <td><Link to={`/surveys/review_final/${survey._id}`}>{survey.surveyName}</Link></td>
+                   <td><Link to={`/survey/responses/${survey._id}`}>{survey.surveyName}</Link></td>
                    <td>{survey.isSent ? "Yes" : "No"}</td>
                    <td>{survey.emailRecipients.length}</td>
                    <td>{survey.noOfRespondents}</td>
@@ -162,35 +163,37 @@ class SurveyList extends Component {
     // }
 
     return (
-      <Paginator
-         onPrevious={this.loadSurveys.bind(this, 'previous')}
-         onNext={this.loadSurveys.bind(this, 'next')}
-         lastPage={Math.ceil(this.state.totalItems / 2)}
-         currentPage={this.state.surveyPage}
-         >
-         {this.renderModal()}
-         {this.renderMessageModal()}
-        <div className={classes.SurveyList}>
-         {this.state.surveyDeleting ? <div className={classes.LoaderBox}><img src={loader} alt="loading..." /></div> : null }
-        <h5 style={{ color: 'rgba(0,0,0,.8)' }}>LIST OF SURVEYS</h5>
-        <Table striped responsive>
-           <thead>
-             <tr>
-               <th>S/N</th>
-               <th>Survey Name</th>
-               <th>Sent</th>
-               <th>No of Recipients</th>
-               <th>No of Respondents</th>
-               <th>Date Sent</th>
-               <th>Delete</th>
-             </tr>
-           </thead>
-           <tbody>
-              {this.renderSurveyList()}
-           </tbody>
-          </Table>
-        </div>
-        </Paginator>
+      <Dashboard>
+        <Paginator
+          onPrevious={this.loadSurveys.bind(this, 'previous')}
+          onNext={this.loadSurveys.bind(this, 'next')}
+          lastPage={Math.ceil(this.state.totalItems / 2)}
+          currentPage={this.state.surveyPage}
+          >
+          {this.renderModal()}
+          {this.renderMessageModal()}
+          <div className={classes.SurveyList}>
+          {this.state.surveyDeleting ? <div className={classes.LoaderBox}><img src={loader} alt="loading..." /></div> : null }
+          <h5 style={{ color: 'rgba(0,0,0,.8)' }}>LIST OF SURVEYS</h5>
+          <Table striped responsive>
+            <thead>
+              <tr>
+                <th>S/N</th>
+                <th>Survey Name</th>
+                <th>Sent</th>
+                <th>No of Recipients</th>
+                <th>No of Respondents</th>
+                <th>Date Sent</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+                {this.renderSurveyList()}
+            </tbody>
+            </Table>
+          </div>
+          </Paginator>  
+      </Dashboard>
     )
   }
 }

@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PaystackButton from 'react-paystack';
 import { connect } from 'react-redux';
 import { Input } from 'reactstrap';
-import DashboardSideBar from  '../../../components/SideBar/DashboardSideBar';
+
 
 import * as actions from '../../../store/actions';
 
 import * as classes from './PurchaseCredits.module.css';
-
+import Dashboard from '../Dashboard';
 
 class PurchaseCredits extends Component {
 
@@ -62,11 +62,7 @@ class PurchaseCredits extends Component {
   render () {
 console.log(this.state);
     return (
-      <div className={classes.DashboardContainer}>
-              <DashboardSideBar />
-               <div className={classes.DashboardMain}>
-                 <div className={classes.DashboardInnerBox}>
-
+              <Dashboard>
                     <div>
                        <img className={classes.CreditCardImg} src={require('../../../assets/images/creditcards.jpg')} alt="image" />
                        <div className={classes.PurchaseCreditsContainer}>
@@ -92,11 +88,8 @@ console.log(this.state);
                             />
                           </div>
                        </div>
-                    </div>
-                    
-            </div>
-         </div>
-      </div>
+                    </div>    
+               </Dashboard>
     )
   }
 }

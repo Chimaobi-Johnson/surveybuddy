@@ -21,6 +21,7 @@ import PurchaseCredits from './Pages/Dashboard/Credits/PurchaseCredits';
 import SurveyList from './Pages/Dashboard/SurveyList/SurveyList';
 import SurveyResponse from './Pages/SurveyResponse/SurveyResponse';
 import SubmitSuccess from './Pages/SurveyResponse/SubmitSuccess';
+import ResponseList from './Pages/Dashboard/Response/ResponseList/ResponseList';
 
 class App extends Component {
 
@@ -132,6 +133,7 @@ class App extends Component {
      let routes;
      routes = (
        <Switch>
+         <Route path='/survey/responses/:id' component={ResponseList} />
          <Route path='/survey/respond/success' component={SubmitSuccess} />
          <Route path="/survey/respond/:id" component={SurveyResponse} />
          <Route path="/surveys/credits/new" component={PurchaseCredits} />
@@ -140,7 +142,7 @@ class App extends Component {
          <Route path="/surveys/review_final/:id" component={SurveyFinalReview} />
          <Route path="/surveys/customize_email" component={CustomizeEmail} />
          <Route path="/surveys/new" component={CreateSurvey} />
-         <Route path="/surveys" component={Dashboard} />
+         <Route path="/surveys" component={SurveyList} />
          <Route path="/" exact component={Home} />
          <Redirect to="/" />
        </Switch>

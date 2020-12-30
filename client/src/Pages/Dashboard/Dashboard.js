@@ -20,7 +20,7 @@ class Dashboard extends Component {
            <DashboardSideBar />
                  <div className={classes.DashboardMain}>
                    <div className={classes.DashboardInnerBox}>
-                     <SurveyList />
+                      {this.props.children}
                    </div>
                 </div>
          </div>
