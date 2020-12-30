@@ -56,9 +56,9 @@ exports.returnSurveyData = (req, res) => {
 }
 
 exports.storeSurveyEmailDetails = (req, res) => {
-  console.log(req.body);
   const emailSubject = req.body.emailSubject;
   const emailBody = req.body.emailBody;
+  const emailFrom = req.body.emailFrom;
   const emailRecipients = req.body.emailRecipients;
   const surveyId = req.body.surveyId;
   const emailRecipientsArr = emailRecipients.trim().split(',');
@@ -83,8 +83,6 @@ exports.storeSurveyEmailDetails = (req, res) => {
     return user.save();
   })
   .then(updatedUser => {
-       console.log(updatedUser);
-       console.log(surveyId);
       Survey.findById(surveyId).then(survey => {
         if(!survey) {
           const error = new Error('Could not find survey');
@@ -93,6 +91,7 @@ exports.storeSurveyEmailDetails = (req, res) => {
         }
         survey.emailSubject = emailSubject;
         survey.emailBody = emailBody;
+        survey.emailFrom = emailFrom;
         survey.emailRecipients = emailRecipientsArr;
         return survey.save()
      }).then(result => {
@@ -202,7 +201,7 @@ exports.deleteSurvey = (req, res, next) => {
 
 exports.sendSurveyEmailLink = (req, res, next) => {
   const { surveyId, emailRecipients, emailFrom, emailBody, emailSubject } = req.body;
-
+    console.log(req.body)
     const transporter = nodemailer.createTransport(smtp({ 
       service: 'gmail',
       // secure: true,
@@ -218,7 +217,7 @@ exports.sendSurveyEmailLink = (req, res, next) => {
       subject: emailSubject,
       html: emailBody,
     };
-  
+    console.log(mailOptions);
     transporter.verify((error, success) => {
       if (error) {
         console.log(error);
@@ -251,8 +250,17 @@ exports.storeSurveyResponse = (req, res, next) => {
   const response = new Response({
     ...req.body
   })
-  response.save()
+   return response.save()
   .then(success => {
+    return Survey.findById(req.body._survey)
+  }).then(survey => {
+    if(!survey) {
+      const error = new Error("Survey not found!")
+      throw error
+    }
+    survey.noOfRespondents =+ 1
+    return survey.save()
+  }).then(result => {
     res.status(200).json({ message: 'Response stored successfully' })
   }).catch(err => {
     console.log(err)

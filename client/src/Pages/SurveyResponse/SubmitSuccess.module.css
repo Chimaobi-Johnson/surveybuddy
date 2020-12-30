@@ -7,3 +7,11 @@
 .Wrapper h4 {
     color: beige;
 }
+
+@media (max-width: 699px) {
+    .Wrapper {
+        padding: 2rem;
+        background-color: rgb(50 50 93);
+        margin: 2rem;
+    }
+}

@@ -16,7 +16,8 @@ class SurveyFinalReview extends Component {
     survey: null,
     loading: false,
     modalOpen: false,
-    errorModal: false
+    errorModal: false,
+    sidebarOpen: false
   }
 
   componentDidMount() {
@@ -38,7 +39,8 @@ class SurveyFinalReview extends Component {
     const data = {
       emailBody: this.state.survey.emailBody,
       emailRecipients: this.state.survey.emailRecipients,
-      emailSubject: this.state.emailSubject,
+      emailSubject: this.state.survey.emailSubject,
+      emailFrom: this.state.survey.emailFrom,
       surveyId: this.state.survey._id
     }
     axios.post('/api/survey/send', data).then(response => {
@@ -57,11 +59,11 @@ class SurveyFinalReview extends Component {
     this.props.history.push('/surveys')
   }
 
-  closeModal () {
+  closeModal = () => {
     this.setState({ modalOpen: !this.state.modalOpen })
   }
 
-  closeErrorModal () {
+  closeErrorModal = () => {
     this.setState({ errorModal: !this.state.errorModal })
   }
 
@@ -221,6 +223,17 @@ class SurveyFinalReview extends Component {
     // }
   }
 
+  toggleSidebarOpen = () => {
+    const sidebar = document.getElementById('surveyReviewSidebar');
+    if(sidebar.style.transform === 'translate(-100%)') {
+      sidebar.style.transform = 'translate(0)';
+      this.setState({ sidebarOpen: true });
+    } else {
+      sidebar.style.transform = 'translate(-100%)';
+      this.setState({ sidebarOpen: false });
+    }
+  }
+
   render () {
 
     console.log(this.state);
@@ -233,9 +246,12 @@ class SurveyFinalReview extends Component {
          {this.state.loading ? <div className={classes.LoadingBox}><img style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '50px', height: '50px'}} src={loader} alt="" /><p style={{display: 'block', fontWeight: 'bold',  position: 'absolute', top: '55%', left: '50%', transform: 'translate(-50%, -50%)'}}>Sending...</p></div> : null}
          {this.messageModal()}
          {this.errorMessageModal()}
-        <div className={classes.SideBarContainer}>
+        <div  id="surveyReviewSidebar" className={classes.SideBarContainer}>
+           <Button onClick={this.toggleSidebarOpen} className={classes.SideBarToggle}>
+               { this.state.sidebarOpen ? <i className="fa fa-close"></i> : <i className="fa fa-bars"></i> }
+           </Button>
          <SideBar>
-           <Button className={classes.goBack}><i className="fa fa-chevron-left" aria-hidden="true"></i></Button>
+           <Button onClick={() => this.props.history.goBack()} className={classes.goBack}><i className="fa fa-chevron-left" aria-hidden="true"></i></Button>
            <div style={{ textAlign: 'center' }}>
 
            <div className={classes.EmailData}>

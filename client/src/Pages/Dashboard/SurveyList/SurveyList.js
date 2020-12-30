@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Paginator from '../../../components/Paginator/Paginator';
 import { withRouter } from 'react-router-dom';
-import { Modal, Input, Button, Table } from 'reactstrap';
+import { Modal, Input, Button, Table, Tooltip } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import loader from '../../../assets/images/gifs/pulse.gif';
 
@@ -21,7 +21,9 @@ class SurveyList extends Component {
     surveyDeleting: false,
     deletingErrorMessage: null,
     deletingMessage: null,
-    messageModal: true
+    messageModal: true,
+    tooltipOpen: false,
+    tooltipOpen2: false
   }
 
   componentDidMount() {
@@ -131,6 +133,22 @@ class SurveyList extends Component {
     }
   }
 
+  gotoResponsePage = (survey) => {
+    if(survey.noOfRespondents === 0) {
+      alert("No one has responded to this survey yet!")
+    } else {
+      this.props.history.push(`/survey/responses/${survey._id}`)
+    }
+  }
+
+  toggleToolTip = () => {
+    this.setState({ tooltipOpen: !this.state.tooltipOpen })
+  }
+
+  toggleToolTip2 = () => {
+    this.setState({ tooltipOpen2: !this.state.tooltipOpen2 })
+  }
+
   renderSurveyList() {
     if(this.state.surveys) {
       if(this.state.surveys.length !== 0) {
@@ -138,12 +156,21 @@ class SurveyList extends Component {
              return (
                  <tr className={classes.TableRow} key={this.state.surveys.indexOf(survey)}>
                    <td>{this.state.surveys.indexOf(survey) + 1}</td>
-                   <td><Link to={`/survey/responses/${survey._id}`}>{survey.surveyName}</Link></td>
+                   <td><Link onClick={(arg) => this.gotoResponsePage(survey)} to="#">{survey.surveyName}</Link></td>
                    <td>{survey.isSent ? "Yes" : "No"}</td>
                    <td>{survey.emailRecipients.length}</td>
                    <td>{survey.noOfRespondents}</td>
                    <td>25/01/2020</td>
-                   <td onClick={(surveyId) => this.initSurveyDialog(survey._id)}><i className="fa fa-trash" aria-hidden="true"></i></td>
+                   <td>
+                     <p onClick={(surveyId) => this.initSurveyDialog(survey._id)} className={classes.iconContainer} id="deleteSurvey"><i className="fa fa-trash" aria-hidden="true"></i></p>
+                      {/* <Tooltip placement="left" isOpen={this.state.tooltipOpen} target="deleteSurvey" toggle={this.toggleToolTip}>
+                        Delete Survey
+                      </Tooltip> */}
+                     <p onClick={() => this.props.history.push(`/surveys/review_final/${survey._id}`)} className={classes.iconContainer} id="previewSurvey"><i className="fa fa-eye" aria-hidden="true"></i></p>
+                      {/* <Tooltip placement="left" isOpen={this.state.tooltipOpen2} target="previewSurvey" toggle={this.toggleToolTip2}>
+                        Preview/Send 
+                      </Tooltip> */}
+                   </td>
                  </tr>
              )
            })
@@ -184,7 +211,7 @@ class SurveyList extends Component {
                 <th>No of Recipients</th>
                 <th>No of Respondents</th>
                 <th>Date Sent</th>
-                <th>Delete</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>

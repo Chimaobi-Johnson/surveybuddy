@@ -234,6 +234,7 @@ class CreateSurveyWizard extends React.Component {
   
 
   initSurveyInputDialog = () => {
+    this.toggleSidebarOpen();
     this.setState({surveyInputDialog: true});
   }
 

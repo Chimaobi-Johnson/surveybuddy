@@ -37,3 +37,15 @@
   width: 60%;
   margin-top: 20%;
 }
+
+.iconContainer {
+  display: inline;
+}
+
+.iconContainer i {
+  margin-left: 1rem;
+}
+
+.iconContainer i:hover {
+  color: #cdb55c !important;
+}
