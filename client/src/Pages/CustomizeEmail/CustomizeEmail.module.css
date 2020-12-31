@@ -32,7 +32,7 @@ h5 {
   padding: .8rem 1.2rem;
   border-top-right-radius: 3px;
   border-bottom-left-radius: 3px;
-  background-color: ##f4f5f7;
+  background-color: #f4f5f7;
 }
 
 .EmailContentBox {
@@ -45,7 +45,7 @@ h5 {
 
 @media (max-width: 699px) {
   .Container {
-    display: block;
+    flex-direction: column-reverse;
     height: auto;
   }
   .SideBarContainer {

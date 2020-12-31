@@ -1,14 +1,17 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import * as classes from './SideBar.module.css';
 
-const sidebar = props => {
+const Sidebar = props => {
+
+   const authState = useSelector(state => state.authReducer);
 
   return (
      <div className={classes.SideBarContent}>
       <div className={classes.TopSideBar}>
          <ul>
-            <li>Credits: 200</li>
-            <li>Surveys: 3</li>
+            <li>Credits: {authState ? authState.credits : '0'}</li>
+            <li>Surveys: {authState ? authState.surveyNo : '0'}</li>
          </ul>
       </div>
       <div className={classes.BottomSideBar}>
@@ -21,4 +24,4 @@ const sidebar = props => {
   )
 }
 
-export default sidebar;
+export default Sidebar;

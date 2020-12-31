@@ -75,7 +75,7 @@ exports.storeSurveyEmailDetails = (req, res) => {
       } else {
         message = 'You currently do not have enough credits for ' + emailRecipientsArr.length + ' clients';
       }
-      res.status(500).json({ message });
+      res.status(501).json({ message });
     } else {
        newUserCredit = userCredits - emailRecipientsArr.length;
        user.credits = newUserCredit;

@@ -30,29 +30,16 @@ class App extends Component {
     //  this.props.authenticateUser();
       // const token = localStorage.getItem('token');
       const userId = localStorage.getItem('userId');
-      const email = localStorage.getItem('email');
-      const firstName = localStorage.getItem('firstName');
-      const displayName = localStorage.getItem('displayName');
-      const profilePhoto = localStorage.getItem('profilePhoto');
       const googleId = localStorage.getItem('googleId');
-      const facebookId = localStorage.getItem('facebookId');
       const expiryDate = localStorage.getItem('expiryDate');
 
-      if (!expiryDate || !googleId || !facebookId) {
         axios.get('/api/current_user')
         .then(response => {
           if(!response) {
             return;
           }
           // remove any data that might exist
-          localStorage.removeItem('expiryDate');
-          localStorage.removeItem('userId');
-          localStorage.removeItem('facebookId');
-          localStorage.removeItem('googleId');
-          localStorage.removeItem('profilePhoto');
-          localStorage.removeItem('displayName');
-          localStorage.removeItem('firstName');
-          localStorage.removeItem('email');
+          // localStorage.removeItem('googleId');
 
           // store data to redux
           this.props.storeLoginData({
@@ -68,42 +55,20 @@ class App extends Component {
             credits: response.data.user.credits
           })
 
-          localStorage.setItem('googleId', response.data.user.googleId);
-          localStorage.setItem('facebookId', response.data.user.facebookId);
-          localStorage.setItem('userId', response.data.user._id);
-          localStorage.setItem('email', response.data.user.email);
-          localStorage.setItem('firstName', response.data.user.firstName);
-          localStorage.setItem('displayName', response.data.user.displayName);
-          localStorage.setItem('profilePhoto', response.data.user.profilePhoto);
+          // localStorage.setItem('googleId', response.data.user.googleId);
+
           // set one hour expiration time
-          const remainingMilliseconds = 60 * 60 * 1000;
-          const expiryDate = new Date(
-            new Date().getTime() + remainingMilliseconds
-          );
-          localStorage.setItem('expiryDate', expiryDate.toISOString());
-          this.setAutoLogout(remainingMilliseconds);
+          // const remainingMilliseconds = 60 * 60 * 1000;
+          // const expiryDate = new Date(
+          //   new Date().getTime() + remainingMilliseconds
+          // );
+          // localStorage.setItem('expiryDate', expiryDate.toISOString());
+          // this.setAutoLogout(remainingMilliseconds);
         })
         .catch(err => {
           console.log(err);
         })
-      } else {
 
-        const remainingMilliseconds =
-           new Date(expiryDate).getTime() - new Date().getTime();
-
-           this.props.storeLoginData({
-             isAuth: true,
-             userId: userId,
-             firstName: firstName,
-             email: email,
-             googleId: googleId,
-             facebookId: facebookId,
-             displayName: displayName,
-             profilePhoto: profilePhoto
-           })
-
-         this.setAutoLogout(remainingMilliseconds);
-    }
 
   }  // end of componentDidMount
 
@@ -115,14 +80,7 @@ class App extends Component {
     }
 
     logoutHandler = () => {
-      localStorage.removeItem('expiryDate');
-      localStorage.removeItem('userId');
-      localStorage.removeItem('facebookId');
       localStorage.removeItem('googleId');
-      localStorage.removeItem('profilePhoto');
-      localStorage.removeItem('displayName');
-      localStorage.removeItem('firstName');
-      localStorage.removeItem('email');
       this.props.storeLoginData({
         isAuth: false
       })

@@ -101,7 +101,7 @@ class MenuBar extends Component {
                Buy Credits
              </DropdownItem>
              <DropdownItem divider />
-             <DropdownItem>
+             <DropdownItem href="/api/logout">
                Logout
              </DropdownItem>
            </DropdownMenu>

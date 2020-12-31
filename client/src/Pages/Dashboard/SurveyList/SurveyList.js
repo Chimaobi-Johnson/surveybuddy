@@ -166,7 +166,7 @@ class SurveyList extends Component {
                       {/* <Tooltip placement="left" isOpen={this.state.tooltipOpen} target="deleteSurvey" toggle={this.toggleToolTip}>
                         Delete Survey
                       </Tooltip> */}
-                     <p onClick={() => this.props.history.push(`/surveys/review_final/${survey._id}`)} className={classes.iconContainer} id="previewSurvey"><i className="fa fa-eye" aria-hidden="true"></i></p>
+                     <p onClick={() => this.props.history.push(`/surveys/customize_email`, {surveyId: survey._id, surveyName: survey.surveyName })} className={classes.iconContainer} id="previewSurvey"><i className="fa fa-pencil-square" aria-hidden="true"></i></p>
                       {/* <Tooltip placement="left" isOpen={this.state.tooltipOpen2} target="previewSurvey" toggle={this.toggleToolTip2}>
                         Preview/Send 
                       </Tooltip> */}
@@ -175,7 +175,7 @@ class SurveyList extends Component {
              )
            })
      } else {
-      return <h6 style={{ color: 'rgba(0,0,0,.8)' }}>You have not created any surveys, goto menu and start!</h6>
+      return <h6 style={{ color: 'rgba(0,0,0,.8)' }}>You have not created any surveys, buy some credits and start!</h6>
     }
   } else {
     return <h6 style={{ color: 'rgba(0,0,0,.8)' }}>Loading...</h6>

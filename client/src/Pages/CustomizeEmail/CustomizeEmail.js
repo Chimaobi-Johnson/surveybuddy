@@ -18,7 +18,10 @@ class CustomizeEmail extends Component {
      emailRecipients: '',
      surveyId: null,
      loading: false,
-     errorModal: false
+     modalOpen: false,
+     errorModalOpen: false,
+     successMessage: '',
+     errorMessage: ''
    }
 
    componentDidMount () {
@@ -47,43 +50,73 @@ class CustomizeEmail extends Component {
 
         axios.post('/api/store_survey_email_details', formdata)
         .then(response => {
-          alert('Form Submitted Successfully');
-          this.props.history.push(`/surveys/review_final/${this.state.surveyId}`);
+          this.setState({ successMessage: 'Form Submitted Successfully', modalOpen: true });
         })
         .catch(err => {
           this.setState({ loading: false });
-          console.log(err);
-          alert('Error submitting form please check connection settings');
+          console.log(err.response);
+          if(err.response.status === 501) {
+            this.setState({ errorMessage: err.response.data.message, errorModalOpen: true })
+          } else {
+            this.setState({ errorMessage: "Server error. Check connection settings", errorModalOpen: true })
+          }
         })
 
        }
 
+      closeModal = () => {
+        this.setState({ modalOpen: !this.state.modalOpen });
+      }
+    
+      closeErrorModal = () => {
+        this.setState({ errorModalOpen: !this.state.errorModalOpen });
+      }
+    
+      renderModal () {
+      return (
+      <Modal
+        className="modal-dialog-centered"
+        toggle={this.closeModal}
+        isOpen={this.state.modalOpen}
+      >
+        <div className="modal-body">
+              <h1>{this.state.successMessage}</h1>
+        </div>
+        <div className="modal-footer">
+          <Button onClick={() => this.props.history.push(`/surveys/review_final/${this.state.surveyId}`)} size="sm">
+            Okay
+          </Button>
+        </div>
+      </Modal>)
+    }
+
+    renderErrorModal () {
+      return (
+      <Modal
+        className="modal-dialog-centered"
+        toggle={this.closeErrorModal}
+        isOpen={this.state.errorModalOpen}
+      >
+        <div className="modal-body">
+              <h1>{this.state.errorMessage}</h1>
+        </div>
+        <div className="modal-footer">
+          <Button onClick={this.closeErrorModal} size="sm">
+            Okay
+          </Button>
+          <Button size="sm" onClick={() => this.props.history.push('/surveys/credits/new')}>Buy Credits</Button>
+        </div>
+      </Modal>)
+    }
 
   render () {
 
-   if(this.props.emailDetails) {
-     this.props.history.push('/surveys/review_final', { surveyId: this.state.surveyId });
-   }
-  let errorModal;
-   if(this.props.emailDetailsFail === true) {
-     errorModal = (
-       <Modal
-         className="modal-dialog-centered"
-         toggle={this.props.closeModal}
-         isOpen={true}
-       >
-         <div className="modal-body">
-           <h1> There has been an error, please check your connection settings and try again </h1>
-         </div>
-         <div className="modal-footer">
-           <Button size="sm">Okay</Button>
-         </div>
-       </Modal>
-     )
-   }
+  
 
     return (
       <div className={classes.Container}>
+        {this.renderModal()}
+        {this.renderErrorModal()}
          <div className={classes.SideBarContainer}>
            <SideBar>
               <div className={classes.SideBarContent}>
