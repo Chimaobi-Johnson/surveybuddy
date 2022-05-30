@@ -139,10 +139,10 @@ class MenuBar extends Component {
               <NavLink href="/components/">Pricing</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="https://github.com/reactstrap/reactstrap">About</NavLink>
+              <NavLink href="#">About</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="https://github.com/reactstrap/reactstrap">Contact</NavLink>
+              <NavLink href="#">Contact</NavLink>
             </NavItem>
             {profileBox}
           </Nav>
